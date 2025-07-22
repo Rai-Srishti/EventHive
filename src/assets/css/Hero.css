@@ -1,0 +1,123 @@
+/* Hero Section Base */
+.hero-section {
+  background: linear-gradient(135deg, #fff 0%, #f8e7ef 45%, #ecb7c8 100%);
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  color: #2a2f33;
+  font-family: 'Montserrat', sans-serif;
+  padding: 3rem 1rem;
+}
+
+/* Remove old left gray boxes */
+.hero-section::before {
+  content: none;
+}
+
+/* Dotted accent behind image */
+.hero-section::after {
+  content: '';
+  position: absolute;
+  right: 24%;
+  top: 7%;
+  width: 140px;
+  height: 140px;
+  background-image: radial-gradient(#d4809d 1px, transparent 1px);
+  background-size: 16px 16px;
+  opacity: 0.45;
+  z-index: 0;
+}
+
+/* Main title */
+.hero-title {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 1.25rem;
+}
+.hero-title .highlight {
+  color: #d40040;
+}
+
+/* Replaced stats with catchphrases */
+.hero-stats {
+  padding-left: 0;
+  margin-bottom: 1.5rem;
+}
+.hero-tagline {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #c40c46;
+  margin-right: 2rem;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+}
+
+/* Buttons */
+.hero-btn--primary {
+  background: #d40040;
+  border: none;
+  padding: 0.7rem 2.5rem;
+  font-weight: 700;
+  transition: all 0.3s ease-in-out;
+}
+.hero-btn--primary:hover {
+  background: #a60033;
+}
+
+.hero-btn--outline {
+  border: 2px solid #d40040 !important;
+  color: #d40040 !important;
+  padding: 0.7rem 2.5rem;
+  font-weight: 700;
+  background: transparent;
+  transition: all 0.3s ease-in-out;
+}
+.hero-btn--outline:hover {
+  background: #d40040;
+  color: #fff !important;
+}
+
+/* Right-side image */
+.hero-image {
+  max-width: 465px;
+  height: auto;
+  z-index: 1;
+  animation: float 5s ease-in-out infinite;
+}
+
+/* Floating animation */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* Vertical label */
+@media (min-width: 992px) {
+  .vertical-caption {
+    position: absolute;
+    left: -3rem;
+    bottom: 8rem;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    letter-spacing: 0.15em;
+    color: #d4809d;
+    font-weight: 600;
+    font-size: 1rem;
+  }
+}
+
+/* Hide dotted accent on small screens */
+@media (max-width: 991.98px) {
+  .hero-section::after {
+    display: none;
+  }
+}
