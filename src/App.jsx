@@ -1,16 +1,17 @@
-import { useState } from 'react'
+import { useState } from 'react';
+import './App.css';
 
-
-import './App.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Header from './components/Header';
+import Hero from './components/Hero';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
-      <h1>Project Cleaned</h1>
+      <Header />
+      <Hero />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
