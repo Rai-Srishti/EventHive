@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import Favourites from './pages/Favourites';
 import Header from './components/Header';
 import Update from './pages/Attendee/Update';
+import Login from './pages/Login';
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/favourites" element={<Favourites />} />
         <Route path="/attendee/update" element={<Update />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
 
     </>
