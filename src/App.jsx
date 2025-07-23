@@ -9,7 +9,7 @@ import EventsPage from './pages/EventPage';
 import Update from './pages/Attendee/Update';
 import Login from './pages/Login';
 import Register from './pages/Register';
-
+import AboutUs from './pages/AboutUsPage';
 
 function App() {
   return (
@@ -22,6 +22,7 @@ function App() {
         <Route path="/attendee/update" element={<Update />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path='/about' element={<AboutUs/>} />
       </Routes>
 
     </>
