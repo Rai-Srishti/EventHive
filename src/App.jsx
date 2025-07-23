@@ -1,15 +1,21 @@
-import { useState } from 'react';
-import './App.css';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
+// src/App.jsx
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import Favourites from './pages/Favourites';
 import Header from './components/Header';
-import Hero from './components/Hero';
+
 
 function App() {
   return (
     <>
       <Header />
-      <Hero />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/favourites" element={<Favourites />} />
+      </Routes>
+
     </>
   );
 }
