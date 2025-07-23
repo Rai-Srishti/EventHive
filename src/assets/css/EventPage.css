@@ -1,0 +1,60 @@
+/* No top padding to remove space between header and banner */
+.events-page {
+  padding-top: 0;
+}
+
+/* Banner Styling */
+.events-banner {
+  height: 280px;
+  background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent dark background */
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 40px;
+  color: white;
+}
+
+/* Banner Content */
+.banner-content {
+  text-align: left;
+}
+
+.banner-content h1 {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #ffffff;
+}
+
+.banner-content p {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Pagination Styling */
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: 40px 0;
+}
+
+.pagination-controls button {
+  background-color: #d4145a;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  transition: 0.3s ease;
+}
+
+.pagination-controls button:hover:not(:disabled) {
+  background-color: #b5124e;
+}
+
+.pagination-controls button:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+}

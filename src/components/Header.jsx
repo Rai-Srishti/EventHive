@@ -1,15 +1,20 @@
 // src/components/Header.jsx
 import React from 'react';
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
-import '../assets/css/EventNavbar.css';
-import logo from '../images/Logo.png';
-import { BsHeart } from 'react-icons/bs';
-import { Link } from 'react-router-dom';
-import '../assets/css/Header.css';
+import { Link, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { BsHeart } from 'react-icons/bs';
+
+import '../assets/css/EventNavbar.css';
+import '../assets/css/Header.css';
+import logo from '../images/Logo.png';
 
 const Header = () => {
+  const location = useLocation();
   const favouriteCount = useSelector((state) => state.favourites.items.length);
+
+  // Helper to check active path for styling
+  const isActive = (path) => location.pathname === path ? 'nav-link active' : 'nav-link';
 
   return (
     <Navbar expand="lg" className="event-navbar" variant="light">
@@ -26,12 +31,11 @@ const Header = () => {
         <Navbar.Toggle aria-controls="event-navbar-nav" />
         <Navbar.Collapse id="event-navbar-nav" className="justify-content-between">
           <Nav className="mx-auto align-items-center nav-main-list gap-3">
-            <Link to="/" className="nav-link">HOME</Link>
+            <Link to="/" className={isActive('/')}>HOME</Link>
             <Nav.Link href="#about">ABOUT</Nav.Link>
-            <Nav.Link href="#events">EVENTS</Nav.Link>
+            <Link to="/events" className={isActive('/events')}>EVENTS</Link>
             <Nav.Link href="#speakers">SPEAKERS</Nav.Link>
 
-            {/* Heart icon with Redux count */}
             <Link to="/favourites" className="favourite-link position-relative">
               <BsHeart className="heart-icon" size={24} />
               {favouriteCount > 0 && (

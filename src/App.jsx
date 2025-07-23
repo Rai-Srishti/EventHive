@@ -4,6 +4,7 @@ import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Favourites from './pages/Favourites';
 import Header from './components/Header';
+import EventsPage from './pages/EventPage';
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/events" element={<EventsPage />} /> 
         <Route path="/favourites" element={<Favourites />} />
       </Routes>
     </>

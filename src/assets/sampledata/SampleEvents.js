@@ -83,6 +83,24 @@ const sampleEvents = [
     seats: 500,
     image: DemoEvent,
   },
+  {
+    id: 10,
+    title: 'Business Growth Summit',
+    date: '2025-08-12',
+    location: 'Broadw, New York',
+    category: 'Business',
+    seats: 500,
+    image: DemoEvent,
+  },
+  {
+    id: 11,
+    title: 'Marketing Trends 2025',
+    date: '2025-09-05',
+    location: 'Broadw, New York',
+    category: 'Marketing',
+    seats: 500,
+    image: DemoEvent,
+  },
 ];
 
 export default sampleEvents;
