@@ -1,22 +1,20 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
-import 'bootstrap/dist/css/bootstrap.min.css';
+// src/App.jsx
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import Favourites from './pages/Favourites';
 import Header from './components/Header';
-import Hero from './components/Hero';
-
 
 function App() {
-  
-
   return (
     <>
-<Header/>
-<Hero/>
+      <Header />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/favourites" element={<Favourites />} />
+      </Routes>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

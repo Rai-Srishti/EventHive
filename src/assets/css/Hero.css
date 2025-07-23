@@ -56,7 +56,7 @@
 
 /* Buttons */
 .hero-btn--primary {
-  background: #d40040;
+  background: #d40040 !important;
   border: none;
   padding: 0.7rem 2.5rem;
   font-weight: 700;
