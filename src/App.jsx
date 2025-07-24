@@ -1,7 +1,7 @@
 
 // src/App.jsx
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import Home from './pages/Home';
 import Favourites from './pages/Favourites';
 import Header from './components/Header';
@@ -23,12 +23,29 @@ import EditCategory from './pages/Admin/EditCategory';
 import ManageHosts from './pages/Admin/ManageHosts';
 import ManageUsers from './pages/Admin/ManageUsers';
 import HostDashboard from './pages/Host/HostDashboard';
+import HostNavbar from './pages/Host/HostNavbar';
 
 
 function App() {
+  const location = useLocation();
+
+  const hostPaths = [
+    '/host/myevents',
+    '/host/newevent',
+    '/host/updateevent',
+    '/host/dashboard',
+  ];
+
+  const isHostRoute = hostPaths.includes(location.pathname);
+
   return (
     <>
-      <Header />
+    {/* Render Header only when not on host routes */}
+      {!isHostRoute && <Header />}
+      
+      {/* Render HostNavbar only on host routes */}
+      {isHostRoute && <HostNavbar />}
+      
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/events" element={<EventsPage />} /> 
