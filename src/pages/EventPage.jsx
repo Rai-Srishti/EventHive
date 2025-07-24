@@ -27,7 +27,7 @@ const EventsPage = () => {
       {/* Banner Section */}
       <div className="events-banner py-5">
         <div className="banner-content mx-5 px-4">
-          <h1>Events</h1>
+          <p className='display-1 fw-bold'>Events</p>
           <p>
             <span className="h5" style={{ color: '#ffffff' }}>Home</span>{' '}
             <span className="h5" style={{ color: '#e91e63' }}>&gt;</span>{' '}

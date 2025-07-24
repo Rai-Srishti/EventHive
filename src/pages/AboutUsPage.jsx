@@ -3,44 +3,29 @@ import AboutIntro from '../components/AboutUs/AboutIntro';
 import WhyChooseUs from '../components/AboutUs/WhyChooseUs';
 import EventHiveStory from '../components/AboutUs/EventHiveStory';
 import Testimonials from '../components/AboutUs/Testimonials';
-import Footer from "../components/Footer";
 import StatsCounter from "../components/StatsCounter";
 import Speaker from "../components/Speaker";
-import { Container } from 'react-bootstrap';
 import ContactSection from '../components/AboutUs/ContactSection';
+import '../assets/css/EventPage.css';
 
-const AboutUs = () => {
+const AboutUsPage = () => {
   return (
     <>
-      <div
-        style={{
-          
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          color: 'white',
-          position: 'relative',
-          height: '400px', 
-        }}
-      >
-        <div
-          style={{
-            backgroundColor: 'rgba(0, 0, 0, 0.6)',
-            height: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-          }}
-        >
-          <Container>
-            <p className="fw-bold display-1" >About Us</p>
-            <p>
-              <span style={{ color: '#fff' }} className='h5'>Home</span>{' '}
-              <span style={{ color: '#e91e63' }} className='h5'>&gt;</span>{' '}
-              <span style={{ color: '#e91e63' }} className='h5'>About Us</span>
-            </p>
-          </Container>
+      <div className="events-page">
+      {/* Banner Section */}
+      <div className="events-banner py-5">
+        <div className="banner-content mx-5 px-4">
+          <p className="fw-bold display-1">About Us</p>
+          <p>
+            <span className="h5" style={{ color: '#ffffff' }}>Home</span>{' '}
+            <span className="h5" style={{ color: '#e91e63' }}>&gt;</span>{' '}
+            <span className="h5" style={{ color: '#e91e63' }}>About Us</span>
+          </p>
         </div>
       </div>
+      
+        </div>
+      
 
       <AboutIntro />
       <WhyChooseUs />
@@ -54,4 +39,4 @@ const AboutUs = () => {
   );
 };
 
-export default AboutUs;
+export default AboutUsPage;
