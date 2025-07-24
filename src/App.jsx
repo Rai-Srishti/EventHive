@@ -22,6 +22,7 @@ import EditEvent from './pages/Admin/EditEvent';
 import EditCategory from './pages/Admin/EditCategory';
 import ManageHosts from './pages/Admin/ManageHosts';
 import ManageUsers from './pages/Admin/ManageUsers';
+import AdminDashboard from './pages/Admin/AdminDashboard';
 import HostDashboard from './pages/Host/HostDashboard';
 import HostNavbar from './pages/Host/HostNavbar';
 import NewEventPage from './pages/Host/NewEventPage';
@@ -58,6 +59,7 @@ function App() {
         <Route path='/about' element={<AboutUs/>} />
         <Route path='/speakers' element={<SpeakersPage/>} />
         <Route path= '/event-details/:id' element={<EventDetails/>}/>
+
         <Route path="/admin" element={<AdminLayout />}>
           <Route path="categories" element={<ManageCategories />} />
           <Route path="events" element={<ManageEvents />} />
@@ -68,10 +70,9 @@ function App() {
           <Route path="categories/edit/:id" element={<EditCategory />} />
           <Route path="hosts" element={<ManageHosts />} />
           <Route path="users" element={<ManageUsers />} />
-         
-
+          <Route path="dashboard" element={<AdminDashboard />} />
         </Route>
-        
+
         <Route path="/host/dashboard" element={<HostDashboard />} />
         <Route path="/host/newevent" element={<NewEventPage />} />
         <Route path="/host/myevents" element={<MyEventsPage />} />
