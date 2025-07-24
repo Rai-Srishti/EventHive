@@ -2,7 +2,7 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Form, Button } from 'react-bootstrap';
 import Footer from '../../components/Footer';
-import Header from '../../components/Header';
+
 
 function Update() {
     return (
@@ -43,7 +43,7 @@ function Update() {
                 </Form>
             </Container>
 
-            <Footer />
+           
         </div>
     );
 }

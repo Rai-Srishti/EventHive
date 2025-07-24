@@ -19,7 +19,7 @@ const AboutUs = () => {
           backgroundPosition: 'center',
           color: 'white',
           position: 'relative',
-          height: '400px', // increased height
+          height: '400px', 
         }}
       >
         <div
@@ -49,7 +49,7 @@ const AboutUs = () => {
       <Speaker />
       <Testimonials />
       <ContactSection/>
-      <Footer />
+      
     </>
   );
 };

@@ -2,10 +2,12 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { toggleFavourite } from '../store/FavouriteSlice';
 import { BsHeart, BsHeartFill } from 'react-icons/bs';
+import { useNavigate } from 'react-router-dom';
 import '../assets/css/EventBox.css';
 
 const EventBox = ({ event, isFavourite }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   return (
     <div className="event-box d-flex flex-column flex-md-row align-items-stretch mb-5">
@@ -16,7 +18,6 @@ const EventBox = ({ event, isFavourite }) => {
 
       {/* Content Section */}
       <div className="event-box-content position-relative py-5 px-4 px-md-5 w-100">
-        {/* Favourite Button */}
         <button
           className={`favourite-btn ${isFavourite ? 'favourited' : ''}`}
           onClick={() => dispatch(toggleFavourite(event))}
@@ -36,7 +37,12 @@ const EventBox = ({ event, isFavourite }) => {
 
         <h4 className="fw-bold mb-3">{event.title}</h4>
 
-        <button className="btn btn-danger book-btn">Book Now</button>
+        <button
+          className="btn btn-danger book-btn"
+          onClick={() => navigate(`/event-details/${event.id}`)}
+        >
+          Book Now
+        </button>
       </div>
     </div>
   );

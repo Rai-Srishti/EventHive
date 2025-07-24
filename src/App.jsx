@@ -10,6 +10,8 @@ import Update from './pages/Attendee/Update';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import AboutUs from './pages/AboutUsPage';
+import EventDetails from './pages/Attendee/EventDetailsPage';
+import Footer from './components/Footer';
 
 function App() {
   return (
@@ -23,8 +25,9 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path='/about' element={<AboutUs/>} />
+        <Route path= '/event-details/:id' element={<EventDetails/>}/>
       </Routes>
-
+ <Footer/>
     </>
   );
 }

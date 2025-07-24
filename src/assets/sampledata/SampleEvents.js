@@ -8,7 +8,7 @@ const sampleEvents = [
     date: '2025-07-21',
     location: 'Broadw, New York',
     category: 'Technology',
-    seats: 500,
+    seats: 5600,
     image: DemoEvent,
   },
   {

@@ -58,7 +58,7 @@ const Home = () => {
       </div>
       <StatsCounter/>
       <Speakers/>
-      <Footer/>
+      
     </>
   );
 };
