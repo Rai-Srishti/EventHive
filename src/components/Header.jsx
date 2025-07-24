@@ -47,10 +47,12 @@ const Header = () => {
           </Nav>
 
           <Nav className="me-2 align-items-center">
-            <Button href="#get-ticket" className="get-ticket-btn">
-              Get Ticket
-            </Button>
-          </Nav>
+  {location.pathname !== '/login' && location.pathname !== '/register' && (
+    <Button href="/login" className="get-ticket-btn">
+      Login
+    </Button>
+  )}
+</Nav>
         </Navbar.Collapse>
       </Container>
     </Navbar>
