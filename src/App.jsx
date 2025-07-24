@@ -50,8 +50,15 @@ function App() {
     '/admin/profile',
   ];
 
-  const isHostRoute = hostPaths.includes(location.pathname);
-  const isAdminRoute = adminPaths.includes(location.pathname);
+  // Check if the current route is a host page (even with dynamic segments)
+  const isHostRoute = hostPaths.some(path => location.pathname.startsWith(path));
+  // Check if the current route is a host page (even with dynamic segments)
+  const isAdminRoute = adminPaths.some(path => location.pathname.startsWith(path));
+
+  // .some() checks whether at least one item in the array passes the test function
+  // .startsWith(path) allows us to match both exact and nested paths (like /host/updateevent/1001)
+  // This way, dynamic or nested host routes will still trigger the HostNavbar
+  
   return (
     <>
     {/* Render Header only when not on host routes */}
@@ -82,7 +89,7 @@ function App() {
           <Route path="events" element={<ManageEvents />} />
           <Route path="requests" element={<ManageRequest />} />
           <Route path="profile" element={<Profile />} />
-          <Route path="/admin/edit-profile" element={<EditProfile />} />
+          <Route path="edit-profile" element={<EditProfile />} />
           <Route path="events/edit/:id" element={<EditEvent />} />
           <Route path="categories/edit/:id" element={<EditCategory />} />
           <Route path="hosts" element={<ManageHosts />} />

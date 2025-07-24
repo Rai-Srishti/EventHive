@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import "./EditEvent.css";
+import "../../assets/css/Admin/EditEvent.css";
 
 const EditEvent = () => {
   const { id } = useParams();

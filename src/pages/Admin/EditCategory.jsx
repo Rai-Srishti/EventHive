@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import "./EditEvent.css"; // Reuse your CSS or create a separate one if needed
+import "../../assets/css/Admin/EditEvent.css"; // Reuse your CSS or create a separate one if needed
 
 const EditCategory = () => {
   const { id } = useParams();
