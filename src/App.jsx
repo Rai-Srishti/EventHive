@@ -29,6 +29,8 @@ import NewEventPage from './pages/Host/NewEventPage';
 import MyEventsPage from "./pages/Host/MyEventsPage";
 import SpeakersPage from './pages/SpeakersPage';
 import WalletPage from './pages/Attendee/WalletPage';
+import BookingsPage from './pages/Attendee/BookingsPage';
+
 function App() {
   const location = useLocation();
 
@@ -72,6 +74,7 @@ function App() {
         <Route path= '/event-details/:id' element={<EventDetails/>}/>
         <Route path= '/attendee/wallet' element={<WalletPage/>}/>
         <Route path="/attendee/update" element={<Update />} />
+        <Route path="/attendee/booking" element={<BookingsPage />} />
 
 
         <Route path="/admin" element={<AdminLayout />}>
