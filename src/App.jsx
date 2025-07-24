@@ -25,7 +25,9 @@ import ManageUsers from './pages/Admin/ManageUsers';
 import HostDashboard from './pages/Host/HostDashboard';
 import HostNavbar from './pages/Host/HostNavbar';
 import NewEventPage from './pages/Host/NewEventPage';
-import MyEventsPage from "./pages/Host/MyEventsPage"
+import MyEventsPage from "./pages/Host/MyEventsPage";
+import SpeakersPage from './pages/SpeakersPage';
+
 function App() {
   const location = useLocation();
 
@@ -54,6 +56,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path='/about' element={<AboutUs/>} />
+        <Route path='/speakers' element={<SpeakersPage/>} />
         <Route path= '/event-details/:id' element={<EventDetails/>}/>
         <Route path="/admin" element={<AdminLayout />}>
           <Route path="categories" element={<ManageCategories />} />
