@@ -34,7 +34,7 @@ const Header = () => {
             <Link to="/" className={isActive('/')}>HOME</Link>
             <Nav.Link href="/about">ABOUT</Nav.Link>
             <Link to="/events" className={isActive('/events')}>EVENTS</Link>
-            <Nav.Link href="#speakers">SPEAKERS</Nav.Link>
+            <Nav.Link href="/speakers">SPEAKERS</Nav.Link>
 
             <Link to="/favourites" className="favourite-link position-relative">
               <BsHeart className="heart-icon" size={24} />
