@@ -30,6 +30,7 @@ import MyEventsPage from "./pages/Host/MyEventsPage";
 import SpeakersPage from './pages/SpeakersPage';
 import WalletPage from './pages/Attendee/WalletPage';
 import BookingsPage from './pages/Attendee/BookingsPage';
+import AttendeeNavbar from './pages/Attendee/AttendeeNavbar';
 
 function App() {
   const location = useLocation();
@@ -50,10 +51,18 @@ function App() {
     '/admin/profile',
   ];
 
+    const attendeePaths = [
+      '/attendee/wallet',
+      '/attendee/update',
+      '/attendee/booking',
+    ]
+
   // Check if the current route is a host page (even with dynamic segments)
   const isHostRoute = hostPaths.some(path => location.pathname.startsWith(path));
-  // Check if the current route is a host page (even with dynamic segments)
+  // Check if the current route is a admin page (even with dynamic segments)
   const isAdminRoute = adminPaths.some(path => location.pathname.startsWith(path));
+  // Check if the current route is a attendee page (even with dynamic segments)
+  const isAttendeeRoute = attendeePaths.some(path => location.pathname.startsWith(path));
 
   // .some() checks whether at least one item in the array passes the test function
   // .startsWith(path) allows us to match both exact and nested paths (like /host/updateevent/1001)
@@ -62,13 +71,16 @@ function App() {
   return (
     <>
     {/* Render Header only when not on host routes */}
-      {!isHostRoute && !isAdminRoute && <Header />}
-
-
       
-      {/* Render HostNavbar only on host routes */}
+
       {isHostRoute && <HostNavbar />}
       
+      {/* Render HostNavbar only on host routes */}
+      {isAttendeeRoute && <AttendeeNavbar />}
+      
+      {!isHostRoute && !isAdminRoute && !isAttendeeRoute && <Header />}
+      
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/events" element={<EventsPage />} /> 
