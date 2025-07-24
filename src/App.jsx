@@ -12,6 +12,14 @@ import Register from './pages/Register';
 import AboutUs from './pages/AboutUsPage';
 import EventDetails from './pages/Attendee/EventDetailsPage';
 import Footer from './components/Footer';
+import ManageCategories from './pages/Admin/ManageCategories';
+import AdminLayout from './components/AdminLayout';
+import ManageEvents from './pages/Admin/ManageEvents';
+import ManageRequest from './pages/Admin/ManageRequest';
+import Profile from './pages/Admin/ManageProfile';
+import EditProfile from './pages/Admin/EditProfile';
+import EditEvent from './pages/Admin/EditEvent';
+import EditCategory from './pages/Admin/EditCategory';
 
 function App() {
   return (
@@ -26,6 +34,15 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path='/about' element={<AboutUs/>} />
         <Route path= '/event-details/:id' element={<EventDetails/>}/>
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route path="categories" element={<ManageCategories />} />
+          <Route path="events" element={<ManageEvents />} />
+          <Route path="requests" element={<ManageRequest />} />
+          <Route path="profile" element={<Profile />} />
+          <Route path="/admin/edit-profile" element={<EditProfile />} />
+          <Route path="events/edit/:id" element={<EditEvent />} />
+          <Route path="categories/edit/:id" element={<EditCategory />} />
+        </Route>
       </Routes>
  <Footer/>
     </>
