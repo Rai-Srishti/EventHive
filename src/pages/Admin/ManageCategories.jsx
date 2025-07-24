@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "./ManageRequest.css";
+import "../../assets/css/Admin/ManageRequest.css";
 
 const ManageCategories = () => {
   const navigate = useNavigate();

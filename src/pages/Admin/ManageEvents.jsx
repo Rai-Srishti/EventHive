@@ -1,5 +1,5 @@
 import React from "react";
-import "./ManageRequest.css";
+import "../../assets/css/Admin/ManageRequest.css";
 import { useNavigate } from "react-router-dom";
 
 const ManageEvents = () => {

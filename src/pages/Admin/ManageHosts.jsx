@@ -1,5 +1,5 @@
 import React from "react";
-import "./ManageRequest.css"; // Reuse same CSS for consistent styling
+import "../../assets/css/Admin/ManageRequest.css"; // Reuse same CSS for consistent styling
 
 const ManageHosts = () => {
   const hosts = [

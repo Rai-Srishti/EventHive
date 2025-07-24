@@ -1,5 +1,5 @@
 import React from "react";
-import "./ManageRequest.css"; // Reuse the same CSS for styling
+import "../../assets/css/Admin/ManageRequest.css"; // Reuse the same CSS for styling
 
 const ManageUsers = () => {
   const users = [
