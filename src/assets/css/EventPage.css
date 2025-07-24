@@ -5,7 +5,7 @@
 
 /* Banner Styling */
 .events-banner {
-  height: 280px;
+  height: 400px;
   background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent dark background */
   display: flex;
   align-items: center;
@@ -26,7 +26,7 @@
   color: #ffffff;
 }
 
-.banner-content p {
+.banner-content p:not(.display-1) {
   font-size: 1.4rem;
   font-weight: 600;
   margin: 0;
