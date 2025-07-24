@@ -22,6 +22,7 @@ import EditEvent from './pages/Admin/EditEvent';
 import EditCategory from './pages/Admin/EditCategory';
 import ManageHosts from './pages/Admin/ManageHosts';
 import ManageUsers from './pages/Admin/ManageUsers';
+import HostDashboard from './pages/Host/HostDashboard';
 
 
 function App() {
@@ -47,7 +48,10 @@ function App() {
           <Route path="categories/edit/:id" element={<EditCategory />} />
           <Route path="hosts" element={<ManageHosts />} />
           <Route path="users" element={<ManageUsers />} />
+         
+
         </Route>
+        <Route path="/host/dashboard" element={<HostDashboard />} />
       </Routes>
  <Footer/>
     </>
