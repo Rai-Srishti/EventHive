@@ -1,0 +1,46 @@
+.dashboard-container {
+  display: flex;
+}
+
+.dashboard-content {
+  flex: 1;
+  padding: 30px;
+  background-color: #f9f9f9;
+  min-height: 100vh;
+}
+
+.dashboard-title {
+  font-size: 28px;
+  font-family: 'Segoe UI', sans-serif;
+  font-weight: 600;
+  border-bottom: 3px solid #E2215F;
+  display: inline-block;
+  margin-bottom: 30px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.stat-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+  text-align: center;
+  transition: 0.3s;
+}
+
+.stat-card h3 {
+  margin-bottom: 10px;
+  font-size: 18px;
+  color: #555;
+}
+
+.stat-card p {
+  font-size: 24px;
+  font-weight: bold;
+  color: #E2215F;
+}
