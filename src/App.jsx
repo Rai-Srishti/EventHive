@@ -25,7 +25,7 @@ import ManageUsers from './pages/Admin/ManageUsers';
 import HostDashboard from './pages/Host/HostDashboard';
 import HostNavbar from './pages/Host/HostNavbar';
 import NewEventPage from './pages/Host/NewEventPage';
-
+import MyEventsPage from "./pages/Host/MyEventsPage"
 function App() {
   const location = useLocation();
 
@@ -71,6 +71,7 @@ function App() {
         
         <Route path="/host/dashboard" element={<HostDashboard />} />
         <Route path="/host/newevent" element={<NewEventPage />} />
+        <Route path="/host/myevents" element={<MyEventsPage />} />
       </Routes>
  <Footer/>
     </>
