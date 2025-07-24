@@ -11,7 +11,7 @@ const SpeakersPage = () => {
       <div className="events-page">
         <div className="events-banner py-5">
           <div className="banner-content mx-5 px-4">
-            <h1 className="fw-bold display-1">Speakers</h1>
+            <p className="fw-bold display-1">Speakers</p>
             <p>
               <span className="h5" style={{ color: "#ffffff" }}>Home</span>{" "}
               <span className="h5" style={{ color: "#e91e63" }}>&gt;</span>{" "}
