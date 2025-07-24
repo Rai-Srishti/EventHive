@@ -38,12 +38,23 @@ function App() {
     '/host/dashboard',
   ];
 
-  const isHostRoute = hostPaths.includes(location.pathname);
+    const adminPaths = [
+    '/admin/requests',
+    '/admin/hosts',
+    '/admin/users',
+    '/admin/categories',
+    '/admin/events',
+    '/admin/profile',
+  ];
 
+  const isHostRoute = hostPaths.includes(location.pathname);
+  const isAdminRoute = adminPaths.includes(location.pathname);
   return (
     <>
     {/* Render Header only when not on host routes */}
-      {!isHostRoute && <Header />}
+      {!isHostRoute && !isAdminRoute && <Header />}
+
+
       
       {/* Render HostNavbar only on host routes */}
       {isHostRoute && <HostNavbar />}
