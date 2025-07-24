@@ -28,7 +28,7 @@ import HostNavbar from './pages/Host/HostNavbar';
 import NewEventPage from './pages/Host/NewEventPage';
 import MyEventsPage from "./pages/Host/MyEventsPage";
 import SpeakersPage from './pages/SpeakersPage';
-
+import WalletPage from './pages/Attendee/WalletPage';
 function App() {
   const location = useLocation();
 
@@ -64,12 +64,15 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/events" element={<EventsPage />} /> 
         <Route path="/favourites" element={<Favourites />} />
-        <Route path="/attendee/update" element={<Update />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path='/about' element={<AboutUs/>} />
         <Route path='/speakers' element={<SpeakersPage/>} />
+
         <Route path= '/event-details/:id' element={<EventDetails/>}/>
+        <Route path= '/attendee/wallet' element={<WalletPage/>}/>
+        <Route path="/attendee/update" element={<Update />} />
+
 
         <Route path="/admin" element={<AdminLayout />}>
           <Route path="categories" element={<ManageCategories />} />
