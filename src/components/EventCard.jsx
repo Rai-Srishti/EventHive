@@ -4,8 +4,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toggleFavourite } from '../store/FavouriteSlice';
 import '../assets/css/EventCard.css';
 import { BsHeart, BsHeartFill } from 'react-icons/bs';
+import { useNavigate } from 'react-router-dom';
+
 
 const EventCard = ({ event }) => {
+const Navigate = useNavigate();
   const dispatch = useDispatch();
   const favourites = useSelector((state) => state.favourites.items);
   const isFavourite = favourites.some((fav) => fav.id === event.id);
@@ -41,7 +44,12 @@ const EventCard = ({ event }) => {
             <i className="bi bi-geo-alt me-2"></i>{event.location}
           </div>
           <h5 className="card-title">{event.title}</h5>
-          <a href="#" className="text-danger fw-bold">Book Now</a>
+         <button
+          className="btn btn-danger book-btn"
+          onClick={() => Navigate(`/event-details/${event.id}`)}
+        >
+          Book Now
+        </button>
         </div>
       </div>
     </div>

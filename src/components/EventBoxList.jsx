@@ -1,4 +1,3 @@
-// src/components/EventBoxList.jsx
 import React from 'react';
 import { useSelector } from 'react-redux';
 import EventBox from './EventBox';
@@ -11,7 +10,11 @@ const EventBoxList = ({ events }) => {
       {events.map((event) => {
         const isFavourite = favourites.some((fav) => fav.id === event.id);
         return (
-          <EventBox key={event.id} event={event} isFavourite={isFavourite} />
+          <EventBox
+            key={event.id}
+            event={event}
+            isFavourite={isFavourite}
+          />
         );
       })}
     </div>
