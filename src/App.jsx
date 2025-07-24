@@ -20,6 +20,9 @@ import Profile from './pages/Admin/ManageProfile';
 import EditProfile from './pages/Admin/EditProfile';
 import EditEvent from './pages/Admin/EditEvent';
 import EditCategory from './pages/Admin/EditCategory';
+import ManageHosts from './pages/Admin/ManageHosts';
+import ManageUsers from './pages/Admin/ManageUsers';
+
 
 function App() {
   return (
@@ -42,6 +45,8 @@ function App() {
           <Route path="/admin/edit-profile" element={<EditProfile />} />
           <Route path="events/edit/:id" element={<EditEvent />} />
           <Route path="categories/edit/:id" element={<EditCategory />} />
+          <Route path="hosts" element={<ManageHosts />} />
+          <Route path="users" element={<ManageUsers />} />
         </Route>
       </Routes>
  <Footer/>
