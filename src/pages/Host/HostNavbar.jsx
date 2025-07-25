@@ -4,10 +4,12 @@ import { NavLink } from 'react-router-dom';
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
 
 import logo from '../../images/Logo.png';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { FaUser } from 'react-icons/fa';
 
 const HostNavbar = () => {
+  const location = useLocation();
+  const isActive = (path) => location.pathname === path ? 'nav-link active' : 'nav-link';
   return (
     
       <Navbar expand="lg" className="event-navbar" variant="light">
@@ -24,12 +26,12 @@ const HostNavbar = () => {
         <Navbar.Toggle aria-controls="event-navbar-nav" />
         <Navbar.Collapse id="event-navbar-nav" className="justify-content-between">
           <Nav className="mx-auto align-items-center nav-main-list gap-3">
-            <Link to="/host/dashboard" className="nav-link">ANALYTICS</Link>
-            <Nav.Link href="/host/newevent">NEW EVENT</Nav.Link>
-            <Nav.Link href="/host/myevents">MY EVENTS</Nav.Link>
-            <Nav.Link href="/host/about">ABOUT</Nav.Link>
-            <Nav.Link to="/host/contact" activeclassname="active">CONTACT</Nav.Link>
-            <Nav.Link to="/host/profile" activeclassname="active"></Nav.Link>
+            <Link to="/host/dashboard" className={isActive('/host/dashboard')}>ANALYTICS</Link>
+            <Link to="/host/newevent" className={isActive('/host/newevent')}>NEW EVENT</Link>
+            <Link to="/host/myevents" className={isActive('/host/myevents')}>MY EVENTS</Link>
+            <Link to="/host/about" className={isActive('/host/about')}>ABOUT</Link>
+            <Link to="/host/contact" activeclassname="active" className={isActive('/host/contact')}>CONTACT</Link>
+            <Link to="/host/profile" activeclassname="active" className={isActive('/host/dashboard')}></Link>
 
             
           </Nav>

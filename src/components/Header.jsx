@@ -32,9 +32,9 @@ const Header = () => {
         <Navbar.Collapse id="event-navbar-nav" className="justify-content-between">
           <Nav className="mx-auto align-items-center nav-main-list gap-3">
             <Link to="/" className={isActive('/')}>HOME</Link>
-            <Nav.Link href="/about">ABOUT</Nav.Link>
+            <Link to="/about" className={isActive('/about')}>ABOUT</Link>
             <Link to="/events" className={isActive('/events')}>EVENTS</Link>
-            <Nav.Link href="/speakers">SPEAKERS</Nav.Link>
+            <Link to="/speakers" className={isActive('/speakers')}>SPEAKERS</Link>
 
             <Link to="/favourites" className="favourite-link position-relative">
               <BsHeart className="heart-icon" size={24} />

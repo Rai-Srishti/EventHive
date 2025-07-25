@@ -28,14 +28,14 @@ const AttendeeNavbar = () => {
         <Navbar.Toggle aria-controls="event-navbar-nav" />
         <Navbar.Collapse id="event-navbar-nav" className="justify-content-between">
           <Nav className="mx-auto align-items-center nav-main-list gap-3">
-            <Link to="/attendee/home" className="nav-link">HOME</Link>
-            <Nav.Link href="/attendee/events">EVENTS</Nav.Link>
-            <Nav.Link href="/attendee/mybookings">MY BOOKINGS</Nav.Link>
-            <Nav.Link href="/attendee/wallet">WALLET</Nav.Link>
-            <Nav.Link href="/attendee/about">ABOUT</Nav.Link>
-            <Nav.Link to="/contact" activeclassname="active">CONTACT</Nav.Link>
-            <Nav.Link to="/contact" activeclassname="active"></Nav.Link>
-            <Nav.Link to="/profile" activeclassname="active"></Nav.Link>
+            <Link to="/attendee/home" className={isActive('/attendee/home')}>HOME</Link>
+            <Link to="/attendee/events" className={isActive('/attendee/events')}>EVENTS</Link>
+            <Link to="/attendee/mybookings"className={isActive('/attendee/mybookings')}>MY BOOKINGS</Link>
+            <Link to="/attendee/wallet" className={isActive('/attendee/wallet')}>WALLET</Link>
+            <Link to="/attendee/about" className={isActive('/attendee/about')}>ABOUT</Link>
+            <Link to="/attendee/contact" activeclassname="active" className={isActive('/attendee/contact')}>CONTACT</Link>
+            {/* <Link to="/contact" activeclassname="active" className="nav-link"></Link> */}
+            <Link to="/profile" activeclassname="active" className="nav-link"></Link>
             <Link to="/favourites" className="favourite-link position-relative">
               <BsHeart className="heart-icon" size={24} />
               {favouriteCount > 0 && (
