@@ -27,9 +27,9 @@ const HostNavbar = () => {
             <Link to="/host/dashboard" className="nav-link">ANALYTICS</Link>
             <Nav.Link href="/host/newevent">NEW EVENT</Nav.Link>
             <Nav.Link href="/host/myevents">MY EVENTS</Nav.Link>
-            <Nav.Link href="/about">ABOUT</Nav.Link>
-            <Nav.Link to="/contact" activeclassname="active">CONTACT</Nav.Link>
-            <Nav.Link to="/profile" activeclassname="active"></Nav.Link>
+            <Nav.Link href="/host/about">ABOUT</Nav.Link>
+            <Nav.Link to="/host/contact" activeclassname="active">CONTACT</Nav.Link>
+            <Nav.Link to="/host/profile" activeclassname="active"></Nav.Link>
 
             
           </Nav>
