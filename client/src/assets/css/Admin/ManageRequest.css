@@ -1,0 +1,143 @@
+
+
+.manage-request-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: rgb(245, 244, 244); 
+  flex-direction: column;
+}
+
+@media (min-width: 769px) {
+  .manage-request-container {
+    flex-direction: row;
+  }
+}
+
+.manage-request-content {
+  flex: 1;
+  padding: 20px;
+  overflow-x: auto;
+}
+
+.manage-request-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  margin-bottom: 30px;
+}
+
+.manage-request-table thead {
+  background-color: #ffffff; /* white header */
+  color: #E2215F;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 16px;
+  position: relative;
+}
+
+.manage-request-table thead::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 3px;
+  background-color: #E2215F;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.manage-request-table th,
+.manage-request-table td {
+  text-align: center;
+  padding: 14px 16px;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 16px;
+}
+
+.manage-request-table tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+.button-approve,
+.button-reject {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.button-approve {
+  background-color: #28a745;
+}
+
+.button-approve:hover {
+  background-color: #218838;
+}
+
+.button-reject {
+  background-color: #dc3545;
+}
+
+.button-reject:hover {
+  background-color: #c82333;
+}
+
+
+@media screen and (max-width: 768px) {
+  .manage-request-table {
+    border: 0;
+  }
+
+  .manage-request-table thead {
+    display: none;
+  }
+
+  .manage-request-table,
+  .manage-request-table tbody,
+  .manage-request-table tr,
+  .manage-request-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .manage-request-table tr {
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: white;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    padding: 12px;
+  }
+
+  .manage-request-table td {
+    text-align: right;
+    padding-left: 50%;
+    position: relative;
+    font-size: 15px;
+    border: none;
+    border-bottom: 1px solid #eee;
+  }
+
+  .manage-request-table td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 16px;
+    width: 45%;
+    padding-left: 10px;
+    font-weight: bold;
+    text-align: left;
+    color: grey;
+  }
+
+  .button-approve,
+  .button-reject {
+    width: 100%;
+    margin-top: 6px;
+    margin-right: 8px;
+  }
+}

@@ -1,0 +1,26 @@
+.custom-table tbody tr:hover {
+    background-color: #f1f4f8;
+    cursor: pointer;
+  }
+  
+  .status-badge {
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 12px;
+  }
+  
+  .status-active {
+    background-color: #d1e7dd;
+    color: #0f5132;
+  }
+  
+  .status-upcoming {
+    background-color: #cff4fc;
+    color: #055160;
+  }
+  
+  .status-completed {
+    background-color: #e2e3e5;
+    color: #41464b;
+  }
+  
