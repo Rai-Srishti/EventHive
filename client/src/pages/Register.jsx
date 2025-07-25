@@ -94,7 +94,7 @@ function Register() {
               value={userdet.role}
               onChange={(e) => setUserdet({ ...userdet, role: e.target.value })}
             >
-              <option value="Admin">Admin</option>
+              <option value="Admin">Host</option>
               <option value="Attendee">Attendee</option>
             </select>
           </div>
