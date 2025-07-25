@@ -1,0 +1,14 @@
+.text-input {
+  border: 1.5px solid #ccc; /* default light gray */
+  border-radius: 25px;
+  padding-left: 20px;
+  height: 48px;
+  color: #333;
+  transition: border-color 0.3s ease;
+}
+
+.text-input:focus {
+  border-color: #d11d4a;     /* Pink color when focused */
+  outline: none;             /* Removes default blue outline */
+  box-shadow: none;
+}
