@@ -24,96 +24,110 @@ import ManageHosts from './pages/Admin/ManageHosts';
 import ManageUsers from './pages/Admin/ManageUsers';
 import AdminDashboard from './pages/Admin/AdminDashboard';
 import HostDashboard from './pages/Host/HostDashboard';
-import HostNavbar from './pages/Host/HostNavbar';
 import NewEventPage from './pages/Host/NewEventPage';
 import MyEventsPage from "./pages/Host/MyEventsPage";
 import SpeakersPage from './pages/SpeakersPage';
 import WalletPage from './pages/Attendee/WalletPage';
 import BookingsPage from './pages/Attendee/BookingsPage';
-import AttendeeNavbar from './pages/Attendee/AttendeeNavbar';
+import MyBookings from './pages/Attendee/MyBookings';
+import AttendeeLayout from './components/AttendeeLayout';
+import HostLayout from './components/HostLayout';
 
 function App() {
-  const location = useLocation();
-
-  const hostPaths = [
-    '/host/myevents',
-    '/host/newevent',
-    '/host/updateevent',
-    '/host/dashboard',
-  ];
-
-    const adminPaths = [
-    '/admin/requests',
-    '/admin/hosts',
-    '/admin/users',
-    '/admin/categories',
-    '/admin/events',
-    '/admin/profile',
-  ];
-
-    const attendeePaths = [
-      '/attendee/wallet',
-      '/attendee/update',
-      '/attendee/booking',
-    ]
-
-  // Check if the current route is a host page (even with dynamic segments)
-  const isHostRoute = hostPaths.some(path => location.pathname.startsWith(path));
-  // Check if the current route is a admin page (even with dynamic segments)
-  const isAdminRoute = adminPaths.some(path => location.pathname.startsWith(path));
-  // Check if the current route is a attendee page (even with dynamic segments)
-  const isAttendeeRoute = attendeePaths.some(path => location.pathname.startsWith(path));
-
-  // .some() checks whether at least one item in the array passes the test function
-  // .startsWith(path) allows us to match both exact and nested paths (like /host/updateevent/1001)
-  // This way, dynamic or nested host routes will still trigger the HostNavbar
-  
   return (
     <>
-    {/* Render Header only when not on host routes */}
-      
-
-      {isHostRoute && <HostNavbar />}
-      
-      {/* Render HostNavbar only on host routes */}
-      {isAttendeeRoute && <AttendeeNavbar />}
-      
-      {!isHostRoute && !isAdminRoute && !isAttendeeRoute && <Header />}
-      
-
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/events" element={<EventsPage />} /> 
-        <Route path="/favourites" element={<Favourites />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path='/about' element={<AboutUs/>} />
-        <Route path='/speakers' element={<SpeakersPage/>} />
+        {/* Public Routes */}
+        <Route path="/" element={
+          <>
+            <Header />
+            <Home />
+            <Footer />
+          </>
+        } />
+        <Route path="/events" element={
+          <>
+            <Header />
+            <EventsPage />
+            <Footer />
+          </>
+        } />
+        <Route path="/favourites" element={
+          <>
+            <Header />
+            <Favourites />
+            <Footer />
+          </>
+        } />
+        <Route path="/login" element={
+          <>
+            <Header />
+            <Login />
+            <Footer />
+          </>
+        } />
+        <Route path="/register" element={
+          <>
+            <Header />
+            <Register />
+            <Footer />
+          </>
+        } />
+        <Route path="/about" element={
+          <>
+            <Header />
+            <AboutUs />
+            <Footer />
+          </>
+        } />
+        <Route path="/speakers" element={
+          <>
+            <Header />
+            <SpeakersPage />
+            <Footer />
+          </>
+        } />
+        <Route path="/event-details/:id" element={
+          <>
+            <Header />
+            <EventDetails />
+            <Footer />
+          </>
+        } />
 
-        <Route path= '/event-details/:id' element={<EventDetails/>}/>
-        <Route path= '/attendee/wallet' element={<WalletPage/>}/>
-        <Route path="/attendee/update" element={<Update />} />
-        <Route path="/attendee/booking" element={<BookingsPage />} />
+        {/* Attendee Routes */}
+        <Route path="/attendee" element={<AttendeeLayout />}>
+          <Route path="wallet" element={<WalletPage />} />
+          <Route path="update" element={<Update />} />
+          <Route path="booking" element={<BookingsPage />} />
+          <Route path="mybookings" element={<MyBookings />} />
+          <Route path="events" element={<EventsPage />} />
+          <Route path="about" element={<AboutUs />} />
+          <Route path="home" element={<Home />} /> 
+        </Route>
 
-
+        {/* Admin Routes */}
         <Route path="/admin" element={<AdminLayout />}>
           <Route path="categories" element={<ManageCategories />} />
-          <Route path="events" element={<ManageEvents />} />
-          <Route path="requests" element={<ManageRequest />} />
-          <Route path="profile" element={<Profile />} />
-          <Route path="edit-profile" element={<EditProfile />} />
-          <Route path="events/edit/:id" element={<EditEvent />} />
           <Route path="categories/edit/:id" element={<EditCategory />} />
+          <Route path="events" element={<ManageEvents />} />
+          <Route path="events/edit/:id" element={<EditEvent />} />
+          <Route path="requests" element={<ManageRequest />} />
           <Route path="hosts" element={<ManageHosts />} />
           <Route path="users" element={<ManageUsers />} />
+          <Route path="profile" element={<Profile />} />
+          <Route path="edit-profile" element={<EditProfile />} />
           <Route path="dashboard" element={<AdminDashboard />} />
         </Route>
 
-        <Route path="/host/dashboard" element={<HostDashboard />} />
-        <Route path="/host/newevent" element={<NewEventPage />} />
-        <Route path="/host/myevents" element={<MyEventsPage />} />
+        {/* Host Routes */}
+        <Route path="/host" element={<HostLayout />}>
+          <Route path="dashboard" element={<HostDashboard />} />
+          <Route path="newevent" element={<NewEventPage />} />
+          <Route path="myevents" element={<MyEventsPage />} />
+          <Route path="about" element={<AboutUs />} />
+        </Route>
       </Routes>
- <Footer/>
     </>
   );
 }

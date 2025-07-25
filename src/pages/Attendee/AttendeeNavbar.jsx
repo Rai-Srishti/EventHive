@@ -28,21 +28,22 @@ const AttendeeNavbar = () => {
         <Navbar.Toggle aria-controls="event-navbar-nav" />
         <Navbar.Collapse id="event-navbar-nav" className="justify-content-between">
           <Nav className="mx-auto align-items-center nav-main-list gap-3">
-            <Link to="/" className="nav-link">HOME</Link>
-            <Nav.Link href="/events">EVENTs</Nav.Link>
+            <Link to="/attendee/home" className="nav-link">HOME</Link>
+            <Nav.Link href="/attendee/events">EVENTS</Nav.Link>
             <Nav.Link href="/attendee/mybookings">MY BOOKINGS</Nav.Link>
-            <Nav.Link href="/about">ABOUT</Nav.Link>
+            <Nav.Link href="/attendee/wallet">WALLET</Nav.Link>
+            <Nav.Link href="/attendee/about">ABOUT</Nav.Link>
             <Nav.Link to="/contact" activeclassname="active">CONTACT</Nav.Link>
             <Nav.Link to="/contact" activeclassname="active"></Nav.Link>
             <Nav.Link to="/profile" activeclassname="active"></Nav.Link>
             <Link to="/favourites" className="favourite-link position-relative">
-                          <BsHeart className="heart-icon" size={24} />
-                          {favouriteCount > 0 && (
-                            <span className="favourite-badge badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
-                              {favouriteCount}
-                            </span>
-                          )}
-                        </Link>
+              <BsHeart className="heart-icon" size={24} />
+              {favouriteCount > 0 && (
+                <span className="favourite-badge badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
+                 {favouriteCount}
+                </span>
+              )}
+           </Link>
             
           </Nav>
 
