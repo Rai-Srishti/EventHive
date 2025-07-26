@@ -1,12 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import events from '../../assets/sampledata/Events';
+import { useNavigate } from 'react-router-dom';
 
 const EventsPage = () => {
   const eventsPerPage = 8; //numbe of events per page
   const [page, setPage] = useState(0); //to track the pabe number. starts with 0
   const [searchTerm, setSearchTerm] = useState('');
 
+  const navigate = useNavigate();
+  const handleEdit = (eventId) => {
+    navigate(`/host/my-events/edit/${eventId}`);
+  };
+
+  const handleDelete = (eventId) => {
+    navigate(`/host/my-events/delete/${eventId}`);
+  };
   const filteredEvents = events.filter(event =>
     event.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -63,6 +72,7 @@ const EventsPage = () => {
                 <th>Date</th>
                 <th>Category</th>
                 <th>Status</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -76,6 +86,19 @@ const EventsPage = () => {
                     <td>{event.date}</td>
                     <td>{event.category}</td>
                     <td>{event.status}</td>
+                    <td>
+                    {event.status === "Upcoming" && (
+                        <>
+                          <button onClick={() => handleEdit(event.id)} className="btn btn-warning me-2">
+                            Edit
+                          </button>
+                          <button onClick={() => handleDelete(event.id)} className="btn btn-danger">
+                            Delete
+                          </button>
+                        </>
+                      )}
+                    </td>
+                    
                   </tr>
                 ))
               ) : (

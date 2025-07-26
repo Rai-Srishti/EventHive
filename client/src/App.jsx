@@ -32,6 +32,7 @@ import BookingsPage from './pages/Attendee/BookingsPage';
 import MyBookings from './pages/Attendee/MyBookings';
 import AttendeeLayout from './components/AttendeeLayout';
 import HostLayout from './components/HostLayout';
+import UpdateEvent from './pages/Host/UpdateEventPage';
 
 function App() {
   return (
@@ -101,7 +102,7 @@ function App() {
           <Route path="update" element={<Update />} />
           <Route path="favourites" element={<Favourites />} />
           <Route path="booking" element={<BookingsPage />} />
-          <Route path="mybookings" element={<MyBookings />} />
+          <Route path="my-bookings" element={<MyBookings />} />
           <Route path="events" element={<EventsPage />} />
           <Route path="about" element={<AboutUs />} />
           <Route path="" element={<Home />} /> 
@@ -125,8 +126,9 @@ function App() {
         {/* Host Routes */}
         <Route path="/host" element={<HostLayout />}>
           <Route path="" element={<HostDashboard />} />
-          <Route path="newevent" element={<NewEventPage />} />
-          <Route path="myevents" element={<MyEventsPage />} />
+          <Route path="new-event" element={<NewEventPage />} />
+          <Route path="my-events" element={<MyEventsPage />} />
+          <Route path="my-events/edit/:id" element={<UpdateEvent />} />
           <Route path="about" element={<AboutUs />} />
           <Route path="artists" element={<ArtistPage />} /> 
         </Route>

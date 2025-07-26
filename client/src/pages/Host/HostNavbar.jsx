@@ -27,8 +27,8 @@ const HostNavbar = () => {
         <Navbar.Collapse id="event-navbar-nav" className="justify-content-between">
           <Nav className="mx-auto align-items-center nav-main-list gap-3">
             <Link to="/host" className={isActive('/host')}>ANALYTICS</Link>
-            <Link to="/host/newevent" className={isActive('/host/newevent')}>NEW EVENT</Link>
-            <Link to="/host/myevents" className={isActive('/host/myevents')}>MY EVENTS</Link>
+            <Link to="/host/new-event" className={isActive('/host/newevent')}>NEW EVENT</Link>
+            <Link to="/host/my-events" className={isActive('/host/myevents')}>MY EVENTS</Link>
             <Link to="/host/artists" className={isActive('/host/artists')}>ARTISTS</Link>
             <Link to="/host/about" className={isActive('/host/about')}>ABOUT</Link>
             <Link to="/host/contact" activeclassname="active" className={isActive('/host/contact')}>CONTACT</Link>
