@@ -1,0 +1,5 @@
+package com.eventhive.entities.enums;
+
+public class ApprovalAction {
+
+}

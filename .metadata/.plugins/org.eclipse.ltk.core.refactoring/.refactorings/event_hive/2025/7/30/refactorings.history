@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Move element &apos;User.java&apos; to &apos;Event-Hive_Backend/src/main/java/com.eventhive.entities&apos;&#x0A;- Original project: &apos;event_hive&apos;&#x0A;- Destination element: &apos;Event-Hive_Backend/src/main/java/com.eventhive.entities&apos;&#x0A;- Original element: &apos;com.eventhive.entities.User.java&apos;&#x0A;- Update references to refactored element" description="Move compilation unit" destination="=Event-Hive_Backend/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.eventhive.entities" element1="/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.eventhive.entities{User.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.move" patterns="*" policy="org.eclipse.jdt.ui.moveResources" qualified="false" references="true" stamp="1753515673385" units="1" version="1.0"/>
+</session>
