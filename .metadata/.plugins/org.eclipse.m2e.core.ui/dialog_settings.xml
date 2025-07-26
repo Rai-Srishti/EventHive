@@ -2,6 +2,7 @@
 <section name="Workbench">
 	<section name="MavenProjectImportWizardPage">
 		<list key="rootDirectory">
+			<item value="/Users/amitjamra/Project Backend/Event-Hive_Backend"/>
 			<item value="/Users/amitjamra/EventHive/EventHive/Event-Hive_Backend"/>
 		</list>
 		<list key="projectNameTemplate">
