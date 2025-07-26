@@ -1,5 +1,5 @@
 import React from 'react';
-import '../assets/css/SpeakerCard.css';
+import '../assets/css/ArtistCard.css';
 
 const SpeakerCard = ({ speaker }) => {
   return (

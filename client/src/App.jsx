@@ -26,7 +26,7 @@ import AdminDashboard from './pages/Admin/AdminDashboard';
 import HostDashboard from './pages/Host/HostDashboard';
 import NewEventPage from './pages/Host/NewEventPage';
 import MyEventsPage from "./pages/Host/MyEventsPage";
-import SpeakersPage from './pages/SpeakersPage';
+import ArtistPage from './pages/ArtistPage';
 import WalletPage from './pages/Attendee/WalletPage';
 import BookingsPage from './pages/Attendee/BookingsPage';
 import MyBookings from './pages/Attendee/MyBookings';
@@ -80,10 +80,10 @@ function App() {
             <Footer />
           </>
         } />
-        <Route path="/speakers" element={
+        <Route path="/artists" element={
           <>
             <Header />
-            <SpeakersPage />
+            <ArtistPage />
             <Footer />
           </>
         } />
@@ -99,11 +99,13 @@ function App() {
         <Route path="/attendee" element={<AttendeeLayout />}>
           <Route path="wallet" element={<WalletPage />} />
           <Route path="update" element={<Update />} />
+          <Route path="favourites" element={<Favourites />} />
           <Route path="booking" element={<BookingsPage />} />
           <Route path="mybookings" element={<MyBookings />} />
           <Route path="events" element={<EventsPage />} />
           <Route path="about" element={<AboutUs />} />
-          <Route path="home" element={<Home />} /> 
+          <Route path="" element={<Home />} /> 
+          <Route path="artists" element={<ArtistPage />} /> 
         </Route>
 
         {/* Admin Routes */}
@@ -122,10 +124,11 @@ function App() {
 
         {/* Host Routes */}
         <Route path="/host" element={<HostLayout />}>
-          <Route path="dashboard" element={<HostDashboard />} />
+          <Route path="" element={<HostDashboard />} />
           <Route path="newevent" element={<NewEventPage />} />
           <Route path="myevents" element={<MyEventsPage />} />
           <Route path="about" element={<AboutUs />} />
+          <Route path="artists" element={<ArtistPage />} /> 
         </Route>
       </Routes>
     </>
