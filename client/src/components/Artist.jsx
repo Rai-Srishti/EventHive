@@ -4,7 +4,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
 import speakers from '../assets/sampledata/speakerdata';
 import 'swiper/css';
-import '../assets/css/Speaker.css';
+import '../assets/css/Artist.css';
 
 const SpeakerCarousel = () => {
   return (

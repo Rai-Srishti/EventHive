@@ -5,7 +5,7 @@ import WhyChooseUs from '../components/AboutUs/WhyChooseUs';
 import EventHiveStory from '../components/AboutUs/EventHiveStory';
 import Testimonials from '../components/AboutUs/Testimonials';
 import StatsCounter from "../components/StatsCounter";
-import Speaker from "../components/Speaker";
+import Artist from "../components/Artist";
 import ContactSection from '../components/AboutUs/ContactSection';
 import '../assets/css/EventPage.css';
 
@@ -39,7 +39,7 @@ const AboutUsPage = () => {
       <WhyChooseUs />
       <EventHiveStory />
       <StatsCounter />
-      <Speaker />
+      <Artist />
       <Testimonials />
       <ContactSection/>
       

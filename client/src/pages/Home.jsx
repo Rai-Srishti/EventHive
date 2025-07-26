@@ -6,7 +6,7 @@ import sampleEvents from '../assets/sampledata/SampleEvents';
 import SearchBar from '../components/SearchBar';
 import Footer from '../components/Footer';
 import StatsCounter from '../components/StatsCounter';
-import Speakers from '../components/Speaker';
+import Artist from '../components/Artist';
 
 const Home = () => {
   const [searchCity, setSearchCity] = useState('');
@@ -57,7 +57,7 @@ const Home = () => {
         </div>
       </div>
       <StatsCounter/>
-      <Speakers/>
+      <Artist/>
       
     </>
   );

@@ -26,9 +26,10 @@ const HostNavbar = () => {
         <Navbar.Toggle aria-controls="event-navbar-nav" />
         <Navbar.Collapse id="event-navbar-nav" className="justify-content-between">
           <Nav className="mx-auto align-items-center nav-main-list gap-3">
-            <Link to="/host/dashboard" className={isActive('/host/dashboard')}>ANALYTICS</Link>
+            <Link to="/host" className={isActive('/host')}>ANALYTICS</Link>
             <Link to="/host/newevent" className={isActive('/host/newevent')}>NEW EVENT</Link>
             <Link to="/host/myevents" className={isActive('/host/myevents')}>MY EVENTS</Link>
+            <Link to="/host/artists" className={isActive('/host/artists')}>ARTISTS</Link>
             <Link to="/host/about" className={isActive('/host/about')}>ABOUT</Link>
             <Link to="/host/contact" activeclassname="active" className={isActive('/host/contact')}>CONTACT</Link>
             <Link to="/host/profile" activeclassname="active" className={isActive('/host/dashboard')}></Link>
@@ -37,9 +38,9 @@ const HostNavbar = () => {
           </Nav>
 
           <Nav className="me-2 align-items-center">
-            <Button href="#get-ticket" className="get-ticket-btn">
-              Get Ticket
-            </Button>
+            <Link to="/" className="get-ticket-btn" style={{textDecoration:"none"}}>
+              Logout
+            </Link>
           </Nav>
         </Navbar.Collapse>
       </Container>

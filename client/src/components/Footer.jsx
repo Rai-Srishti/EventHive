@@ -24,10 +24,10 @@ const Footer = () => {
             <h5 className="footer-title">Quick Link</h5>
             <ul className="footer-links">
               <li>About Us</li>
-              <li>Event</li>
+              <li>Events</li>
               <li>Schedule</li>
               <li>Our Support</li>
-              <li>Speaker</li>
+              <li>Artists</li>
               <li>Sponsor</li>
               <li>Blog</li>
             </ul>

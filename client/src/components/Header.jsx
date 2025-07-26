@@ -34,7 +34,7 @@ const Header = () => {
             <Link to="/" className={isActive('/')}>HOME</Link>
             <Link to="/about" className={isActive('/about')}>ABOUT</Link>
             <Link to="/events" className={isActive('/events')}>EVENTS</Link>
-            <Link to="/speakers" className={isActive('/speakers')}>SPEAKERS</Link>
+            <Link to="/artists" className={isActive('/artists')}>ARTISTS</Link>
 
             <Link to="/favourites" className="favourite-link position-relative">
               <BsHeart className="heart-icon" size={24} />
@@ -48,9 +48,9 @@ const Header = () => {
 
           <Nav className="me-2 align-items-center">
   {location.pathname !== '/login' && location.pathname !== '/register' && (
-    <Button href="/login" className="get-ticket-btn">
+    <Link to="/login" className="get-ticket-btn" style={{textDecoration: "none"}}>
       Login
-    </Button>
+    </Link>
   )}
 </Nav>
         </Navbar.Collapse>
