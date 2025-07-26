@@ -1,5 +1,5 @@
   const events = [
-    { id: 1, name: 'Music Fiesta', description: 'A vibrant music event featuring top artists.', location: 'Mumbai', date: '2025-08-15', category: 'Music', status: 'Upcoming' },
+    { id: 1, name: 'Music Fiesta', description: 'A vibrant music event featuring top artists.', location: 'Mumbai', date: '2025-08-15', category: 'Music', status: 'Finished' },
     { id: 2, name: 'Art Expo', description: 'An exhibition of modern art from around the world.', location: 'Delhi', date: '2025-09-01', category: 'Art', status: 'Upcoming' },
     { id: 3, name: 'Tech Conference', description: 'Conference on the latest trends in technology.', location: 'Bangalore', date: '2025-10-10', category: 'Technology', status: 'Upcoming' },
     { id: 4, name: 'Food Carnival', description: 'Tasty treats from all over the country.', location: 'Chennai', date: '2025-07-20', category: 'Food', status: 'Upcoming' },

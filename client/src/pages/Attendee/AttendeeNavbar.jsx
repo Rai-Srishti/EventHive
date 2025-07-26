@@ -30,7 +30,7 @@ const AttendeeNavbar = () => {
           <Nav className="mx-auto align-items-center nav-main-list gap-3">
             <Link to="/attendee" className={isActive('/attendee')}>HOME</Link>
             <Link to="/attendee/events" className={isActive('/attendee/events')}>EVENTS</Link>
-            <Link to="/attendee/mybookings"className={isActive('/attendee/mybookings')}>MY BOOKINGS</Link>
+            <Link to="/attendee/my-bookings"className={isActive('/attendee/my-bookings')}>MY BOOKINGS</Link>
             <Link to="/attendee/wallet" className={isActive('/attendee/wallet')}>WALLET</Link>
             <Link to="/attendee/about" className={isActive('/attendee/about')}>ABOUT</Link>
             <Link to="/attendee/artists" className={isActive('/attendee/artists')}>ARTISTS</Link>
