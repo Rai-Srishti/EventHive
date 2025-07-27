@@ -1,0 +1,87 @@
+package com.eventhive.services.authentication;
+
+import java.time.LocalDateTime;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.eventhive.custom_exception.ApiException;
+import com.eventhive.dao.authentication.AuthUserDao;
+import com.eventhive.dao.host.EventDao;
+import com.eventhive.dto.authentication.LoginRequestDto;
+import com.eventhive.dto.authentication.LoginResponseDto;
+import com.eventhive.dto.authentication.SignupRequestDto;
+import com.eventhive.dto.host.ApiResponse;
+import com.eventhive.entities.User;
+import com.eventhive.entities.enums.Role;
+import com.eventhive.entities.enums.UserStatus;
+
+import lombok.AllArgsConstructor;
+
+@Service
+@Transactional
+@AllArgsConstructor
+public class AuthServiceImpl implements AuthService {
+
+    @Autowired
+    private AuthUserDao userDao;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
+    @Override
+    public ApiResponse register(SignupRequestDto dto) {
+
+        // Validate allowed roles
+    	// Not needed on Front End Though
+        if (dto.getRole() != Role.ATTENDEE && dto.getRole() != Role.HOST) {
+            throw new ApiException("Only HOST and ATTENDEE can register.");
+        }
+
+        // Check duplicate email
+        if (userDao.existsByEmail(dto.getEmail())) {
+            throw new ApiException("Email is already registered.");
+        }
+
+        // Create user
+        User user = new User();
+        user.setFirstName(dto.getFirstName());
+        user.setLastName(dto.getLastName());
+        user.setEmail(dto.getEmail());
+        user.setPhoneNumber(dto.getPhoneNumber());
+        user.setCity(dto.getCity());
+        user.setState(dto.getState());
+        user.setCountry(dto.getCountry());
+        user.setRole(dto.getRole());
+        user.setStatus(UserStatus.ACTIVE);
+        user.setSignupDate(LocalDateTime.now());
+
+        // Encrypt password
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+
+        userDao.save(user);
+
+        return new ApiResponse("User registered successfully");
+    }
+
+    @Override
+    public LoginResponseDto login(LoginRequestDto dto) {
+
+        User user = userDao.findByEmail(dto.getEmail())
+                .orElseThrow(() -> new ApiException("Invalid email or password."));
+
+        if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
+            throw new ApiException("Invalid email or password.");
+        }
+
+        return new LoginResponseDto(
+                user.getUserId(),
+                user.getFirstName() + " " + user.getLastName(),
+                user.getRole(),
+                "Login successful"
+        );
+    }
+}
