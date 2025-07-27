@@ -4,7 +4,8 @@ import java.util.List;
 
 import com.eventhive.dto.attendee.EventDto;
 
-public interface AttendeeService {
+public interface AttendeeEventService {
 
+	List<EventDto> getAllApprovedEvents();
 	
 }
