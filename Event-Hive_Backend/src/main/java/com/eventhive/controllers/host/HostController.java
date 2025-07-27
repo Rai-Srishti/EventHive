@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.eventhive.dto.host.HostNewEventRequestDto;
-import com.eventhive.services.host.EventService;
+import com.eventhive.services.host.HostEventService;
 import com.eventhive.services.host.HostService;
 
 import lombok.AllArgsConstructor;
@@ -26,7 +26,7 @@ public class HostController {
 	//Dependency Injection 
 	//Field Based (2 Benefits)
 	private final HostService hostService;
-	private final EventService eventService;
+	private final HostEventService eventService;
 	
 	
 

@@ -1,4 +1,4 @@
-package com.eventhive.dao.events;
+package com.eventhive.dao.attendee;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import com.eventhive.entities.Event;
 import com.eventhive.entities.enums.ApprovalAction;
 import com.eventhive.entities.enums.EventApprovalStatus;
 
-public interface EventDao extends JpaRepository<Event, Long>{
+public interface AttendeeEventDao extends JpaRepository<Event, Long>{
 
 	List<Event> findByStatus(EventApprovalStatus status);
 }

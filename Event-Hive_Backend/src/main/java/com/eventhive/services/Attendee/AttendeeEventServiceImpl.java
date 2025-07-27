@@ -1,4 +1,4 @@
-package com.eventhive.services.events;
+package com.eventhive.services.Attendee;
 
 import java.util.List;
 import java.util.stream.Collector;
@@ -7,8 +7,8 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import com.eventhive.dao.events.EventDao;
-import com.eventhive.dto.event.EventDto;
+import com.eventhive.dao.attendee.AttendeeEventDao;
+import com.eventhive.dto.attendee.EventDto;
 import com.eventhive.entities.Event;
 import com.eventhive.entities.enums.ApprovalAction;
 import com.eventhive.entities.enums.EventApprovalStatus;
@@ -20,9 +20,9 @@ import lombok.AllArgsConstructor;
 @Transactional
 @AllArgsConstructor
 
-public class EventServiceImpl implements EventService {
+public class AttendeeEventServiceImpl implements AttendeeEventService {
 
-	private final EventDao eventDao;
+	private final AttendeeEventDao eventDao;
 	
 	private final ModelMapper mapper;
 

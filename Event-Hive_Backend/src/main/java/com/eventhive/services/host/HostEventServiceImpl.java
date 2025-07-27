@@ -16,7 +16,7 @@ import lombok.AllArgsConstructor;
 @Service
 @Transactional
 @AllArgsConstructor
-public class EventServiceImpl implements EventService {
+public class HostEventServiceImpl implements HostEventService {
 	
 	//Dependency 
 	private final EventDao eventDao;
