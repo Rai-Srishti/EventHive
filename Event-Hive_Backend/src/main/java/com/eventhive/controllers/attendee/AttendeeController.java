@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.eventhive.dto.event.EventDto;
 import com.eventhive.services.Attendee.AttendeeService;
+import com.eventhive.services.events.EventService;
 
 import lombok.AllArgsConstructor;
 
@@ -18,9 +19,10 @@ import lombok.AllArgsConstructor;
 public class AttendeeController {
 
 	private final AttendeeService attendeeService;
+	private final EventService eventService;
 	
 	@GetMapping()
 	public ResponseEntity<List<EventDto>> getAllEvents(){
-		return null;
+		return ResponseEntity.ok(eventService.getAllApprovedEvents());
 	}
 }
