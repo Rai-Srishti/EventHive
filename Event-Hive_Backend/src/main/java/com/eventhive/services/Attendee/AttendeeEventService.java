@@ -7,5 +7,7 @@ import com.eventhive.dto.attendee.EventDto;
 public interface AttendeeEventService {
 
 	List<EventDto> getAllApprovedEvents();
+
+	EventDto getEventById(Long eventId);
 	
 }
