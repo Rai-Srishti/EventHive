@@ -6,6 +6,6 @@ import com.eventhive.dto.event.EventDto;
 
 public interface EventService {
 
-	List<EventDto> getAllEvent();
+	List<EventDto> getAllApprovedEvents();
 	
 }
