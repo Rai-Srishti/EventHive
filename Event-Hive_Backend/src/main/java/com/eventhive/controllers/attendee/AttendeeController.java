@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.eventhive.services.Attendee.AttendeeService;
+import com.eventhive.dto.attendee.ArtistDto;
 import com.eventhive.dto.attendee.AttendeeEventPhaseDto;
 import com.eventhive.dto.attendee.EventDto;
+import com.eventhive.services.Attendee.ArtistService;
 import com.eventhive.services.Attendee.AttendeeEventPhaseService;
 import com.eventhive.services.Attendee.AttendeeEventService;
 
@@ -23,6 +25,7 @@ public class AttendeeController {
 
 	private final AttendeeService attendeeService;
 	private final AttendeeEventService eventService;
+	private final ArtistService artistService;
 	private final AttendeeEventPhaseService attendeeEventPhaseService;
 	
 	@GetMapping()
@@ -39,4 +42,9 @@ public class AttendeeController {
 	public ResponseEntity<List<AttendeeEventPhaseDto>> getEventPhases(@PathVariable Long eventId){
 		return ResponseEntity.ok(attendeeEventPhaseService.getPhasesByEventId(eventId));
 	} 
+	
+	@GetMapping("/artists")
+	public ResponseEntity<List<ArtistDto>> getAllArtists(){
+		return ResponseEntity.ok(artistService.getAllArtists());
+	}
 }
