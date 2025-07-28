@@ -1,5 +1,6 @@
 package com.eventhive.services.host;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -8,10 +9,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.eventhive.custom_exception.ApiException;
+import com.eventhive.custom_exception.EventNotFoundException;
 import com.eventhive.dao.host.ArtistDao;
+import com.eventhive.dao.host.EventDao;
 import com.eventhive.dao.host.HostDao;
 import com.eventhive.dto.host.ApiResponse;
+import com.eventhive.dto.host.EventResponseDto;
 import com.eventhive.dto.host.HostNewEventRequestDto;
+import com.eventhive.dto.host.HostUpdateEventDto;
 import com.eventhive.entities.Artist;
 import com.eventhive.entities.Event;
 import com.eventhive.entities.EventPhase;
@@ -31,7 +36,7 @@ public class HostServiceImpl implements HostService {
 	
 	private final HostDao hostDao;
 	private final ArtistDao artistDao;
-	
+	private final EventDao eventDao;
 	private final ModelMapper mapper;
 
 	
@@ -76,6 +81,23 @@ public class HostServiceImpl implements HostService {
 	
 				
 	}
+
+
+	// Top get all Events of a Particular Host
+	@Override
+	public List<EventResponseDto> fetchDetails(Long hostId) {
+	    List<Event> eventList = eventDao.findByHostUserId(hostId);
+	    
+	    if (eventList.isEmpty()) {
+	        throw new EventNotFoundException("No events found for host ID: " + hostId);
+	    }
+	    
+	    return eventList.stream()
+	            .map(d -> mapper.map(d, EventResponseDto.class))
+	            .toList();
+	}
+	
+	
 	
 	
 	
