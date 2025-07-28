@@ -120,7 +120,7 @@ function App() {
           <Route path="users" element={<ManageUsers />} />
           <Route path="profile" element={<Profile />} />
           <Route path="edit-profile" element={<EditProfile />} />
-          <Route path="dashboard" element={<AdminDashboard />} />
+          <Route path="" element={<AdminDashboard />} />
         </Route>
 
         {/* Host Routes */}
