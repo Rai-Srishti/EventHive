@@ -8,6 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+import com.google.zxing.qrcode.QRCodeWriter;
+
 @SpringBootApplication // includes @Configuration
 @EnableScheduling
 public class Application {
@@ -39,6 +41,13 @@ public class Application {
 		return mapper;
 
 	}
+	
+	// Registering a new bean for the QrCodeWriter which will be use for qr code generation
+		  @Bean
+		  public QRCodeWriter CodeWriter() {
+		    return new QRCodeWriter();
+		  }
 
-}
+		}
+
 
