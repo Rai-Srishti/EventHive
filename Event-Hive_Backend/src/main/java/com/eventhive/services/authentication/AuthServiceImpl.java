@@ -1,5 +1,6 @@
 package com.eventhive.services.authentication;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import org.modelmapper.ModelMapper;
@@ -16,6 +17,7 @@ import com.eventhive.dto.authentication.LoginResponseDto;
 import com.eventhive.dto.authentication.SignupRequestDto;
 import com.eventhive.dto.host.ApiResponse;
 import com.eventhive.entities.User;
+import com.eventhive.entities.Wallet;
 import com.eventhive.entities.enums.Role;
 import com.eventhive.entities.enums.UserStatus;
 
@@ -61,6 +63,13 @@ public class AuthServiceImpl implements AuthService {
 
         // Encrypt password
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        
+        if (dto.getRole() == Role.ATTENDEE) {
+            Wallet wallet = new Wallet();
+            wallet.setUser(user);
+            wallet.setBalance(BigDecimal.ZERO);
+            user.setWallet(wallet);
+        }
 
         userDao.save(user);
 
