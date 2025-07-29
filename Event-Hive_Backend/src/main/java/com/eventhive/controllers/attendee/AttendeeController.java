@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.eventhive.services.Attendee.AttendeeService;
 import com.eventhive.dto.attendee.AttendeeEventPhaseDto;
 import com.eventhive.dto.attendee.EventDto;
+import com.eventhive.dto.attendee.MyBookingDto;
+import com.eventhive.services.Attendee.AttendeeBookingService;
 import com.eventhive.services.Attendee.AttendeeEventPhaseService;
 import com.eventhive.services.Attendee.AttendeeEventService;
 
@@ -24,6 +26,7 @@ public class AttendeeController {
 	private final AttendeeService attendeeService;
 	private final AttendeeEventService eventService;
 	private final AttendeeEventPhaseService attendeeEventPhaseService;
+	private final AttendeeBookingService bookingService;
 	
 	@GetMapping()
 	public ResponseEntity<List<EventDto>> getAllEvents(){
@@ -39,4 +42,10 @@ public class AttendeeController {
 	public ResponseEntity<List<AttendeeEventPhaseDto>> getEventPhases(@PathVariable Long eventId){
 		return ResponseEntity.ok(attendeeEventPhaseService.getPhasesByEventId(eventId));
 	} 
+	
+	 @GetMapping("/my-bookings/{attendeeId}")
+	    public ResponseEntity<List<MyBookingDto>> getMyUpcomingBookings(@PathVariable Long attendeeId) {
+	        List<MyBookingDto> bookings = bookingService.getBookingsByAttendeeId(attendeeId);
+	        return ResponseEntity.ok(bookings);
+	    }
 }

@@ -14,6 +14,7 @@ import com.eventhive.dto.attendee.EventDto;
 import com.eventhive.entities.Event;
 import com.eventhive.entities.enums.ApprovalAction;
 import com.eventhive.entities.enums.EventApprovalStatus;
+import com.eventhive.entities.enums.EventLifeCycleStatus;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -30,7 +31,8 @@ public class AttendeeEventServiceImpl implements AttendeeEventService {
 
 	@Override
 	public List<EventDto> getAllApprovedEvents() {
-		List<Event> eventList = eventDao.findByStatus(EventApprovalStatus.APPROVED);
+		List<Event> eventList = eventDao.findByStatusAndLifecycleStatus(EventApprovalStatus.APPROVED, EventLifeCycleStatus.UPCOMING);
+
 		
 		 return eventList.stream().map(event -> {
 		        EventDto dto = new EventDto();
