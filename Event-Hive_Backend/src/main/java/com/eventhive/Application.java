@@ -9,9 +9,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import com.google.zxing.qrcode.QRCodeWriter;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication // includes @Configuration
 @EnableScheduling
+@EnableJpaAuditing //Activates auditing globally
 public class Application {
 
 	public static void main(String[] args) {
