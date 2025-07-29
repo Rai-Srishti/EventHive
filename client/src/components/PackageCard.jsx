@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { FaCheck, FaTimes } from 'react-icons/fa';
 
-const PackageCard = ({ title, price, seats, features, highlight }) => {
-  const [count, setCount] = useState(0);
-
+const PackageCard = ({ title, price, seats, features, highlight, count, setCount, disabled }) => {
   const bgClass = highlight ? 'border-warning' : 'border-primary';
   const textClass = highlight ? 'text-warning' : 'text-primary';
 
@@ -22,16 +20,17 @@ const PackageCard = ({ title, price, seats, features, highlight }) => {
                 key={index}
                 className={`list-group-item d-flex align-items-center ${feature.included ? 'text-success' : 'text-danger text-decoration-line-through'}`}
               >
-                {feature.included ? <FaCheck className="text-success me-2" /> : <FaTimes className="text-danger me-2" />}&nbsp; {feature.name}
+                {feature.included ? <FaCheck className="text-success me-2" /> : <FaTimes className="text-danger me-2" />}
+                &nbsp; {feature.name}
               </li>
             ))}
           </ul>
         </div>
 
         <div className="d-flex align-items-center justify-content-between">
-          <button className="btn btn-danger" onClick={() => setCount(count > 0 ? count - 1 : 0)}>-</button>
+          <button className="btn btn-danger" onClick={() => setCount(Math.max(0, count - 1))} disabled={disabled || count === 0}>-</button>
           <span className="mx-3">Selected: {count}</span>
-          <button className="btn btn-success" onClick={() => setCount(count + 1)}>+</button>
+          <button className="btn btn-success" onClick={() => setCount(count + 1)} disabled={disabled}>+</button>
         </div>
       </div>
     </div>
