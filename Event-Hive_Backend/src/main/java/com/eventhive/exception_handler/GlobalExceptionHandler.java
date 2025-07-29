@@ -7,15 +7,23 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.eventhive.custom_exception.ApiException;
 import com.eventhive.custom_exception.EventNotFoundException;
+import com.eventhive.custom_exception.QrCodeGenerationException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(QrCodeGenerationException.class)
+    public ResponseEntity<String> handleQrCodeGenertaion(QrCodeGenerationException ex) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ex.getMessage());
+    }
+    
     @ExceptionHandler(EventNotFoundException.class)
     public ResponseEntity<String> handleHostNotFound(EventNotFoundException ex) {
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(ex.getMessage());
+    	return ResponseEntity
+    			.status(HttpStatus.NOT_FOUND)
+    			.body(ex.getMessage());
     }
     
     @ExceptionHandler(ApiException.class)
