@@ -9,6 +9,8 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.eventhive.entities.enums.TicketStatus;
 
@@ -31,7 +33,10 @@ public class Ticket {
     @ManyToOne
     @JoinColumn(name = "event_id", nullable = false)
     private Event event;
-
+    
+    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL)
+    private List<QrCode> qrCodes = new ArrayList<>();
+    
     @ManyToOne
     @JoinColumn(name = "phase_id", nullable = false)
     private EventPhase phase;
