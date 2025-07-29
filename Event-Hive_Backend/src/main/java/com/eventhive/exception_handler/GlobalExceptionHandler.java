@@ -7,12 +7,20 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.eventhive.custom_exception.ApiException;
 import com.eventhive.custom_exception.EventNotFoundException;
+import com.eventhive.custom_exception.UserNotFoundException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(EventNotFoundException.class)
     public ResponseEntity<String> handleHostNotFound(EventNotFoundException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ex.getMessage());
+    }
+    
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<String> handleHostNotFound(UserNotFoundException ex) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(ex.getMessage());
