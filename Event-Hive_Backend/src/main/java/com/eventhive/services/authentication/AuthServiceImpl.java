@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.eventhive.custom_exception.ApiException;
 import com.eventhive.dao.authentication.AuthUserDao;
+import com.eventhive.dao.authentication.WalletDao;
 import com.eventhive.dao.host.EventDao;
 import com.eventhive.dto.authentication.LoginRequestDto;
 import com.eventhive.dto.authentication.LoginResponseDto;
@@ -30,6 +31,8 @@ public class AuthServiceImpl implements AuthService {
 
     @Autowired
     private AuthUserDao userDao;
+    
+    private WalletDao walletDao; 
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -63,15 +66,16 @@ public class AuthServiceImpl implements AuthService {
 
         // Encrypt password
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
+  
+        userDao.save(user);
         
-        if (dto.getRole() == Role.ATTENDEE) {
+     //Create wallet only if role is ATTENDEE
+        if (user.getRole() == Role.ATTENDEE) {
             Wallet wallet = new Wallet();
             wallet.setUser(user);
-            wallet.setBalance(BigDecimal.ZERO);
-            user.setWallet(wallet);
+            wallet.setBalance(BigDecimal.ZERO); // Initial balance
+            walletDao.save(wallet); 
         }
-
-        userDao.save(user);
 
         return new ApiResponse("User registered successfully");
     }
