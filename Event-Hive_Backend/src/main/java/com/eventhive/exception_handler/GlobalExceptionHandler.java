@@ -7,11 +7,15 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.eventhive.custom_exception.ApiException;
 import com.eventhive.custom_exception.EventNotFoundException;
+
 import com.eventhive.custom_exception.InsufficientBalanceException;
+import com.eventhive.custom_exception.UserNotFoundException;
+
 import com.eventhive.custom_exception.QrCodeGenerationException;
 import com.eventhive.custom_exception.QrCodeNotFoundException;
 import com.eventhive.custom_exception.TicketSoldOutException;
 import com.eventhive.custom_exception.UserNotFounderException;
+
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -54,7 +58,14 @@ public class GlobalExceptionHandler {
     			.body(ex.getMessage());
     }
     
-    
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<String> handleHostNotFound(UserNotFoundException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ex.getMessage());
+    }
+
     @ExceptionHandler(ApiException.class)
     public ResponseEntity<String> handleApiException(ApiException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);

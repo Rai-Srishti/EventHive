@@ -1,12 +1,18 @@
 package com.eventhive.services.host;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.eventhive.custom_exception.ApiException;
 import com.eventhive.custom_exception.EventNotFoundException;
@@ -40,16 +46,24 @@ public class HostServiceImpl implements HostService {
 	private final ModelMapper mapper;
 
 	
-	public ApiResponse enterEvent(HostNewEventRequestDto dto, Long hostId) {
-		
-		 // 1. Find the Host
+	public ApiResponse enterEvent(HostNewEventRequestDto dto, MultipartFile photoFile, Long hostId) {
+
+	    // 1. Find the Host
 	    User host = hostDao.findById(hostId)
 	            .orElseThrow(() -> new ApiException("Host doesn't exist"));
 
 	    // 2. Find the Artist by Name
 	    Artist artist = artistDao.findByName(dto.getArtistName())
-	            .orElseThrow(() -> new ApiException("Artist '" + dto.getArtistName() + "' doesn't exist"));
+	    	    .orElseGet(() -> {
+	    	        Artist newArtist = new Artist();
+	    	        newArtist.setName(dto.getArtistName());
+	    	        newArtist.setCountry("India"); // default
+	    	        newArtist.setBio("Performer in " + dto.getCategory()); // default based on category
+	    	        newArtist.setGenre(dto.getCategory()); 
+	    	        return artistDao.save(newArtist);
+	    	    });
 
+	    
 	    // 3. Map DTO to Event Entity
 	    Event event = mapper.map(dto, Event.class);
 
@@ -57,11 +71,32 @@ public class HostServiceImpl implements HostService {
 	    event.setHost(host);
 	    event.setArtist(artist);
 
-	    // 5. Map Phases from DTO and link them to the event
+	    // 5. Handle Image Upload
+	    if (photoFile != null && !photoFile.isEmpty()) {
+	        try {
+	            // Generate unique filename
+	            String fileName = UUID.randomUUID().toString() + "_" + photoFile.getOriginalFilename();
+	           // Path uploadDir = Paths.get("/eventhive/uploads/event-photos");
+	            
+	            String uploadDirStr = System.getProperty("user.dir") + "/uploads/event-photos";
+	            Path uploadDir = Paths.get(uploadDirStr);
+	            Files.createDirectories(uploadDir);
+	            Path filePath = uploadDir.resolve(fileName);
+
+	            // Save file
+	            photoFile.transferTo(filePath.toFile());
+
+	            // Set relative path to photo field
+	            event.setPhoto("event-photos/" + fileName);
+	        } catch (IOException e) {
+	            throw new ApiException("Failed to store event photo: " + e.getMessage());
+	        }
+	    }
+
+	    // 6. Map Phases from DTO and link them to the event
 	    List<EventPhase> phases = dto.getPhases().stream().map(phaseDto -> {
 	        EventPhase phase = new EventPhase();
 	        phase.setPhaseName(TicketPhaseName.valueOf(phaseDto.getPhaseName().toUpperCase()));
-
 	        phase.setPrice(phaseDto.getPrice());
 	        phase.setAvailableTickets(phaseDto.getAvailableTickets());
 	        phase.setStartTime(phaseDto.getStartTime());
@@ -71,16 +106,15 @@ public class HostServiceImpl implements HostService {
 	        return phase;
 	    }).collect(Collectors.toList());
 
-	    // 6. Attach phases to event
+	    // 7. Attach phases to event
 	    event.setPhases(phases);
 
-	    // 7. Using helper to persist 
+	    // 8. Persist event via host
 	    host.addEvent(event);
 
-	    return new ApiResponse("Event with phases and artist linked successfully");
-	
-				
+	    return new ApiResponse("Event with phases, artist, and photo uploaded successfully");
 	}
+
 
 
 	// Top get all Events of a Particular Host
