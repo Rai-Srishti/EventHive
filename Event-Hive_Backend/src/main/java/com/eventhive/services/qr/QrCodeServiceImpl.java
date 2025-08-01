@@ -28,52 +28,63 @@ import lombok.AllArgsConstructor;
 @Service
 @Transactional
 @AllArgsConstructor
+public class QrCodeServiceImpl implements QrCodeService {
 
-public class QrCodeServiceImpl implements QrCodeService{
-
-	private final QrCodeDao qrDao ;
+	private final QrCodeDao qrDao;
 	private final QRCodeWriter qrWriter;
-	
-	private static final int QR_HEIGHT= 300;
+
+	private static final int QR_HEIGHT = 300;
 	private static final int QR_WIDTH = 300;
-	
+
 	@Override
 	public QrCode generateQrCode(Ticket ticket) {
 		try {
-			long uniqueId = UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE;
+			String content = buildQrContent(ticket);
 
-			String qrCodeImage =generateQrCode(uniqueId);
-			
+			String base64Image = generateQrBase64(content);
+
 			QrCode qrCode = new QrCode();
-			qrCode.setId(uniqueId);
+			qrCode.setId(UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE);
 			qrCode.setStatus(QrCodeStatusEnum.ACTIVE);
-			qrCode.setValue(qrCodeImage);
+			qrCode.setValue(base64Image);
 			qrCode.setTicket(ticket);
-			
+
 			return qrDao.saveAndFlush(qrCode);
-		}catch (IOException | WriterException ex) {
+		} catch (IOException | WriterException ex) {
 			throw new QrCodeGenerationException("Failed to generate a QR Code");
 		}
-		
 	}
 
-	private String generateQrCode(long uniqueId) throws WriterException, IOException {
-		BitMatrix bitMatrix =
-		qrWriter.encode(
-				String.valueOf(uniqueId),
-				BarcodeFormat.QR_CODE,
-				QR_WIDTH,
-				QR_HEIGHT
-				);
-		 BufferedImage qrCodeImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
-		try(ByteArrayOutputStream baos = new ByteArrayOutputStream()){
+	private String buildQrContent(Ticket ticket) {
+		return "TicketID:" + ticket.getTicketId() +
+		       "|Event:" + ticket.getEvent().getEventName() +
+		       "|Phase:" + ticket.getPhase().getPhaseName() +
+		       "|Qty:" + ticket.getQuantity();
+	}
+
+	private String generateQrBase64(String content) throws WriterException, IOException {
+		BitMatrix bitMatrix = qrWriter.encode(content, BarcodeFormat.QR_CODE, QR_WIDTH, QR_HEIGHT);
+		BufferedImage qrCodeImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
+
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 			ImageIO.write(qrCodeImage, "PNG", baos);
 			byte[] imageBytes = baos.toByteArray();
-			
 			return Base64.getEncoder().encodeToString(imageBytes);
 		}
-		
-
 	}
 
+	@Override
+	public byte[] generateQrCodeAsBytes(Ticket ticket) {
+		try {
+			String content = buildQrContent(ticket);
+
+			BitMatrix bitMatrix = qrWriter.encode(content, BarcodeFormat.QR_CODE, 250, 250);
+			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+			MatrixToImageWriter.writeToStream(bitMatrix, "PNG", outputStream);
+
+			return outputStream.toByteArray();
+		} catch (Exception e) {
+			throw new QrCodeGenerationException("Failed to generate QR Code");
+		}
+	}
 }
