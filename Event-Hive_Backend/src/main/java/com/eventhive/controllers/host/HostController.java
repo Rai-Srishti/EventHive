@@ -3,6 +3,7 @@ package com.eventhive.controllers.host;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.eventhive.dto.host.HostNewEventRequestDto;
 import com.eventhive.dto.host.HostUpdateEventDto;
+import com.eventhive.services.host.HostArtist;
 import com.eventhive.services.host.HostEventService;
 import com.eventhive.services.host.HostService;
 
@@ -34,6 +36,7 @@ public class HostController {
 	//Field Based (2 Benefits)
 	private final HostService hostService;
 	private final HostEventService eventService;
+	private final HostArtist artistService;
 	
 	
 
@@ -69,6 +72,12 @@ public class HostController {
 			HostUpdateEventDto dto) {
 	    return ResponseEntity.ok(eventService.updateEvent(eventId,dto));
 	}
+	
+	@GetMapping("/artists")
+	public ResponseEntity<?> fetchAllArtists() {
+	    return ResponseEntity.ok(artistService.getAllArtistNames());
+	}
+	
 	
 	
 	

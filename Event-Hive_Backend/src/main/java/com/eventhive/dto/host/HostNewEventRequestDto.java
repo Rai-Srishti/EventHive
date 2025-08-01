@@ -6,9 +6,11 @@ import java.util.List;
 import com.eventhive.entities.enums.EventApprovalStatus;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 @Getter
 @Setter
+@NoArgsConstructor
 public class HostNewEventRequestDto {
 	  
     private String eventName;
