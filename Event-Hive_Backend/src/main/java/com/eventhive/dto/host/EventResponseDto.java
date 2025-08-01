@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.eventhive.entities.enums.EventApprovalStatus;
+import com.eventhive.entities.enums.EventLifeCycleStatus;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -27,6 +28,8 @@ public class EventResponseDto {
 	    public String artistName;
 
 	    private EventApprovalStatus status = EventApprovalStatus.PENDING;
+	    
+	    private EventLifeCycleStatus lifecycleStatus;
 
 	    private LocalDateTime createdAt = LocalDateTime.now();
 

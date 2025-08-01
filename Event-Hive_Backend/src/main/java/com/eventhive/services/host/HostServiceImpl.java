@@ -116,20 +116,28 @@ public class HostServiceImpl implements HostService {
 	}
 
 
-
 	// Top get all Events of a Particular Host
-	@Override
-	public List<EventResponseDto> fetchDetails(Long hostId) {
-	    List<Event> eventList = eventDao.findByHostUserId(hostId);
-	    
-	    if (eventList.isEmpty()) {
-	        throw new EventNotFoundException("No events found for host ID: " + hostId);
-	    }
-	    
-	    return eventList.stream()
-	            .map(d -> mapper.map(d, EventResponseDto.class))
-	            .toList();
-	}
+		@Override
+		public List<EventResponseDto> fetchDetails(Long hostId) {
+		    List<Event> eventList = eventDao.findByHostUserId(hostId);
+		    
+		    if (eventList.isEmpty()) {
+		        throw new EventNotFoundException("No events found for host ID: " + hostId);
+		    }
+		    
+		    return eventList.stream()
+			        .map(event -> {
+			            EventResponseDto dto = mapper.map(event, EventResponseDto.class);
+			            if (event.getArtist() != null) {
+			                dto.setArtistName(event.getArtist().getName());
+			            }
+			            return dto;
+			        })
+			        .toList();
+			
+		    
+		    
+		}
 	
 	
 	
