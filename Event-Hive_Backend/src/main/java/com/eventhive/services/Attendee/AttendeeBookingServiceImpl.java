@@ -10,6 +10,7 @@ import com.eventhive.dao.attendee.AttendeeBookingDao;
 import com.eventhive.dto.attendee.MyBookingDto;
 import com.eventhive.entities.Ticket;
 import com.eventhive.entities.enums.EventLifeCycleStatus;
+import com.eventhive.entities.enums.TicketStatus;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -28,6 +29,7 @@ public class AttendeeBookingServiceImpl implements AttendeeBookingService {
 
         return tickets.stream()
                 .filter(ticket -> ticket.getEvent().getLifecycleStatus() == EventLifeCycleStatus.UPCOMING) // ✅ upcoming only
+                .filter(ticket -> ticket.getStatus() == TicketStatus.BOOKED)
                 .map(ticket -> {
                     MyBookingDto dto = new MyBookingDto();
                     dto.setTicketId(ticket.getTicketId());

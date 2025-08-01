@@ -3,6 +3,7 @@ package com.eventhive.controllers.attendee;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -71,6 +72,11 @@ public class AttendeeController {
 	        @RequestParam int quantity){
 		
 		return ResponseEntity.ok(ticketPhaseService.purchasedTicket(userId, phaseId, quantity));
+	}
+	
+	@DeleteMapping("/cancel-ticket/{ticketId}")
+	public ResponseEntity<?> deleteBooking(@PathVariable Long ticketId){
+		return ResponseEntity.ok(ticketPhaseService.cancelTicket(ticketId));
 	}
 
 }

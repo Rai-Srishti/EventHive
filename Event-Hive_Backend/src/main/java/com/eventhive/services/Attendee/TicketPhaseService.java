@@ -7,4 +7,6 @@ import com.eventhive.entities.Ticket;
 public interface TicketPhaseService {
 
 	ApiResponse purchasedTicket(Long userId , Long phase_id ,int quantity);
+
+	ApiResponse cancelTicket(Long ticketId);
 }
