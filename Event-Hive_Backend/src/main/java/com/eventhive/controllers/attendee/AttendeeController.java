@@ -5,10 +5,13 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.eventhive.services.Attendee.AttendeeService;
+import com.eventhive.services.Attendee.TicketPhaseService;
 import com.eventhive.dto.attendee.ArtistDto;
 import com.eventhive.dto.attendee.AttendeeEventPhaseDto;
 import com.eventhive.dto.attendee.EventDto;
@@ -32,6 +35,7 @@ public class AttendeeController {
 	private final ArtistService artistService;
 	private final AttendeeEventPhaseService attendeeEventPhaseService;
 	private final AttendeeBookingService bookingService;
+	private final TicketPhaseService ticketPhaseService;
 	
 	@GetMapping()
 	public ResponseEntity<List<EventDto>> getAllEvents(){
@@ -58,6 +62,15 @@ public class AttendeeController {
 	@GetMapping("/artists")
 	public ResponseEntity<List<ArtistDto>> getAllArtists(){
 		return ResponseEntity.ok(artistService.getAllArtists());
+	}
+	
+	@PostMapping("/purchase-ticket")
+	public ResponseEntity<?> purchaseTicket(
+			@RequestParam Long userId,
+	        @RequestParam Long phaseId,
+	        @RequestParam int quantity){
+		
+		return ResponseEntity.ok(ticketPhaseService.purchasedTicket(userId, phaseId, quantity));
 	}
 
 }

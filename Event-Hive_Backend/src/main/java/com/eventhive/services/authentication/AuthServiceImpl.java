@@ -1,5 +1,6 @@
 package com.eventhive.services.authentication;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import org.modelmapper.ModelMapper;
@@ -15,12 +16,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.eventhive.config.UserPrincipal;
 import com.eventhive.custom_exception.ApiException;
 import com.eventhive.dao.authentication.AuthUserDao;
+import com.eventhive.dao.authentication.WalletDao;
 import com.eventhive.dao.host.EventDao;
 import com.eventhive.dto.authentication.LoginRequestDto;
 import com.eventhive.dto.authentication.LoginResponseDto;
 import com.eventhive.dto.authentication.SignupRequestDto;
 import com.eventhive.dto.host.ApiResponse;
 import com.eventhive.entities.User;
+import com.eventhive.entities.Wallet;
 import com.eventhive.entities.enums.Role;
 import com.eventhive.entities.enums.UserStatus;
 
@@ -33,6 +36,8 @@ public class AuthServiceImpl implements AuthService {
 
     @Autowired
     private AuthUserDao userDao;
+    
+    private WalletDao walletDao; 
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -72,8 +77,16 @@ public class AuthServiceImpl implements AuthService {
 
         // Encrypt password
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
-
+  
         userDao.save(user);
+        
+     //Create wallet only if role is ATTENDEE
+        if (user.getRole() == Role.ATTENDEE) {
+            Wallet wallet = new Wallet();
+            wallet.setUser(user);
+            wallet.setBalance(BigDecimal.ZERO); // Initial balance
+            walletDao.save(wallet); 
+        }
 
         return new ApiResponse("User registered successfully");
     }
