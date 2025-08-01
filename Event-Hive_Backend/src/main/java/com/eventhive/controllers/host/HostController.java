@@ -50,6 +50,7 @@ public class HostController {
 	    return ResponseEntity.ok( hostService.enterEvent(dto, photoFile, hostId));
 	}
 	
+	//API For All Events of Host
 	@GetMapping("{hostId}")
 	ResponseEntity<?> getEventById(@PathVariable Long hostId){
 		
