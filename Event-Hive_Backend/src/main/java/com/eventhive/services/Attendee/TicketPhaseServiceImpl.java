@@ -17,6 +17,8 @@ import com.eventhive.entities.EventPhase;
 import com.eventhive.entities.Ticket;
 import com.eventhive.entities.User;
 import com.eventhive.entities.Wallet;
+import com.eventhive.entities.enums.QrCodeStatusEnum;
+import com.eventhive.entities.enums.TicketStatus;
 import com.eventhive.services.EmailService;
 import com.eventhive.services.qr.QrCodeService;
 
@@ -102,6 +104,52 @@ public class TicketPhaseServiceImpl implements TicketPhaseService{
 	    
 	    return new ApiResponse("Ticket Booked!!");
 		
+	}
+
+
+
+	@Override
+	public ApiResponse cancelTicket(Long ticketId) {
+		
+		//1. getting the ticket
+		Ticket ticket = ticketDao.findById(ticketId)
+				.orElseThrow(()-> new RuntimeException("Not a Valid ticket"));
+		
+		//2.checking for the status
+		if(ticket.getStatus() != TicketStatus.BOOKED) {
+			throw new RuntimeException("Only booked tickets can be cancelled");
+		}
+		
+		//3.calculating the refund amount
+		
+		BigDecimal refundAmount = ticket.getTotalPrice();
+		
+		//4.getting the users wallet to process the refund
+		
+		Wallet wallet = ticket.getAttendee().getWallet();
+		
+		//5. adding the refund amount
+		
+		wallet.setBalance(wallet.getBalance().add(refundAmount));
+		ticket.setRefundAmount(refundAmount);
+		ticket.setStatus(TicketStatus.REFUNDED);
+		
+		ticket.getQrCodes().forEach(qr-> qr.setStatus(QrCodeStatusEnum.EXPIRED));
+		
+		//6. increasing the seat count for that phase 
+		EventPhase phase = ticket.getPhase();
+        phase.setAvailableTickets(phase.getAvailableTickets() + ticket.getQuantity());
+        
+        //7.notifying the host about the deleted event
+        User host = ticket.getEvent().getHost();
+        
+        String subject = "Ticket Cancelled for Event: " + ticket.getEvent().getEventName();
+        String content = "A ticket for your event '" + ticket.getEvent().getEventName() + "' has been cancelled.\n"
+                       + "Attendee: " + ticket.getAttendee().getFirstName() + " " + ticket.getAttendee().getLastName() + "\n"
+                       + "Quantity: " + ticket.getQuantity();
+
+        mailService.sendEmail(host.getEmail(), subject, content);
+		return new ApiResponse("ticket cancelled successfully and refund added to your wallet");
 	}
 
 }
