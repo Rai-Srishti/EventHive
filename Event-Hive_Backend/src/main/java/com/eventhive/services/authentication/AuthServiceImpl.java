@@ -4,10 +4,15 @@ import java.time.LocalDateTime;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.eventhive.config.UserPrincipal;
 import com.eventhive.custom_exception.ApiException;
 import com.eventhive.dao.authentication.AuthUserDao;
 import com.eventhive.dao.host.EventDao;
@@ -31,6 +36,12 @@ public class AuthServiceImpl implements AuthService {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+    
+    @Autowired
+    AuthenticationManager authManager;   // reference of authmanager
+    
+    @Autowired
+    private JWTService jwtService;
 
     @Override
     public ApiResponse register(SignupRequestDto dto) {
@@ -84,4 +95,19 @@ public class AuthServiceImpl implements AuthService {
                 "Login successful"
         );
     }
+
+	@Override
+	public String verify(LoginRequestDto dto) {
+		//passing the email and password and authenticating them and then saving them in authentication reference
+		Authentication authentication = 
+				authManager.authenticate(new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword()));
+		
+		// checking if credentials are authenticated
+		if(authentication.isAuthenticated()) {
+			 UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+			   return jwtService.generateToken(userPrincipal);        //return "Success"; //rather than returning string we want to generate token of successful login
+			   //sending userPrincipal(id, email, password) to generate the token
+		}
+		return "fail";
+	}
 }

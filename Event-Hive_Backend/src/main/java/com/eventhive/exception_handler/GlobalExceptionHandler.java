@@ -7,11 +7,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.eventhive.custom_exception.ApiException;
 import com.eventhive.custom_exception.EventNotFoundException;
-<<<<<<< HEAD
 import com.eventhive.custom_exception.UserNotFoundException;
-=======
 import com.eventhive.custom_exception.QrCodeGenerationException;
->>>>>>> b111a03a233746770cb8491e0ca442aa447040fc
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
