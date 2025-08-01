@@ -17,6 +17,7 @@ import com.eventhive.entities.EventPhase;
 import com.eventhive.entities.Ticket;
 import com.eventhive.entities.User;
 import com.eventhive.entities.Wallet;
+import com.eventhive.services.EmailService;
 import com.eventhive.services.qr.QrCodeService;
 
 import jakarta.transaction.Transactional;
@@ -32,6 +33,7 @@ public class TicketPhaseServiceImpl implements TicketPhaseService{
 	private final AttendeeEventPhaseDao eventPhaseDao;
 	private final TicketDao ticketDao;
 	private final QrCodeService qrService;
+	private final EmailService mailService;
 	//private final ModelMapper mapper;
 
 	
@@ -84,7 +86,19 @@ public class TicketPhaseServiceImpl implements TicketPhaseService{
 
 	    // 10. Generate QR Code and associate
 	    qrService.generateQrCode(savedTicket);
+	    
+	    byte[] qrImage = qrService.generateQrCodeAsBytes(savedTicket);
 
+        // Compose Email
+        String subject = "🎟 Ticket Confirmation - " + phase.getEvent().getEventName();
+        String messageBody = "<p>Hi <strong>" + user.getFirstName() + "</strong>,</p>" +
+                "<p>Your ticket for the event <strong>" + phase.getEvent().getEventName() + "</strong> has been successfully booked.</p>" +
+                "<p><strong>Quantity:</strong> " + quantity + "<br>" +
+                "<strong>Total Paid:</strong> ₹" + totalPrice + "</p>" +
+                "<p>Your QR code is attached with this email.</p>" +
+                "<br><p>Thanks,<br><em>EventHive Team</em></p>";
+
+        mailService.sendTicketConfirmationEmail(user.getEmail(), subject, messageBody, qrImage);
 	    
 	    return new ApiResponse("Ticket Booked!!");
 		
