@@ -11,7 +11,9 @@ import com.eventhive.custom_exception.ApiException;
 import com.eventhive.custom_exception.EventNotFoundException;
 import com.eventhive.dao.admin.AdminArtistDao;
 import com.eventhive.dao.admin.AdminEventDao;
+import com.eventhive.dto.admin.AdminArtistDTO;
 import com.eventhive.dto.admin.AdminEventResponseDTO;
+import com.eventhive.dto.admin.AdminHostDto;
 import com.eventhive.dto.host.ApiResponse;
 import com.eventhive.entities.Event;
 import com.eventhive.entities.Artist;
@@ -41,8 +43,20 @@ public class AdminEventServiceImpl implements AdminEventService{
 		}
 		
 		return eventList.stream()
-				.map(evt->mapper.map(evt, AdminEventResponseDTO.class))
-				.toList();
+				.map(evt->{
+					 AdminEventResponseDTO dto = mapper.map(evt, AdminEventResponseDTO.class);
+					 AdminHostDto hostDto = new AdminHostDto();
+			         hostDto.setFirstName(evt.getHost().getFirstName());
+			         dto.setHost(hostDto);
+			         
+			         if (evt.getArtist() != null) {
+			             AdminArtistDTO artistDto = new AdminArtistDTO();
+			             artistDto.setName(evt.getArtist().getName());
+			             dto.setArtist(artistDto);
+			         }
+			        
+			         return dto;
+					}).toList();
 	}
 
 
