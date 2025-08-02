@@ -32,7 +32,7 @@ import BookingsPage from './pages/Attendee/BookingsPage';
 import MyBookings from './pages/Attendee/MyBookings';
 import AttendeeLayout from './components/AttendeeLayout';
 import HostLayout from './components/HostLayout';
-import UpdateEvent from './pages/Host/UpdateEventPage';
+import HostEditEventPage from './pages/Host/HostEditEventPage';
 import ValidateTicketPage from './pages/Host/ValidateTickePage';
 function App() {
   return (
@@ -114,7 +114,7 @@ function App() {
           <Route path="categories" element={<ManageCategories />} />
           <Route path="categories/edit/:id" element={<EditCategory />} />
           <Route path="events" element={<ManageEvents />} />
-          <Route path="events/edit/:id" element={<EditEvent />} />
+          <Route path="my-events/edit/:eventId" element={<HostEditEventPage />} />
           <Route path="requests" element={<ManageRequest />} />
           <Route path="hosts" element={<ManageHosts />} />
           <Route path="users" element={<ManageUsers />} />
@@ -128,7 +128,7 @@ function App() {
           <Route path="" element={<HostDashboard />} />
           <Route path="new-event" element={<NewEventPage />} />
           <Route path="my-events" element={<MyEventsPage />} />
-          <Route path="my-events/edit/:id" element={<UpdateEvent />} />
+          <Route path="my-events/edit/:eventId" element={<HostEditEventPage />} />
           <Route path="about" element={<AboutUs />} />
           <Route path="artists" element={<ArtistPage />} /> 
           <Route path="validate-ticket" element={<ValidateTicketPage />} />

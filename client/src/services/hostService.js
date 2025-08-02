@@ -19,5 +19,25 @@ export const insertNewEvent = (formData, hostId) => {
   });
 };
 
+export const updateEventByHost = async (eventId, dto) => {
+  try {
+    const response = await axios.put(`${config.serverUrl}/host/event/${eventId}`, dto);
+    return response.data;
+  } catch (err) {
+    console.error('Error updating event:', err);
+    throw err;
+  }
+};
+
+export const fetchEventById = async (eventId) => {
+  try {
+    const response = await axios.get(`${config.serverUrl}/host/event/${eventId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching event:", error);
+    throw error;
+  }
+};
+
 
 
