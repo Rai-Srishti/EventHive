@@ -39,7 +39,7 @@ public class SecurityConfig {
 				//any request comming should be authenticated, but doing only this create an issue as with login id and password also it will 
 				//not allow user to enter
 				.authorizeHttpRequests(request->request
-						.requestMatchers("/auth/login","/auth/signup", "/swagger-ui/**", "/v3/api-docs/**")
+						.requestMatchers("/auth/login","/auth/signup", "/swagger-ui/", "/v3/api-docs/")
 						.permitAll()
 						//.anyRequest().authenticated()) 
 				//to enable login through form

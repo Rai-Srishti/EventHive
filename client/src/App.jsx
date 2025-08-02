@@ -33,7 +33,7 @@ import MyBookings from './pages/Attendee/MyBookings';
 import AttendeeLayout from './components/AttendeeLayout';
 import HostLayout from './components/HostLayout';
 import UpdateEvent from './pages/Host/UpdateEventPage';
-
+import ValidateTicketPage from './pages/Host/ValidateTickePage';
 function App() {
   return (
     <>
@@ -131,6 +131,7 @@ function App() {
           <Route path="my-events/edit/:id" element={<UpdateEvent />} />
           <Route path="about" element={<AboutUs />} />
           <Route path="artists" element={<ArtistPage />} /> 
+          <Route path="validate-ticket" element={<ValidateTicketPage />} />
         </Route>
       </Routes>
     </>
