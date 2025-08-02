@@ -1,43 +1,81 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col, Navbar, Nav, Table, Button } from 'react-bootstrap';
-import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer } from 'recharts';
-import { FaUserCircle } from 'react-icons/fa';
+import {
+  Container,
+  Table,
+  Button
+} from 'react-bootstrap';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+  ResponsiveContainer
+} from 'recharts';
+import { getEventsByHostId } from '../../services/hostService';
 import Footer from '../../components/Footer';
-import '../../assets/css/HostAnalytics.css';
-
-// Sample Data
-const sampleGraphData = [
-  { month: 'Jan', attendance: 40 },
-  { month: 'Feb', attendance: 55 },
-  { month: 'Mar', attendance: 75 },
-  { month: 'Apr', attendance: 50 },
-  { month: 'May', attendance: 90 }
-];
-
-const sampleEvents = [
-  { id: 1, name: 'Tech Conference', type: 'Conference', date: '2025-08-01', status: 'Active' },
-  { id: 2, name: 'Live Concert', type: 'Concert', date: '2025-08-20', status: 'Upcoming' },
-  { id: 3, name: 'AI Webinar', type: 'Webinar', date: '2025-09-05', status: 'Completed' }
-];
 
 const HostDashboard = () => {
   const [graphData, setGraphData] = useState([]);
   const [eventData, setEventData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const hostId = 1; // Replace with dynamic value if needed
 
   useEffect(() => {
-    setGraphData(sampleGraphData);
-    setEventData(sampleEvents);
+    const fetchData = async () => {
+      try {
+        const response = await getEventsByHostId(hostId);
+        const events = Array.isArray(response) ? response : [];
+
+        console.log("✅ Events from /host/{hostId}:", events);
+        console.log("👉 Sample event object:", events[0]);
+
+        setEventData(events);
+
+        const graph = events
+          .filter(event => event.eventDate)
+          .map((event) => {
+            const date = new Date(event.eventDate);
+            const month = isNaN(date) ? 'Unknown' : date.toLocaleString('default', { month: 'short' });
+
+            return {
+              month,
+              attendance: Math.floor(Math.random() * 50) + 30 // Dummy attendance
+            };
+          });
+
+        const grouped = graph.reduce((acc, cur) => {
+          const existing = acc.find(item => item.month === cur.month);
+          if (existing) {
+            existing.attendance += cur.attendance;
+          } else {
+            acc.push({ ...cur });
+          }
+          return acc;
+        }, []);
+
+        setGraphData(grouped);
+      } catch (error) {
+        console.error("❌ Error fetching events:", error);
+        setEventData([]);
+        setGraphData([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
   return (
     <div className="bg-light min-vh-100 d-flex flex-column">
-   
-      {/* Page Title */}
+      {/* Header */}
       <Container className="my-4">
         <h4 className="text-center fw-bold">ANALYTICS</h4>
       </Container>
 
-      {/* Graph Section */}
+      {/* Graph */}
       <Container className="mb-5">
         <div className="bg-white shadow rounded p-4">
           <h5 className="text-center mb-3">Event Attendance Trend</h5>
@@ -53,7 +91,7 @@ const HostDashboard = () => {
         </div>
       </Container>
 
-      {/* Events Table Section */}
+      {/* Table */}
       <Container className="mb-5">
         <div className="bg-white shadow rounded p-4">
           <div className="d-flex justify-content-between align-items-center mb-3">
@@ -66,32 +104,45 @@ const HostDashboard = () => {
                 <tr>
                   <th>#</th>
                   <th>Event Name</th>
-                  <th>Type</th>
+                  <th>Category</th>
                   <th>Date</th>
                   <th>Status</th>
                 </tr>
               </thead>
               <tbody>
-                {eventData.map((event, index) => (
-                  <tr key={event.id}>
-                    <td>{index + 1}</td>
-                    <td>{event.name}</td>
-                    <td>{event.type}</td>
-                    <td>{event.date}</td>
-                    <td>
-                      <span className={`badge status-badge status-${event.status.toLowerCase()}`}>
-                        {event.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
+                {loading ? (
+                  <tr><td colSpan="5" className="text-center">Loading...</td></tr>
+                ) : eventData.length > 0 ? (
+                  eventData.map((event, index) => (
+                    <tr key={index}>
+                      <td>{index + 1}</td>
+                      <td>{event.eventName || 'Untitled'}</td>
+                      <td>{event.category || 'N/A'}</td>
+                      <td>{event.eventDate ? new Date(event.eventDate).toLocaleDateString() : 'Invalid Date'}</td>
+                      <td>
+                        <span
+                          style={{
+                            backgroundColor: '#e0e0e0',
+                            padding: '2px 8px',
+                            borderRadius: '12px',
+                            color: '#333',
+                            fontSize: '0.85rem'
+                          }}
+                        >
+                          {event.status || 'N/A'}
+                        </span>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr><td colSpan="5" className="text-center text-muted">No events found.</td></tr>
+                )}
               </tbody>
             </Table>
           </div>
         </div>
       </Container>
 
-      {/* Footer */}
       <Footer />
     </div>
   );
