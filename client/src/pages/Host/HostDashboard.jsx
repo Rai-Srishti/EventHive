@@ -28,8 +28,8 @@ const HostDashboard = () => {
         const response = await getEventsByHostId(hostId);
         const events = Array.isArray(response) ? response : [];
 
-        console.log("✅ Events from /host/{hostId}:", events);
-        console.log("👉 Sample event object:", events[0]);
+        console.log("Events from /host/{hostId}:", events);
+        console.log("Sample event object:", events[0]);
 
         setEventData(events);
 
@@ -57,7 +57,7 @@ const HostDashboard = () => {
 
         setGraphData(grouped);
       } catch (error) {
-        console.error("❌ Error fetching events:", error);
+        console.error(" Error fetching events:", error);
         setEventData([]);
         setGraphData([]);
       } finally {
