@@ -117,10 +117,10 @@ const EventsPage = () => {
                       <td>
                         {event.lifecycleStatus === "UPCOMING" ? (
                           <div className="d-flex gap-2">
-                            <button onClick={() => handleEdit(event.id)} className="btn btn-warning">
+                            <button onClick={() => handleEdit(event.eventId)} className="btn btn-warning">
                               Edit
                             </button>
-                            <button onClick={() => handleDelete(event.id)} className="btn btn-danger">
+                            <button onClick={() => handleDelete(event.eventId)} className="btn btn-danger">
                               Delete
                             </button>
                           </div>
