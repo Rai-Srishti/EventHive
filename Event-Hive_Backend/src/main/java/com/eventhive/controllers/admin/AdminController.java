@@ -32,6 +32,8 @@ public class AdminController {
 		return adminEventService.updateEvent(eventId);
 	}
 	
+	
+	
 	@GetMapping("/hosts")
 	public ResponseEntity<?> getAllHosts(){
 		return ResponseEntity.ok(adminService.fetchAllHosts());

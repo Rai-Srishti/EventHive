@@ -15,7 +15,7 @@ public class AdminEventResponseDTO {
 
     private Long eventId;
 
-    private User host; 
+    private AdminHostDto host; 
 
     private String eventName;
     
@@ -29,7 +29,5 @@ public class AdminEventResponseDTO {
 
     private String category;
 
-    private String photo;
-
-    private Artist artist;
+    private AdminArtistDTO artist;
 }
