@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,9 +19,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.eventhive.dto.host.HostNewEventRequestDto;
 import com.eventhive.dto.host.HostUpdateEventDto;
+import com.eventhive.dto.host.QrValidationRequestDto;
 import com.eventhive.services.host.HostArtist;
 import com.eventhive.services.host.HostEventService;
 import com.eventhive.services.host.HostService;
+import com.eventhive.services.host.TicketValidationService;
 
 import lombok.AllArgsConstructor;
 
@@ -37,6 +40,7 @@ public class HostController {
 	private final HostService hostService;
 	private final HostEventService eventService;
 	private final HostArtist artistService;
+	private final TicketValidationService ticketValidationService;
 	
 	
 
@@ -78,6 +82,12 @@ public class HostController {
 	    return ResponseEntity.ok(artistService.getAllArtistNames());
 	}
 	
+	
+	@PostMapping("/validate-ticket")
+	public ResponseEntity<?> ValidateTicket(@RequestBody QrValidationRequestDto request){
+		
+		return ResponseEntity.ok(ticketValidationService.validate(request));
+	}
 	
 	
 	
