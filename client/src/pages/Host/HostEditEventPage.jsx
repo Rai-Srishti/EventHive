@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "../../assets/css/TextInput.css";
 import { useParams, useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2'; 
 import { getAllArtists } from '../../services/artistService';
 import { fetchEventById, updateEventByHost } from '../../services/hostService';
 
@@ -31,7 +32,7 @@ const HostEditEventPage = () => {
         });
       } catch (err) {
         console.error('Error loading event:', err);
-        alert("Error loading event. Please try again.");
+        Swal.fire('Error', 'Failed to load event data.', 'error');
       }
     };
 
@@ -69,11 +70,18 @@ const HostEditEventPage = () => {
 
     try {
       await updateEventByHost(eventId, formData);
-      alert("Event updated successfully!");
+
+      await Swal.fire({
+        icon: 'success',
+        title: 'Updated!',
+        text: 'Event updated successfully.',
+        confirmButtonColor: '#E2215F'
+      });
+
       navigate("/host/my-events");
     } catch (error) {
       console.error("Error updating event:", error);
-      alert("Event update failed.");
+      Swal.fire('Error', 'Event update failed.', 'error');
     }
   };
 
@@ -143,17 +151,13 @@ const HostEditEventPage = () => {
             </div>
           </form>
         </div>
-
       </div>
-            <div>
-      <footer className="bg-dark text-light text-center py-3">
-© 2025 EventHive. All rights reserved.
-</footer>
-</div>
+
+      <footer className="bg-dark text-light text-center py-3 mt-4">
+        © 2025 EventHive. All rights reserved.
+      </footer>
     </>
   );
 };
-
-
 
 export default HostEditEventPage;
