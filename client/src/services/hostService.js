@@ -13,7 +13,7 @@ export const getEventsByHostId = async (hostId) => {
 };
 
 export const insertNewEvent = (formData, hostId) => {
-  return axios.post(`http://localhost:8080/host/event?hostId=${hostId}`, formData, {
+  return axiosInstance.post(`http://localhost:8080/host/event?hostId=${hostId}`, formData, {
     headers: {
       "Content-Type": "multipart/form-data"
     }
@@ -41,7 +41,7 @@ export const fetchEventById = async (eventId) => {
 };
 
 export const deleteEvent = async (eventId) => {
-  const response = await axios.delete(`${config.serverUrl}/host/event/${eventId}`);
+  const response = await axiosInstance.delete(`${config.serverUrl}/host/event/${eventId}`);
   return response.data;
 };
 
