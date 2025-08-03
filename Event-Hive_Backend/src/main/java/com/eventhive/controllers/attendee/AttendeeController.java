@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.eventhive.services.Attendee.AttendeeService;
+import com.eventhive.services.Attendee.AttendeeWalletService;
 import com.eventhive.services.Attendee.TicketPhaseService;
 import com.eventhive.services.authentication.JWTService;
 import com.eventhive.dto.attendee.ArtistDto;
@@ -39,6 +40,7 @@ public class AttendeeController {
 	private final AttendeeBookingService bookingService;
 	private final TicketPhaseService ticketPhaseService;
 	private final JWTService jwtService;
+	private final AttendeeWalletService walletService;
 
 	@GetMapping()
 	public ResponseEntity<List<EventDto>> getAllEvents() {
@@ -81,5 +83,11 @@ public class AttendeeController {
 	public ResponseEntity<?> deleteBooking(@PathVariable Long ticketId) {
 		return ResponseEntity.ok(ticketPhaseService.cancelTicket(ticketId));
 	}
-
+	
+	
+	@GetMapping("/wallet")
+	public ResponseEntity<?> getWallet(){
+		Long attendeeId = jwtService.extractUserIdFromContext();
+		return ResponseEntity.ok(walletService.getBalance(attendeeId));
+	}
 }

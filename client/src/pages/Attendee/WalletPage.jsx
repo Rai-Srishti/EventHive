@@ -3,14 +3,30 @@ import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const WalletPage = () => {
-  const [balance, setBalance] = useState(1000);
+  const attendeeId = 14; // ✅ Hardcoded for now
+  const [balance, setBalance] = useState(null);
   const [amount, setAmount] = useState('');
 
   useEffect(() => {
+    // ✅ Load Razorpay script
     const script = document.createElement("script");
     script.src = "https://checkout.razorpay.com/v1/checkout.js";
     script.async = true;
     document.body.appendChild(script);
+
+    // ✅ Fetch wallet balance from backend
+    const fetchBalance = async () => {
+      try {
+        const res = await axios.get(`http://localhost:8080/attendee/wallet/${attendeeId}`);
+        console.log("Fetched balance from backend:", res.data); // ✅ Debug log
+        setBalance(res.data);
+      } catch (error) {
+        console.error("Failed to fetch balance:", error);
+        setBalance(0); // fallback
+      }
+    };
+
+    fetchBalance();
   }, []);
 
   const handleAddBalance = async () => {
@@ -18,7 +34,6 @@ const WalletPage = () => {
     if (isNaN(value) || value <= 0) return;
 
     try {
-      // 1. Create Razorpay order from backend
       const response = await axios.post('http://localhost:8080/payment/create-order', null, {
         params: {
           amount: value,
@@ -26,9 +41,8 @@ const WalletPage = () => {
         }
       });
 
-      const orderData = response.data; // Backend returns order as JSON string
+      const orderData = response.data;
 
-      // 2. Configure Razorpay options
       const options = {
         key: 'rzp_test_oXQBXTZLh27wth',
         amount: orderData.amount,
@@ -36,11 +50,26 @@ const WalletPage = () => {
         name: 'EventHive Wallet',
         description: 'Add Balance',
         order_id: orderData.id,
-        handler: function (response) {
-          alert('Payment successful!');
-          setBalance((prev) => prev + value);
-          setAmount('');
+
+        handler: async function () {
+          try {
+            await axios.post(
+              `http://localhost:8080/payment/wallet/update-balance/${attendeeId}`,
+              null,
+              {
+                params: { amount: value }
+              }
+            );
+
+            alert('Payment successful and wallet updated!');
+            setBalance((prev) => parseFloat(prev) + value); // ✅ Ensure it's number
+            setAmount('');
+          } catch (err) {
+            alert('Payment succeeded but wallet update failed.');
+            console.error(err);
+          }
         },
+
         prefill: {
           name: 'Test User',
           email: 'test@example.com',
@@ -76,7 +105,12 @@ const WalletPage = () => {
             <div className="mb-3 row">
               <label className="col-sm-3 col-form-label fw-semibold">Available Balance:</label>
               <div className="col-sm-9">
-                <input type="text" className="form-control" value={`Rs. ${balance}`} disabled />
+                <input
+                  type="text"
+                  className="form-control"
+                  value={balance !== null ? `Rs. ${balance}` : 'Loading...'}
+                  disabled
+                />
               </div>
             </div>
             <div className="mb-3 row">
