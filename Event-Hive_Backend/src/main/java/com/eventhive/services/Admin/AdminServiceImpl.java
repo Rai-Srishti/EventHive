@@ -10,7 +10,7 @@ import com.eventhive.custom_exception.ApiException;
 import com.eventhive.custom_exception.UserNotFoundException;
 import com.eventhive.dao.admin.AdminEventDao;
 import com.eventhive.dao.admin.AdminTicketDao;
-import com.eventhive.dao.admin.AdminUserDao;
+import com.eventhive.dao.admin.UserDao;
 import com.eventhive.dto.admin.AdminProfileResponseDTO;
 import com.eventhive.dto.admin.AdminUserRequestDTO;
 import com.eventhive.dto.admin.AdminUserResponseDTO;
@@ -28,7 +28,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class AdminServiceImpl implements AdminService{
 	
-	private final AdminUserDao adminUserDao;
+	private final UserDao adminUserDao;
 	private final AdminEventDao adminEventDao;
 	private final AdminTicketDao adminTicketDao;
 	private final ModelMapper mapper;
