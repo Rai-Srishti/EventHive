@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.eventhive.services.Attendee.AttendeeService;
 import com.eventhive.services.Attendee.TicketPhaseService;
+import com.eventhive.services.authentication.JWTService;
 import com.eventhive.dto.attendee.ArtistDto;
 import com.eventhive.dto.attendee.AttendeeEventPhaseDto;
 import com.eventhive.dto.attendee.EventDto;
@@ -37,45 +38,47 @@ public class AttendeeController {
 	private final AttendeeEventPhaseService attendeeEventPhaseService;
 	private final AttendeeBookingService bookingService;
 	private final TicketPhaseService ticketPhaseService;
-	
+	private final JWTService jwtService;
+
 	@GetMapping()
-	public ResponseEntity<List<EventDto>> getAllEvents(){
+	public ResponseEntity<List<EventDto>> getAllEvents() {
 		return ResponseEntity.ok(eventService.getAllApprovedEvents());
 	}
-	
+
 	@GetMapping("event-details/{eventId}")
-	public ResponseEntity<EventDto> getEventbyId(@PathVariable Long eventId){
+	public ResponseEntity<EventDto> getEventbyId(@PathVariable Long eventId) {
 		return ResponseEntity.ok(eventService.getEventById(eventId));
 	}
-	//this api is for getting all the tickets phase wise have to make chnages in the fronend as the path was not correct
-	@GetMapping("/bookings/{eventId}")
-	public ResponseEntity<List<AttendeeEventPhaseDto>> getEventPhases(@PathVariable Long eventId){
-		return ResponseEntity.ok(attendeeEventPhaseService.getPhasesByEventId(eventId));
-	} 
-	
 
-	 @GetMapping("/my-bookings/{attendeeId}")
-	    public ResponseEntity<List<MyBookingDto>> getMyUpcomingBookings(@PathVariable Long attendeeId) {
-	        List<MyBookingDto> bookings = bookingService.getBookingsByAttendeeId(attendeeId);
-	        return ResponseEntity.ok(bookings);
-	    }
+	// this api is for getting all the tickets phase wise have to make chnages in
+	// the fronend as the path was not correct
+	@GetMapping("/bookings/{eventId}")
+	public ResponseEntity<List<AttendeeEventPhaseDto>> getEventPhases(@PathVariable Long eventId) {
+		return ResponseEntity.ok(attendeeEventPhaseService.getPhasesByEventId(eventId));
+	}
+
+	@GetMapping("/my-bookings")
+	public ResponseEntity<List<MyBookingDto>> getMyUpcomingBookings() {
+		Long attendeeId = jwtService.extractUserIdFromContext();
+		System.out.println(attendeeId);
+		List<MyBookingDto> bookings = bookingService.getBookingsByAttendeeId(attendeeId);
+		return ResponseEntity.ok(bookings);
+	}
 
 	@GetMapping("/artists")
-	public ResponseEntity<List<ArtistDto>> getAllArtists(){
+	public ResponseEntity<List<ArtistDto>> getAllArtists() {
 		return ResponseEntity.ok(artistService.getAllArtists());
 	}
-	
+
 	@PostMapping("/purchase-ticket")
-	public ResponseEntity<?> purchaseTicket(
-			@RequestParam Long userId,
-	        @RequestParam Long phaseId,
-	        @RequestParam int quantity){
-		
+	public ResponseEntity<?> purchaseTicket(@RequestParam Long phaseId, @RequestParam int quantity) {
+		Long userId = jwtService.extractUserIdFromContext();
+
 		return ResponseEntity.ok(ticketPhaseService.purchasedTicket(userId, phaseId, quantity));
 	}
-	
+
 	@DeleteMapping("/cancel-ticket/{ticketId}")
-	public ResponseEntity<?> deleteBooking(@PathVariable Long ticketId){
+	public ResponseEntity<?> deleteBooking(@PathVariable Long ticketId) {
 		return ResponseEntity.ok(ticketPhaseService.cancelTicket(ticketId));
 	}
 
