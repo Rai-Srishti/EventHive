@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { loginUser } from '../services/authService';
 
 function Login() {
   const [log, setLog] = useState({
@@ -13,16 +14,33 @@ function Login() {
 
   const navigate = useNavigate();
 
-  const onLogin = () => {
-    if (log.email.trim() === '') {
-      toast.warn('Please enter email');
-    } else if (log.password.trim() === '') {
-      toast.warn('Please enter password');
-    } else {
+  const onLogin = async () => {
+  if (log.email.trim() === '') {
+    toast.warn('Please enter email');
+  } else if (log.password.trim() === '') {
+    toast.warn('Please enter password');
+  } else {
+    try {
+      const data = await loginUser(log.email, log.password);
+      const { token, role } = data;
+
+      // Save JWT token and role in localStorage
+      localStorage.setItem("token", token);
+      localStorage.setItem("role", role);
+
       toast.success('Login Successful!');
-      navigate('/container/MenuBoard');
+
+      // Redirect based on role
+      if (role === 'SUPERADMIN') navigate('/admin');
+      else if (role === 'HOST') navigate('/host');
+      else if (role === 'ATTENDEE') navigate('/attendee');
+      else navigate('/home');
+
+    } catch (error) {
+      toast.error(error);
     }
-  };
+  }
+};
 
   return (
     <div>

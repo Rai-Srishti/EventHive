@@ -65,7 +65,9 @@ public class SecurityConfig {
 	        .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 	        .csrf(csrf -> csrf.disable())
 	        .authorizeHttpRequests(auth -> auth
-	        	.requestMatchers("/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+	        	.requestMatchers("/auth/**", "/swagger-ui/**", "/v3/api-docs/**", "/home","/","/events",
+	                    "/event-details/**",
+	                    "/artists").permitAll()
 	            .requestMatchers("/admin/**").hasRole("SUPERADMIN")
 	            .requestMatchers("/host/**").hasRole("HOST")
 	            .requestMatchers("/attendee/**").hasRole("ATTENDEE")
@@ -83,7 +85,7 @@ public class SecurityConfig {
 	@Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5173")); // OR use allowedOriginPatterns
+        configuration.setAllowedOrigins(List.of("http://localhost:4173")); // OR use allowedOriginPatterns
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setExposedHeaders(List.of("Authorization"));

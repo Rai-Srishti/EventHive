@@ -35,6 +35,8 @@ import HostLayout from './components/HostLayout';
 import HostEditEventPage from './pages/Host/HostEditEventPage';
 import ValidateTicketPage from './pages/Host/ValidateTickePage';
 import { ToastContainer } from 'react-toastify';
+import PrivateRoute from './components/PrivateRoute';
+
 function App() {
   return (
     <>
@@ -98,7 +100,7 @@ function App() {
         } />
 
         {/* Attendee Routes */}
-        <Route path="/attendee" element={<AttendeeLayout />}>
+        <Route path="/attendee" element={<PrivateRoute allowedRoles={['ATTENDEE']}><AttendeeLayout /></PrivateRoute>}>
           <Route path="wallet" element={<WalletPage />} />
           <Route path="update" element={<Update />} />
           <Route path="favourites" element={<Favourites />} />
@@ -111,7 +113,7 @@ function App() {
         </Route>
 
         {/* Admin Routes */}
-        <Route path="/admin" element={<AdminLayout />}>
+        <Route path="/admin" element={<PrivateRoute allowedRoles={['SUPERADMIN']}><AdminLayout /> </PrivateRoute>}>
           <Route path="categories" element={<ManageCategories />} />
           <Route path="categories/edit/:id" element={<EditCategory />} />
           <Route path="events" element={<ManageEvents />} />
@@ -125,7 +127,7 @@ function App() {
         </Route>
 
         {/* Host Routes */}
-        <Route path="/host" element={<HostLayout />}>
+        <Route path="/host" element={ <PrivateRoute allowedRoles={['HOST']}><HostLayout /></PrivateRoute>}>
           <Route path="" element={<HostDashboard />} />
           <Route path="new-event" element={<NewEventPage />} />
           <Route path="my-events" element={<MyEventsPage />} />

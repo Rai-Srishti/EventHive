@@ -93,34 +93,58 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public LoginResponseDto login(LoginRequestDto dto) {
+        Authentication authentication = authManager.authenticate(
+            new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword())
+        );
 
-        User user = userDao.findByEmail(dto.getEmail())
-                .orElseThrow(() -> new ApiException("Invalid email or password."));
-
-        if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
-            throw new ApiException("Invalid email or password.");
+        if (!authentication.isAuthenticated()) {
+            throw new ApiException("Invalid credentials.");
         }
 
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        User user = userPrincipal.getUser();
+
+        String token = jwtService.generateToken(userPrincipal);  // ✅ Declare it here
+
         return new LoginResponseDto(
-                user.getUserId(),
-                user.getFirstName() + " " + user.getLastName(),
-                user.getRole(),
-                "Login successful"
+            user.getUserId(),
+            user.getFirstName() + " " + user.getLastName(),
+            user.getRole(),
+            token,
+            "Login successful"
         );
     }
 
-	@Override
-	public String verify(LoginRequestDto dto) {
-		//passing the email and password and authenticating them and then saving them in authentication reference
-		Authentication authentication = 
-				authManager.authenticate(new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword()));
-		
-		// checking if credentials are authenticated
-		if(authentication.isAuthenticated()) {
-			 UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-			   return jwtService.generateToken(userPrincipal);        //return "Success"; //rather than returning string we want to generate token of successful login
-			   //sending userPrincipal(id, email, password) to generate the token
-		}
-		return "fail";
-	}
+//    public LoginResponseDto login(LoginRequestDto dto) {
+//
+//        User user = userDao.findByEmail(dto.getEmail())
+//                .orElseThrow(() -> new ApiException("Invalid email or password."));
+//
+//        if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
+//            throw new ApiException("Invalid email or password.");
+//        }
+//
+//        return new LoginResponseDto(
+//                user.getUserId(),
+//                user.getFirstName() + " " + user.getLastName(),
+//                user.getRole(),
+//                token
+//                "Login successful"
+//        );
+//    }
+
+//	@Override
+//	public String verify(LoginRequestDto dto) {
+//		//passing the email and password and authenticating them and then saving them in authentication reference
+//		Authentication authentication = 
+//				authManager.authenticate(new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword()));
+//		
+//		// checking if credentials are authenticated
+//		if(authentication.isAuthenticated()) {
+//			 UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+//			   return jwtService.generateToken(userPrincipal);        //return "Success"; //rather than returning string we want to generate token of successful login
+//			   //sending userPrincipal(id, email, password) to generate the token
+//		}
+//		return "fail";
+//	}
 }

@@ -33,13 +33,8 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequestDto dto) {
-    	
-    	//return authService.verify(dto);
-        //return ResponseEntity.ok(authService.login(dto));
-    	String token = authService.verify(dto);
-        Map<String, String> response = new HashMap<>();
-        response.put("token", token);
+    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto dto) {
+        LoginResponseDto response = authService.login(dto);
         return ResponseEntity.ok(response);
     }
 }
