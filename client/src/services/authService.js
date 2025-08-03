@@ -1,6 +1,5 @@
 const BASE_URL = "http://localhost:8080/auth";
 
-
 export const loginUser = async (email, password) => {
   const response = await fetch(`${BASE_URL}/login`, {
     method: "POST",
@@ -17,18 +16,15 @@ export const loginUser = async (email, password) => {
   return response.json();
 };
 
-export const signupUser = async (userData) => {
-  const response = await fetch(`${BASE_URL}/signup`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(userData),
-  });
+import axios from 'axios';
 
-  if (!response.ok) {
-    throw new Error("Signup failed");
+const API_BASE_URL = 'http://localhost:8080/auth'; 
+
+export const registerUser = async (userData) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/signup`, userData);
+    return response.data; // Expected to return ApiResponse with message
+  } catch (error) {
+    throw error.response?.data?.message || 'Registration failed';
   }
-
-  return response.json();
 };
