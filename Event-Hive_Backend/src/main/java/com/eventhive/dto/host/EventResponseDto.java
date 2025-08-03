@@ -13,6 +13,8 @@ import lombok.Setter;
 @Setter
 public class EventResponseDto {
 
+	private Long eventId;
+	
 	 private String eventName;
 
 	    private String description;

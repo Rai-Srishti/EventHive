@@ -17,6 +17,10 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+
 @Service
 public class JWTService {
 	
@@ -80,7 +84,21 @@ public class JWTService {
 		return extractClaim(token, Claims::getExpiration);
 	}
 	
+
 	public String extractUserRole(String token) {
 	    return extractClaim(token, claims -> claims.get("role", String.class));
+	}
+
+	
+	//adding this method to extract the userId from jwt Token
+	public Long extractUserIdFromContext() {
+	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+	    if (authentication != null && authentication.getPrincipal() instanceof UserPrincipal userPrincipal) {
+	        return userPrincipal.getUserId();
+	    }
+
+	    throw new IllegalStateException("Authentication token is invalid or user not authenticated");
+
 	}
 }
