@@ -29,24 +29,13 @@ public class AuthenticationController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> register(@Valid @RequestBody SignupRequestDto dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(dto));
-        		
+        return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(dto));	
         
     }
 
     @PostMapping("/login")
-<<<<<<< HEAD
     public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto dto) {
         LoginResponseDto response = authService.login(dto);
-=======
-    public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDto dto) {
-    	
-    	//return authService.verify(dto);
-        //return ResponseEntity.ok(authService.login(dto));
-    	String token = authService.verify(dto);
-        Map<String, String> response = new HashMap<>();
-        response.put("token", token);
->>>>>>> 18cec6c31d76d6ef87ca0be3346dad5c7f796a73
         return ResponseEntity.ok(response);
     }
 }
