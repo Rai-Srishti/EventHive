@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate } from 'react-router-dom';
-// Import the host service
-import { getEventsByHostId } from '../../services/hostService';
+import { getEventsByHostId, deleteEvent } from '../../services/hostService'; 
+import Swal from 'sweetalert2';
 
 const EventsPage = () => {
   const eventsPerPage = 8;
   const [page, setPage] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
-  const [events, setEvents] = useState([]); //  Event data from API
-  const [loading, setLoading] = useState(true); //Loading state
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  const hostId = 1; // Replace with dynamic host ID (e.g. from auth context or local storage)
+  const hostId = 1; //  Replace with dynamic host ID later (e.g. from auth)
 
-  // Fetch events from backend
   useEffect(() => {
     const fetchEvents = async () => {
       try {
@@ -33,12 +32,32 @@ const EventsPage = () => {
     navigate(`/host/my-events/edit/${eventId}`);
   };
 
-  const handleDelete = (eventId) => {
-    navigate(`/host/my-events/delete/${eventId}`);
-  };
+  const handleDelete = async (eventId) => {
+  const result = await Swal.fire({
+    title: 'Delete Event?',
+    text: 'Are you sure you want to delete this event? This action cannot be undone.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#E2215F',
+    cancelButtonColor: '#6c757d',
+    confirmButtonText: 'Yes, delete it!',
+  });
 
-  // Filter based on search
-  const filteredEvents = events.filter(event =>
+  if (result.isConfirmed) {
+    try {
+      await deleteEvent(eventId);
+      Swal.fire('Deleted!', 'The event has been deleted.', 'success');
+      // Optionally, refresh the event list here
+    } catch (error) {
+      Swal.fire('Error', 'Failed to delete event.', 'error');
+    }
+  }
+};
+
+
+
+
+  const filteredEvents = events.filter((event) =>
     event.eventName?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -52,11 +71,11 @@ const EventsPage = () => {
   }, [searchTerm, filteredEvents.length, page, startIndex]);
 
   const handlePrevious = () => {
-    if (page > 0) setPage(prev => prev - 1);
+    if (page > 0) setPage((prev) => prev - 1);
   };
 
   const handleNext = () => {
-    if ((page + 1) * eventsPerPage < filteredEvents.length) setPage(prev => prev + 1);
+    if ((page + 1) * eventsPerPage < filteredEvents.length) setPage((prev) => prev + 1);
   };
 
   return (
@@ -69,20 +88,18 @@ const EventsPage = () => {
         <div className="py-4 rounded mt-5">
           <div className="row align-items-center">
             <div className="col-md-12">
-              <div className="input-wrapper">
-                <input
-                  type="text"
-                  className="form-control custom-input"
-                  placeholder="Search by event name..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              </div>
+              <input
+                type="text"
+                className="form-control custom-input"
+                placeholder="Search by event name..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
             </div>
           </div>
         </div>
 
-        {loading ? ( // Show loading message while fetching
+        {loading ? (
           <div className="text-center text-muted">Loading events...</div>
         ) : (
           <div className="table-responsive">
@@ -115,25 +132,36 @@ const EventsPage = () => {
                       <td>{event.category}</td>
                       <td>{event.status}</td>
                       <td>
-                        {event.lifecycleStatus === "UPCOMING" ? (
+                        {event.lifecycleStatus === 'UPCOMING' ? (
                           <div className="d-flex gap-2">
-                            <button onClick={() => handleEdit(event.eventId)} className="btn btn-warning">
-                              Edit
-                            </button>
-                            <button onClick={() => handleDelete(event.eventId)} className="btn btn-danger">
-                              Delete
-                            </button>
+                            {(event.status === 'APPROVED' || event.status === 'PENDING') && (
+                              <button
+                                onClick={() => handleEdit(event.eventId)}
+                                className="btn btn-warning"
+                              >
+                                Edit
+                              </button>
+                            )}
+                            {event.status === 'APPROVED' && (
+                              <button
+                                onClick={() => handleDelete(event.eventId)}
+                                className="btn btn-danger"
+                              >
+                                Delete
+                              </button>
+                            )}
                           </div>
                         ) : (
                           <span className="text-muted">NO ACTIONS</span>
                         )}
                       </td>
-
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="8" className="text-center">No events found.</td>
+                    <td colSpan="10" className="text-center">
+                      No events found.
+                    </td>
                   </tr>
                 )}
               </tbody>
