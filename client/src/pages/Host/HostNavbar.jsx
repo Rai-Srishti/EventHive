@@ -8,6 +8,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { FaUser } from 'react-icons/fa';
 
 const HostNavbar = () => {
+  const hostId = 1;
   const location = useLocation();
   const isActive = (path) => location.pathname === path ? 'nav-link active' : 'nav-link';
   return (
@@ -29,7 +30,7 @@ const HostNavbar = () => {
             <Link to="/host" className={isActive('/host')}>ANALYTICS</Link>
             <Link to="/host/new-event" className={isActive('/host/newevent')}>NEW EVENT</Link>
             <Link to="/host/my-events" className={isActive('/host/myevents')}>MY EVENTS</Link>
-            <Link to="/host/artists" className={isActive('/host/artists')}>ARTISTS</Link>
+            <Link to={`/host/artist/${hostId}`} className={isActive(`/host/artists/${hostId}`)}>ARTISTS</Link>
             <Link to="/host/about" className={isActive('/host/about')}>ABOUT</Link>
             <Link to="/host/contact" activeclassname="active" className={isActive('/host/contact')}>CONTACT</Link>
             <Link to="/host/profile" activeclassname="active" className={isActive('/host/dashboard')}></Link>
