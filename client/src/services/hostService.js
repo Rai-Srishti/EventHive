@@ -1,9 +1,10 @@
 import axios from 'axios';
 import { config } from './config';
+import axiosInstance from './axiosInstance';
 
 export const getEventsByHostId = async (hostId) => {
   try {
-    const response = await axios.get(`${config.serverUrl}/host/${hostId}`);
+    const response = await axiosInstance.get(`${config.serverUrl}/host/${hostId}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching events for host:', error);
@@ -21,7 +22,7 @@ export const insertNewEvent = (formData, hostId) => {
 
 export const updateEventByHost = async (eventId, dto) => {
   try {
-    const response = await axios.put(`${config.serverUrl}/host/event/${eventId}`, dto);
+    const response = await axiosInstance.put(`${config.serverUrl}/host/event/${eventId}`, dto);
     return response.data;
   } catch (err) {
     console.error('Error updating event:', err);
@@ -31,7 +32,7 @@ export const updateEventByHost = async (eventId, dto) => {
 
 export const fetchEventById = async (eventId) => {
   try {
-    const response = await axios.get(`${config.serverUrl}/host/event/${eventId}`);
+    const response = await axiosInstance.get(`${config.serverUrl}/host/event/${eventId}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching event:", error);

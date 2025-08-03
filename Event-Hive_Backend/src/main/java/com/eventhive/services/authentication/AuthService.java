@@ -10,5 +10,4 @@ import com.eventhive.dto.host.ApiResponse;
 public interface AuthService {
     ApiResponse register(SignupRequestDto dto);
     LoginResponseDto login(LoginRequestDto dto);
-    String verify(LoginRequestDto dto);
 }

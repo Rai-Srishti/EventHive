@@ -1,11 +1,9 @@
-// src/pages/Register.js
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { registerUser } from '../services/authService';
-import Footer from '../components/Footer';
 
 function Register() {
   const [userdet, setUserdet] = useState({
@@ -18,7 +16,7 @@ function Register() {
     city: '',
     state: '',
     country: '',
-    role: 'Admin'
+    role: 'ATTENDEE' // Default selection
   });
 
   const navigate = useNavigate();
@@ -73,170 +71,146 @@ function Register() {
       city,
       state,
       country,
-      role: role.toUpperCase() // "HOST" or "ATTENDEE"
+      role // already "HOST" or "ATTENDEE"
     };
 
     try {
       const result = await registerUser(payload);
       toast.success(result.message || 'Registered successfully!');
-      setTimeout(() => navigate('/login'), 1500); // Redirect after delay
+      setTimeout(() => navigate('/login'), 1500);
     } catch (errMsg) {
       toast.error(errMsg);
     }
   };
 
   return (
-    <div>
-      <div className="container my-5">
-        <div className="text-center mb-4">
-          <h2 className="fw-bold" style={{ fontSize: '2rem', color: '#343a40' }}>
-            Create Your Account
-          </h2>
-          <div
-            style={{
-              width: '80px',
-              height: '4px',
-              backgroundColor: '#dc3545',
-              margin: '0.5rem auto 0'
-            }}
+    <div className="container my-5">
+      <div className="text-center mb-4">
+        <h2 className="fw-bold" style={{ fontSize: '2rem', color: '#343a40' }}>
+          Create Your Account
+        </h2>
+        <div style={{ width: '80px', height: '4px', backgroundColor: '#dc3545', margin: '0.5rem auto 0' }} />
+      </div>
+
+      <form className="mx-auto p-4 border rounded shadow-sm w-100" style={{ maxWidth: '600px', backgroundColor: '#f8f9fa' }}>
+        {/* Basic fields */}
+        <div className="mb-3">
+          <label className="form-label"><strong>First Name</strong></label>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Enter first name"
+            value={userdet.first_name}
+            onChange={(e) => setUserdet({ ...userdet, first_name: e.target.value })}
           />
         </div>
 
-        <form
-          className="mx-auto p-4 border rounded shadow-sm w-100"
-          style={{ maxWidth: '600px', backgroundColor: '#f8f9fa' }}
-        >
-          {/* First Name */}
-          <div className="mb-3">
-            <label className="form-label"><strong>First Name</strong></label>
+        <div className="mb-3">
+          <label className="form-label"><strong>Last Name</strong></label>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Enter last name"
+            value={userdet.last_name}
+            onChange={(e) => setUserdet({ ...userdet, last_name: e.target.value })}
+          />
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label"><strong>Email</strong></label>
+          <input
+            type="email"
+            className={`form-control ${userdet.email && !emailRegex.test(userdet.email) ? 'is-invalid' : ''}`}
+            placeholder="Enter email"
+            value={userdet.email}
+            onChange={(e) => setUserdet({ ...userdet, email: e.target.value })}
+          />
+          {userdet.email && !emailRegex.test(userdet.email) && (
+            <div className="invalid-feedback">Please enter a valid email.</div>
+          )}
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label"><strong>Phone Number</strong></label>
+          <input
+            type="tel"
+            className={`form-control ${userdet.phone && !phoneRegex.test(userdet.phone) ? 'is-invalid' : ''}`}
+            placeholder="Enter 10-digit phone number"
+            value={userdet.phone}
+            onChange={(e) => setUserdet({ ...userdet, phone: e.target.value })}
+          />
+          {userdet.phone && !phoneRegex.test(userdet.phone) && (
+            <div className="invalid-feedback">Phone must be 10 digits.</div>
+          )}
+        </div>
+
+        {['city', 'state', 'country'].map((field) => (
+          <div className="mb-3" key={field}>
+            <label className="form-label"><strong>{field[0].toUpperCase() + field.slice(1)}</strong></label>
             <input
               type="text"
               className="form-control"
-              placeholder="Enter first name"
-              value={userdet.first_name}
-              onChange={(e) => setUserdet({ ...userdet, first_name: e.target.value })}
+              placeholder={`Enter ${field}`}
+              value={userdet[field]}
+              onChange={(e) => setUserdet({ ...userdet, [field]: e.target.value })}
             />
           </div>
+        ))}
 
-          {/* Last Name */}
-          <div className="mb-3">
-            <label className="form-label"><strong>Last Name</strong></label>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Enter last name"
-              value={userdet.last_name}
-              onChange={(e) => setUserdet({ ...userdet, last_name: e.target.value })}
-            />
-          </div>
+        <div className="mb-3">
+          <label className="form-label"><strong>Password</strong></label>
+          <input
+            type="password"
+            className={`form-control ${userdet.password && userdet.password.length < 6 ? 'is-invalid' : ''}`}
+            placeholder="Enter password"
+            value={userdet.password}
+            onChange={(e) => setUserdet({ ...userdet, password: e.target.value })}
+          />
+          {userdet.password && userdet.password.length < 6 && (
+            <div className="invalid-feedback">Password must be at least 6 characters.</div>
+          )}
+        </div>
 
-          {/* Email */}
-          <div className="mb-3">
-            <label className="form-label"><strong>Email</strong></label>
-            <input
-              type="email"
-              className={`form-control ${userdet.email && !emailRegex.test(userdet.email) ? 'is-invalid' : ''}`}
-              placeholder="Enter email"
-              value={userdet.email}
-              onChange={(e) => setUserdet({ ...userdet, email: e.target.value })}
-            />
-            {userdet.email && !emailRegex.test(userdet.email) && (
-              <div className="invalid-feedback">Please enter a valid email.</div>
-            )}
-          </div>
+        <div className="mb-3">
+          <label className="form-label"><strong>Confirm Password</strong></label>
+          <input
+            type="password"
+            className={`form-control ${userdet.confirm_password && userdet.password !== userdet.confirm_password ? 'is-invalid' : ''}`}
+            placeholder="Re-enter password"
+            value={userdet.confirm_password}
+            onChange={(e) => setUserdet({ ...userdet, confirm_password: e.target.value })}
+          />
+          {userdet.confirm_password && userdet.password !== userdet.confirm_password && (
+            <div className="invalid-feedback">Passwords do not match.</div>
+          )}
+        </div>
 
-          {/* Phone */}
-          <div className="mb-3">
-            <label className="form-label"><strong>Phone Number</strong></label>
-            <input
-              type="tel"
-              className={`form-control ${userdet.phone && !phoneRegex.test(userdet.phone) ? 'is-invalid' : ''}`}
-              placeholder="Enter 10-digit phone number"
-              value={userdet.phone}
-              onChange={(e) => setUserdet({ ...userdet, phone: e.target.value })}
-            />
-            {userdet.phone && !phoneRegex.test(userdet.phone) && (
-              <div className="invalid-feedback">Phone must be 10 digits.</div>
-            )}
-          </div>
-
-          {/* City, State, Country */}
-          {['city', 'state', 'country'].map((field) => (
-            <div className="mb-3" key={field}>
-              <label className="form-label"><strong>{field[0].toUpperCase() + field.slice(1)}</strong></label>
-              <input
-                type="text"
-                className="form-control"
-                placeholder={`Enter ${field}`}
-                value={userdet[field]}
-                onChange={(e) => setUserdet({ ...userdet, [field]: e.target.value })}
-              />
-            </div>
-          ))}
-
-          {/* Password */}
-          <div className="mb-3">
-            <label className="form-label"><strong>Password</strong></label>
-            <input
-              type="password"
-              className={`form-control ${userdet.password && userdet.password.length < 6 ? 'is-invalid' : ''}`}
-              placeholder="Enter password"
-              value={userdet.password}
-              onChange={(e) => setUserdet({ ...userdet, password: e.target.value })}
-            />
-            {userdet.password && userdet.password.length < 6 && (
-              <div className="invalid-feedback">Password must be at least 6 characters.</div>
-            )}
-          </div>
-
-          {/* Confirm Password */}
-          <div className="mb-3">
-            <label className="form-label"><strong>Confirm Password</strong></label>
-            <input
-              type="password"
-              className={`form-control ${userdet.confirm_password && userdet.password !== userdet.confirm_password ? 'is-invalid' : ''}`}
-              placeholder="Re-enter password"
-              value={userdet.confirm_password}
-              onChange={(e) => setUserdet({ ...userdet, confirm_password: e.target.value })}
-            />
-            {userdet.confirm_password && userdet.password !== userdet.confirm_password && (
-              <div className="invalid-feedback">Passwords do not match.</div>
-            )}
-          </div>
-
-          {/* Role */}
-          <div className="mb-3">
-            <label className="form-label"><strong>Role</strong></label>
-            <select
-              className="form-select"
-              value={userdet.role}
-              onChange={(e) => setUserdet({ ...userdet, role: e.target.value })}
-            >
-              <option value="Admin">Host</option>
-              <option value="Attendee">Attendee</option>
-            </select>
-          </div>
-
-          <button
-            type="button"
-            className="btn btn-danger w-100 fw-bold"
-            onClick={onRegister}
+        {/* ✅ Updated Role Dropdown */}
+        <div className="mb-3">
+          <label className="form-label"><strong>Role</strong></label>
+          <select
+            className="form-select"
+            value={userdet.role}
+            onChange={(e) => setUserdet({ ...userdet, role: e.target.value })}
           >
-            Sign Up
-          </button>
+            <option value="HOST">Host</option>
+            <option value="ATTENDEE">Attendee</option>
+          </select>
+        </div>
 
-          <div className="text-center mt-3">
-            <small>
-              Already have an account?{' '}
-              <Link to="/login" style={{ color: '#E2215F' }}>
-                Login Here
-              </Link>
-            </small>
-          </div>
-        </form>
-      </div>
+        <button type="button" className="btn btn-danger w-100 fw-bold" onClick={onRegister}>
+          Sign Up
+        </button>
 
-    
+        <div className="text-center mt-3">
+          <small>
+            Already have an account?{' '}
+            <Link to="/login" style={{ color: '#E2215F' }}>
+              Login Here
+            </Link>
+          </small>
+        </div>
+      </form>
     </div>
   );
 }
