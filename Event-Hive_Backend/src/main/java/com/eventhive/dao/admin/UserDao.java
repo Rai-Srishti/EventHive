@@ -9,7 +9,7 @@ import com.eventhive.entities.User;
 import com.eventhive.entities.enums.Role;
 
 @Repository
-public interface AdminUserDao extends JpaRepository<User, Long> {
+public interface UserDao extends JpaRepository<User, Long> {
 
 	List<User> findByRole(Role host);
 	User findByEmail(String email);

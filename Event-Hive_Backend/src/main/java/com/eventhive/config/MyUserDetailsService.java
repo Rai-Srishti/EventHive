@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.eventhive.dao.admin.AdminUserDao;
+import com.eventhive.dao.admin.UserDao;
 import com.eventhive.entities.User;
 
 
@@ -14,7 +14,7 @@ import com.eventhive.entities.User;
 public class MyUserDetailsService implements UserDetailsService {
 
 	@Autowired
-	private AdminUserDao repo;
+	private UserDao repo;
 	
 	//abstract class method 
 	@Override
