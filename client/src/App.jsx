@@ -36,7 +36,7 @@ import HostEditEventPage from './pages/Host/HostEditEventPage';
 import ValidateTicketPage from './pages/Host/ValidateTickePage';
 import { ToastContainer } from 'react-toastify';
 import PrivateRoute from './components/PrivateRoute';
-
+import HostArtist from  './pages/Host/HostArtist';
 function App() {
   return (
     <>
@@ -133,8 +133,9 @@ function App() {
           <Route path="my-events" element={<MyEventsPage />} />
           <Route path="my-events/edit/:eventId" element={<HostEditEventPage />} />
           <Route path="about" element={<AboutUs />} />
-          <Route path="artists" element={<ArtistPage />} /> 
+          <Route path="artist/:hostId" element={<HostArtist />} />
           <Route path="validate-ticket" element={<ValidateTicketPage />} />
+
         </Route>
       </Routes>
       <ToastContainer/>    </>

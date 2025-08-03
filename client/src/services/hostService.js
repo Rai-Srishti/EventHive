@@ -40,5 +40,10 @@ export const fetchEventById = async (eventId) => {
   }
 };
 
+export const deleteEvent = async (eventId) => {
+  const response = await axios.delete(`${config.serverUrl}/host/event/${eventId}`);
+  return response.data;
+};
+
 
 
