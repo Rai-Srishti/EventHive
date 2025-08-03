@@ -18,6 +18,8 @@ import com.eventhive.dto.authentication.LoginResponseDto;
 import com.eventhive.dto.authentication.SignupRequestDto;
 import com.eventhive.services.authentication.AuthService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthenticationController {
@@ -26,14 +28,14 @@ public class AuthenticationController {
     private AuthService authService;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> register(@RequestBody SignupRequestDto dto) {
+    public ResponseEntity<?> register(@Valid @RequestBody SignupRequestDto dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(dto));
         		
         
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequestDto dto) {
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDto dto) {
     	
     	//return authService.verify(dto);
         //return ResponseEntity.ok(authService.login(dto));
