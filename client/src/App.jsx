@@ -34,6 +34,7 @@ import AttendeeLayout from './components/AttendeeLayout';
 import HostLayout from './components/HostLayout';
 import HostEditEventPage from './pages/Host/HostEditEventPage';
 import ValidateTicketPage from './pages/Host/ValidateTickePage';
+import { ToastContainer } from 'react-toastify';
 function App() {
   return (
     <>
@@ -134,7 +135,7 @@ function App() {
           <Route path="validate-ticket" element={<ValidateTicketPage />} />
         </Route>
       </Routes>
-    </>
+      <ToastContainer/>    </>
   );
 }
 

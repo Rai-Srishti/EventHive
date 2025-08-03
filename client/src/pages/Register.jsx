@@ -1,7 +1,10 @@
+// src/pages/Register.js
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-toastify/dist/ReactToastify.css';
+import { registerUser } from '../services/authService';
 import Footer from '../components/Footer';
 
 function Register() {
@@ -19,18 +22,21 @@ function Register() {
   });
 
   const navigate = useNavigate();
-
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const phoneRegex = /^[0-9]{10}$/;
 
-  const onRegister = () => {
+  const onRegister = async () => {
     const {
       first_name,
       last_name,
       email,
       password,
       confirm_password,
-      phone
+      phone,
+      city,
+      state,
+      country,
+      role
     } = userdet;
 
     if (!first_name || !last_name || !email || !password || !confirm_password) {
@@ -58,8 +64,25 @@ function Register() {
       return;
     }
 
-    toast.success('Registered successfully!');
-    navigate('/login');
+    const payload = {
+      firstName: first_name,
+      lastName: last_name,
+      email,
+      password,
+      phoneNumber: phone,
+      city,
+      state,
+      country,
+      role: role.toUpperCase() // "HOST" or "ATTENDEE"
+    };
+
+    try {
+      const result = await registerUser(payload);
+      toast.success(result.message || 'Registered successfully!');
+      setTimeout(() => navigate('/login'), 1500); // Redirect after delay
+    } catch (errMsg) {
+      toast.error(errMsg);
+    }
   };
 
   return (
@@ -137,20 +160,16 @@ function Register() {
             )}
           </div>
 
-          {/* City, State, Country in map */}
-          {[
-            { label: 'City', key: 'city', type: 'text' },
-            { label: 'State', key: 'state', type: 'text' },
-            { label: 'Country', key: 'country', type: 'text' }
-          ].map(({ label, key, type }) => (
-            <div className="mb-3" key={key}>
-              <label className="form-label"><strong>{label}</strong></label>
+          {/* City, State, Country */}
+          {['city', 'state', 'country'].map((field) => (
+            <div className="mb-3" key={field}>
+              <label className="form-label"><strong>{field[0].toUpperCase() + field.slice(1)}</strong></label>
               <input
-                type={type}
+                type="text"
                 className="form-control"
-                placeholder={`Enter ${label.toLowerCase()}`}
-                value={userdet[key]}
-                onChange={(e) => setUserdet({ ...userdet, [key]: e.target.value })}
+                placeholder={`Enter ${field}`}
+                value={userdet[field]}
+                onChange={(e) => setUserdet({ ...userdet, [field]: e.target.value })}
               />
             </div>
           ))}
@@ -217,7 +236,7 @@ function Register() {
         </form>
       </div>
 
-      <Footer />
+    
     </div>
   );
 }
