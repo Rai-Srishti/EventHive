@@ -33,6 +33,13 @@ public class JwtFilter extends OncePerRequestFilter{   //oncePerRequestFilter is
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
+		
+		 // 🛑 Skip filtering for public endpoints
+	    String path = request.getRequestURI();
+	    if (path.startsWith("/auth/") || path.startsWith("/swagger-ui") || path.startsWith("/v3/api-docs")) {
+	        filterChain.doFilter(request, response);
+	        return;
+	    }
 		// we have to work with request, we will get bearer token i.e Bearer someTokenHere
 		String authHeader = request.getHeader("Authorization");
 		String token = null;
