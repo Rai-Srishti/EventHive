@@ -67,7 +67,7 @@ public class SecurityConfig {
 	        .authorizeHttpRequests(auth -> auth
 	        	.requestMatchers("/auth/**", "/swagger-ui/**", "/v3/api-docs/**", "/home","/","/events",
 	                    "/event-details/**",
-	                    "/artists").permitAll()
+	                    "/artists","/uploads/**").permitAll()
 	            .requestMatchers("/admin/**").hasRole("SUPERADMIN")
 	            .requestMatchers("/host/**").hasRole("HOST")
 	            .requestMatchers("/attendee/**").hasRole("ATTENDEE")

@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +18,7 @@ import com.eventhive.services.Attendee.AttendeeWalletService;
 import com.eventhive.services.Attendee.TicketPhaseService;
 import com.eventhive.services.authentication.JWTService;
 import com.eventhive.dto.attendee.ArtistDto;
+import com.eventhive.dto.attendee.AttendeeDto;
 import com.eventhive.dto.attendee.AttendeeEventPhaseDto;
 import com.eventhive.dto.attendee.EventDto;
 
@@ -89,5 +92,18 @@ public class AttendeeController {
 	public ResponseEntity<?> getWallet(){
 		Long attendeeId = jwtService.extractUserIdFromContext();
 		return ResponseEntity.ok(walletService.getBalance(attendeeId));
+	}
+	
+	@GetMapping("/details")
+	public ResponseEntity<?> getAttendeeDetails(){
+		Long attendeeId = jwtService.extractUserIdFromContext();
+		return ResponseEntity.ok(attendeeService.getAttendeeById(attendeeId));
+	}
+	
+	@PutMapping("/update-profile")
+	public ResponseEntity<?> updateProfile(@RequestBody AttendeeDto dto) {
+	    Long userId = jwtService.extractUserIdFromContext();
+	    attendeeService.updateAttendeeProfile(userId, dto);
+	    return ResponseEntity.ok("Profile updated successfully");
 	}
 }

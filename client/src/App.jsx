@@ -36,6 +36,7 @@ import ValidateTicketPage from './pages/Host/ValidateTickePage';
 import { ToastContainer } from 'react-toastify';
 import PrivateRoute from './components/PrivateRoute';
 import HostArtist from  './pages/Host/HostArtist';
+import AttendeeProfile from './pages/Attendee/AttendeeProfile';
 function App() {
   return (
     <>
@@ -90,7 +91,7 @@ function App() {
             <Footer />
           </>
         } />
-        <Route path="/event-details/:id" element={
+        <Route path="/event-details/:eventId" element={
           <>
             <Header />
             <EventDetails />
@@ -103,12 +104,14 @@ function App() {
           <Route path="wallet" element={<WalletPage />} />
           <Route path="update" element={<Update />} />
           <Route path="favourites" element={<Favourites />} />
-          <Route path="booking" element={<BookingsPage />} />
+          <Route path="booking/:eventId" element={<BookingsPage />} />
           <Route path="my-bookings" element={<MyBookings />} />
           <Route path="events" element={<EventsPage />} />
           <Route path="about" element={<AboutUs />} />
           <Route path="" element={<Home />} /> 
+          <Route path="profile" element={<AttendeeProfile />} /> 
           <Route path="artists" element={<ArtistPage />} /> 
+          <Route path="event-details/:eventId" element={<EventDetails />} /> 
         </Route>
 
         {/* Admin Routes */}

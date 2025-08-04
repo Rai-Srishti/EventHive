@@ -27,7 +27,9 @@ public class PublicController {
 	}
 	
 	@GetMapping("/event-details/{eventId}")
+	 
 	public ResponseEntity<EventDto> getEventbyId(@PathVariable Long eventId) {
+		System.out.println("hello");
 		return ResponseEntity.ok(eventService.getEventById(eventId));
 	}
 	

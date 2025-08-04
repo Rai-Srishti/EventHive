@@ -33,3 +33,13 @@
 .favourite-icon-btn:hover {
   transform: scale(1.2);
 }
+
+.fixed-event-image {
+  width: 100%;
+  height: 200px;
+  object-fit: contain;       /* Preserve aspect ratio without cutting */
+  object-position: center;
+  background-color: #f8f9fa; /* Optional: light background to fill gaps */
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+}

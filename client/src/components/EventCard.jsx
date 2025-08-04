@@ -6,19 +6,27 @@ import '../assets/css/EventCard.css';
 import { BsHeart, BsHeartFill } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
 
-
 const EventCard = ({ event }) => {
-const Navigate = useNavigate();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const favourites = useSelector((state) => state.favourites.items);
-  const isFavourite = favourites.some((fav) => fav.id === event.id);
+  const isFavourite = favourites.some((fav) => fav.eventId === event.eventId);
+
+  const formattedDate = new Date(event.eventDate).toLocaleString();
+
+  console.log("Image URL:", event.photo);
 
   return (
     <div className="col-lg-4 col-md-6 col-sm-12 mb-4">
       <div className="card h-100 shadow-sm position-relative">
-        <img src={event.image} className="card-img-top" alt={event.title} />
+        <img
+          src={event.photo}
+         
 
-        {/* Favourite button */}
+          className="card-img-top fixed-event-image"
+          alt={event.eventName}
+        />
+
         <button
           className="favourite-btn"
           onClick={() => dispatch(toggleFavourite(event))}
@@ -38,18 +46,24 @@ const Navigate = useNavigate();
         </button>
 
         <div className="card-body">
-          <span className="badge bg-danger mb-2">{event.seats} Seats</span>
           <div className="text-muted small mb-2">
-            <i className="bi bi-calendar-event me-2"></i>{event.date}<br />
-            <i className="bi bi-geo-alt me-2"></i>{event.location}
+            <i className="bi bi-calendar-event me-2"></i>
+            {formattedDate}
+            <br />
+            <i className="bi bi-geo-alt me-2"></i>
+            {event.city}, {event.address}
           </div>
-          <h5 className="card-title">{event.title}</h5>
-         <button
-          className="btn btn-danger book-btn"
-          onClick={() => Navigate(`/event-details/${event.id}`)}
-        >
-          Book Now
-        </button>
+          <h5 className="card-title">{event.eventName}</h5>
+          <p className="card-text">
+            <strong>Artist:</strong> {event.artistName}<br />
+            <strong>Hosted by:</strong> {event.hostName}
+          </p>
+          <button
+            className="btn btn-danger book-btn"
+            onClick={() => navigate(`/event-details/${event.eventId}`)}
+          >
+            Book Now
+          </button>
         </div>
       </div>
     </div>
