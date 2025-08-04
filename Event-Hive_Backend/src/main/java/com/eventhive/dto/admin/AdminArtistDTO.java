@@ -6,5 +6,6 @@ import lombok.Setter;
 @Setter
 @Getter
 public class AdminArtistDTO {
+	private Long artistId;
 	private String name;
 }

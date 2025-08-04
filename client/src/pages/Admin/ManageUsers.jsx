@@ -1,22 +1,42 @@
 import React, { useState, useEffect } from "react";
 import "../../assets/css/Admin/ManageRequest.css";
+import { fetchAllAttendees, blockAttendee, unblockAttendee } from "../../services/adminService";
 
 const ManageUsers = () => {
-  const usersList = [
-    { id: 1, name: "User One", email: "user1@example.com", isBlocked: false },
-    { id: 2, name: "User Two", email: "user2@example.com", isBlocked: true },
-    { id: 3, name: "User Three", email: "user3@example.com", isBlocked: false },
-    { id: 4, name: "User Four", email: "user4@example.com", isBlocked: false },
-    { id: 5, name: "User Five", email: "user5@example.com", isBlocked: true },
-    { id: 6, name: "User Six", email: "user6@example.com", isBlocked: false },
-  ];
-
-  const usersPerPage = 10;
+  const [users, setUsers] = useState([]);
   const [page, setPage] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
+  const usersPerPage = 10;
 
-  const filteredUsers = usersList.filter((user) =>
-    user.name.toLowerCase().includes(searchTerm.toLowerCase())
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const attendees = await fetchAllAttendees();
+        setUsers(attendees);
+      } catch (error) {
+        console.error("Error fetching attendees:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const handleBlockToggle = async (userId, isBlocked) => {
+    try {
+      const message = isBlocked
+        ? await unblockAttendee(userId)
+        : await blockAttendee(userId);
+      alert(message);
+
+      // Refresh user list
+      const attendees = await fetchAllAttendees();
+      setUsers(attendees);
+    } catch (err) {
+      alert("Failed to update status.");
+    }
+  };
+
+  const filteredUsers = users.filter((user) =>
+    `${user.firstName} ${user.lastName}`.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const startIndex = page * usersPerPage;
@@ -27,19 +47,6 @@ const ManageUsers = () => {
       setPage(0);
     }
   }, [searchTerm, filteredUsers.length, page, startIndex]);
-
-  const handleBlockToggle = (id) => {
-    console.log(`Toggling block for user ID ${id}`);
-    // Implement actual logic later
-  };
-
-  const handlePrevious = () => {
-    if (page > 0) setPage((prev) => prev - 1);
-  };
-
-  const handleNext = () => {
-    if ((page + 1) * usersPerPage < filteredUsers.length) setPage((prev) => prev + 1);
-  };
 
   return (
     <div className="manage-request-container">
@@ -66,7 +73,7 @@ const ManageUsers = () => {
         <div className="search-bar" style={{ marginBottom: "1rem", textAlign: "center" }}>
           <input
             type="text"
-            placeholder="Search by user name..."
+            placeholder="Search by name..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             style={{
@@ -83,32 +90,42 @@ const ManageUsers = () => {
         <table className="manage-request-table">
           <thead>
             <tr>
-              <th>User ID</th>
+              <th>ID</th>
               <th>Name</th>
               <th>Email</th>
+              <th>Phone</th>
+              <th>City</th>
+              <th>State</th>
+              <th>Country</th>
+              <th>Status</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {currentUsers.length > 0 ? (
               currentUsers.map((user) => (
-                <tr key={user.id}>
-                  <td data-label="User ID">{user.id}</td>
-                  <td data-label="Name">{user.name}</td>
-                  <td data-label="Email">{user.email}</td>
-                  <td data-label="Actions">
+                <tr key={user.userId}>
+                  <td>{user.userId}</td>
+                  <td>{user.firstName} {user.lastName}</td>
+                  <td>{user.email}</td>
+                  <td>{user.phoneNumber}</td>
+                  <td>{user.city}</td>
+                  <td>{user.state}</td>
+                  <td>{user.country}</td>
+                  <td>{user.status}</td>
+                  <td>
                     <button
-                      className={user.isBlocked ? "button-approve" : "button-reject"}
-                      onClick={() => handleBlockToggle(user.id)}
+                      className={user.status === "BLOCKED" ? "button-approve" : "button-reject"}
+                      onClick={() => handleBlockToggle(user.userId, user.status === "BLOCKED")}
                     >
-                      {user.isBlocked ? "Unblock" : "Block"}
+                      {user.status === "BLOCKED" ? "Unblock" : "Block"}
                     </button>
                   </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="4" style={{ textAlign: "center" }}>
+                <td colSpan="9" style={{ textAlign: "center" }}>
                   No users found.
                 </td>
               </tr>
@@ -126,7 +143,7 @@ const ManageUsers = () => {
           }}
         >
           <button
-            onClick={handlePrevious}
+            onClick={() => setPage((prev) => prev - 1)}
             disabled={page === 0}
             className="pagination-btn"
           >
@@ -134,7 +151,7 @@ const ManageUsers = () => {
           </button>
           <span>Page {page + 1}</span>
           <button
-            onClick={handleNext}
+            onClick={() => setPage((prev) => prev + 1)}
             disabled={(page + 1) * usersPerPage >= filteredUsers.length}
             className="pagination-btn"
           >

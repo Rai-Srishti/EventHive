@@ -8,9 +8,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.eventhive.dto.admin.AdminEditEventDTO;
 import com.eventhive.dto.admin.AdminUserRequestDTO;
 import com.eventhive.services.Admin.AdminEventService;
 import com.eventhive.services.Admin.AdminService;
+import com.eventhive.services.authentication.JWTService;
+
 import lombok.AllArgsConstructor;
 
 @RestController
@@ -21,6 +24,7 @@ public class AdminController {
 	
 	private final AdminEventService adminEventService;
 	private final AdminService adminService;
+	private final JWTService jwtService;
 	
 	@GetMapping("/events")
 	public ResponseEntity<?> getPendingEventsEvent(){
@@ -31,7 +35,6 @@ public class AdminController {
 	public ResponseEntity<?> updateEventStatus(@PathVariable Long eventId){
 		return adminEventService.updateEvent(eventId);
 	}
-	
 	
 	
 	@GetMapping("/hosts")
@@ -68,15 +71,39 @@ public class AdminController {
 		
 	}
 	
-	@GetMapping("/profile/{adminId}")
-	public ResponseEntity<?> showProfile(@PathVariable Long adminId){
+	@GetMapping("/events/approved")
+	public ResponseEntity<?> getApprovedEvents() {
+	    return ResponseEntity.ok(adminEventService.fetchApprovedEvents());
+	}
+	
+	@GetMapping("/profile")
+	public ResponseEntity<?> showProfile(){
+		Long adminId = jwtService.extractUserIdFromContext();
 		return ResponseEntity.ok(adminService.fetchProfile(adminId));
 		
 	}
 	
-	@PutMapping("/profile/{adminId}/update")
-	public ResponseEntity<?> editProfile(@PathVariable Long adminId, @RequestBody AdminUserRequestDTO dto){
+	@PutMapping("/profile/update")
+	public ResponseEntity<?> editProfile(@RequestBody AdminUserRequestDTO dto){
+		Long adminId = jwtService.extractUserIdFromContext();
 		return ResponseEntity.ok(adminService.updateProfile(adminId,dto));
 		
 	}
+	
+	@GetMapping("/artists")
+	public ResponseEntity<?> getAllArtists() {
+	    return ResponseEntity.ok(adminEventService.findAll());
+	}
+	
+	@GetMapping("events/edit/{eventId}")
+    public ResponseEntity<AdminEditEventDTO> getEventForEdit(@PathVariable Long eventId) {
+        return ResponseEntity.ok(adminEventService.getEventForEdit(eventId));
+    }
+	
+	@PutMapping("events/edit/{eventId}")
+    public ResponseEntity<?> updateEditedEvent(@PathVariable Long eventId,
+                                               @RequestBody AdminEditEventDTO dto) {
+        
+        return adminEventService.updateEditedEvent(eventId, dto);
+    }
 }

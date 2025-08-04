@@ -6,6 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AdminHostDto {
-	 private String firstName;
+	private Long userId;
+	private String firstName;
 	 
 }
