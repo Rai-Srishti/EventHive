@@ -45,7 +45,7 @@ const BookingCard = ({ booking, onCancel }) => {
         <img
           src={photo || 'https://via.placeholder.com/300x200'}
           alt={eventName}
-          className="card-img-top"
+          className="card-img-top fixed-event-image"
         />
 
         <button

@@ -23,7 +23,7 @@ const EventCard = ({ event }) => {
           src={event.photo}
          
 
-          className="card-img-top"
+          className="card-img-top fixed-event-image"
           alt={event.eventName}
         />
 
