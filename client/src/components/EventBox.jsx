@@ -13,7 +13,7 @@ const EventBox = ({ event, isFavourite }) => {
     <div className="event-box d-flex flex-column flex-md-row align-items-stretch mb-5">
       {/* Image Section */}
       <div className="event-box-image">
-        <img src={event.image} alt={event.title} />
+        <img src={event.photo} alt={event.eventName} />
       </div>
 
       {/* Content Section */}
@@ -26,23 +26,51 @@ const EventBox = ({ event, isFavourite }) => {
           {isFavourite ? <BsHeartFill /> : <BsHeart />}
         </button>
 
-        <div className="mb-3">
-          <span className="badge bg-danger px-2 py-1 small-badge">{event.seats} Seats</span>
+        <div className="row">
+          {/* Left column: Event name, time, location */}
+          <div className="col-md-6 mb-3">
+            <h4 className="fw-bold mb-2">{event.eventName}</h4>
+
+            <div className="text-muted mb-2 fs-6">
+              <div>
+                <i className="bi bi-calendar-event me-2"></i>
+                {new Date(event.eventDate).toLocaleString()}
+              </div>
+              <div>
+                <i className="bi bi-geo-alt me-2"></i>
+                {event.address || event.city}
+              </div>
+            </div>
+
+            <button
+              className="btn btn-danger book-btn mt-2"
+              onClick={() => navigate(`/event-details/${event.eventId}`)}
+            >
+              View Details
+            </button>
+          </div>
+
+          {/* Right column: Additional info from DTO */}
+          <div className="col-md-6 text-muted fs-6">
+            <div>
+              <strong>Category:</strong> {event.category || 'N/A'}
+            </div>
+            <div>
+              <strong>Artist:</strong> {event.artistName || 'N/A'}
+            </div>
+            <div>
+              <strong>Host:</strong> {event.hostName || 'N/A'}
+            </div>
+            {event.description && (
+              <div className="mt-2">
+                <strong>Description:</strong>{' '}
+                {event.description.length > 80
+                  ? `${event.description.slice(0, 77)}...`
+                  : event.description}
+              </div>
+            )}
+          </div>
         </div>
-
-        <div className="text-muted mb-3 fs-6">
-          <div><i className="bi bi-calendar-event me-2"></i>{event.date}</div>
-          <div><i className="bi bi-geo-alt me-2"></i>{event.location}</div>
-        </div>
-
-        <h4 className="fw-bold mb-3">{event.title}</h4>
-
-        <button
-          className="btn btn-danger book-btn"
-          onClick={() => navigate(`/event-details/${event.id}`)}
-        >
-          Book 
-        </button>
       </div>
     </div>
   );
