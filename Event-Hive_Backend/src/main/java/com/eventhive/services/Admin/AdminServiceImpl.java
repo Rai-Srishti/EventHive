@@ -109,7 +109,7 @@ public class AdminServiceImpl implements AdminService{
 		return new ApiResponse("Attendee has been Unblocked!!");
 	}
 	
-	//------------------Manage Profile --------
+	//------------------Manage Profile -------------------------
 
 	@Override
 	public AdminProfileResponseDTO fetchProfile(Long adminId) {
@@ -127,11 +127,9 @@ public class AdminServiceImpl implements AdminService{
 	public ApiResponse updateProfile(Long adminId, AdminUserRequestDTO dto) {
 		User admin = adminUserDao.findById(adminId)
 				.orElseThrow(()->new UserNotFoundException("Admin Not Found!!"));
-		
 		mapper.map(dto, admin);
-		return new ApiResponse("updated Successfully!!");
+		adminUserDao.save(admin);
+		return new ApiResponse("Profile Updated Successfully!!");
 	}
-	
-	
 	
 }

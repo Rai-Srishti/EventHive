@@ -1,24 +1,48 @@
 import React, { useState, useEffect } from "react";
-import "../../assets/css/Admin/ManageRequest.css"; // Reuse same CSS
+import axios from "axios";
+import "../../assets/css/Admin/ManageRequest.css";
+import { fetchAllHosts,blockHost,unblockHost } from "../../services/adminService";
 
 const ManageHosts = () => {
-  const allHosts = [
-    { id: 1, name: "Host A", email: "a@example.com", isBlocked: false },
-    { id: 2, name: "Host B", email: "b@example.com", isBlocked: true },
-    { id: 3, name: "Host C", email: "c@example.com", isBlocked: false },
-    { id: 4, name: "Host D", email: "d@example.com", isBlocked: true },
-    { id: 5, name: "Host E", email: "e@example.com", isBlocked: false },
-    { id: 6, name: "Host F", email: "f@example.com", isBlocked: false },
-  ];
-
-  const hostsPerPage = 10;
+  const [allHosts, setAllHosts] = useState([]);
   const [page, setPage] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
+  const hostsPerPage = 10;
+
+  useEffect(() => {
+    const fetchHosts = async () => {
+      try {
+        const response = await fetchAllHosts();
+        console.log("Fetched hosts:", response);
+        setAllHosts(response);
+      } catch (error) {
+        console.error("Failed to fetch hosts:", error);
+      }
+    };
+
+    fetchHosts();
+  }, []);
+
+ const handleBlockToggle = async (hostId, isCurrentlyBlocked) => {
+  try {
+    const message = isCurrentlyBlocked
+      ? await unblockHost(hostId)
+      : await blockHost(hostId);
+
+    alert(message); // or use toast
+    // Refresh host list after status change
+    const updatedHosts = await fetchAllHosts();
+    setAllHosts(updatedHosts);
+  } catch (error) {
+    alert("Action failed. Please try again.");
+  }
+};
 
   const filteredHosts = allHosts.filter(
     (host) =>
-      host.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      host.email.toLowerCase().includes(searchTerm.toLowerCase())
+      host.firstName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      host.lastName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      host.email?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const startIndex = page * hostsPerPage;
@@ -29,20 +53,6 @@ const ManageHosts = () => {
       setPage(0);
     }
   }, [searchTerm, filteredHosts.length, page, startIndex]);
-
-  const handleBlockToggle = (id) => {
-    // TODO: Add block/unblock logic
-    console.log(`Toggled block for host ID ${id}`);
-  };
-
-  const handlePrevious = () => {
-    if (page > 0) setPage((prev) => prev - 1);
-  };
-
-  const handleNext = () => {
-    if ((page + 1) * hostsPerPage < filteredHosts.length)
-      setPage((prev) => prev + 1);
-  };
 
   return (
     <div className="manage-request-container">
@@ -86,32 +96,42 @@ const ManageHosts = () => {
         <table className="manage-request-table">
           <thead>
             <tr>
-              <th>ID</th>
-              <th>Name</th>
+              <th>First Name</th>
+              <th>Last Name</th>
               <th>Email</th>
+              <th>Phone</th>
+              <th>City</th>
+              <th>State</th>
+              <th>Country</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {currentHosts.length > 0 ? (
-              currentHosts.map((host) => (
-                <tr key={host.id}>
-                  <td data-label="ID">{host.id}</td>
-                  <td data-label="Name">{host.name}</td>
-                  <td data-label="Email">{host.email}</td>
-                  <td data-label="Actions">
+              currentHosts.map((host, index) => (
+                <tr key={index}>
+                  <td>{host.firstName}</td>
+                  <td>{host.lastName}</td>
+                  <td>{host.email}</td>
+                  <td>{host.phoneNumber}</td>
+                  <td>{host.city}</td>
+                  <td>{host.state}</td>
+                  <td>{host.country}</td>
+                  <td>
                     <button
-                      className={host.isBlocked ? "button-approve" : "button-reject"}
-                      onClick={() => handleBlockToggle(host.id)}
+                      className={host.status == "BLOCKED" ? "button-approve" : "button-reject"}
+                      onClick={() => handleBlockToggle(host.userId, host.status=="BLOCKED")}
                     >
-                      {host.isBlocked ? "Unblock" : "Block"}
+                      {host.status=="BLOCKED" ? "Unblock" : "Block"}
                     </button>
                   </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="4" style={{ textAlign: "center" }}>No hosts found.</td>
+                <td colSpan="8" style={{ textAlign: "center" }}>
+                  No hosts found.
+                </td>
               </tr>
             )}
           </tbody>
@@ -127,7 +147,7 @@ const ManageHosts = () => {
           }}
         >
           <button
-            onClick={handlePrevious}
+            onClick={() => setPage((prev) => prev - 1)}
             disabled={page === 0}
             className="pagination-btn"
           >
@@ -135,7 +155,7 @@ const ManageHosts = () => {
           </button>
           <span>Page {page + 1}</span>
           <button
-            onClick={handleNext}
+            onClick={() => setPage((prev) => prev + 1)}
             disabled={(page + 1) * hostsPerPage >= filteredHosts.length}
             className="pagination-btn"
           >
@@ -148,3 +168,5 @@ const ManageHosts = () => {
 };
 
 export default ManageHosts;
+
+

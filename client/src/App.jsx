@@ -1,4 +1,3 @@
-
 // src/App.jsx
 import React from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
@@ -117,10 +116,10 @@ function App() {
 
         {/* Admin Routes */}
         <Route path="/admin" element={<PrivateRoute allowedRoles={['SUPERADMIN']}><AdminLayout /> </PrivateRoute>}>
-          <Route path="categories" element={<ManageCategories />} />
-          <Route path="categories/edit/:id" element={<EditCategory />} />
+          {/* <Route path="categories" element={<ManageCategories />} />
+          <Route path="categories/edit/:id" element={<EditCategory />} /> */}
           <Route path="events" element={<ManageEvents />} />
-          <Route path="my-events/edit/:eventId" element={<HostEditEventPage />} />
+          <Route path="events/edit/:id" element={<EditEvent />} />
           <Route path="requests" element={<ManageRequest />} />
           <Route path="hosts" element={<ManageHosts />} />
           <Route path="users" element={<ManageUsers />} />

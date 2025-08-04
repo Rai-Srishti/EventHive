@@ -1,81 +1,148 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import {fetchEventById,fetchAllArtists,updateEditedEvent,} from "../../services/adminService";
 import "../../assets/css/Admin/EditEvent.css";
 
 const EditEvent = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [eventData, setEventData] = useState({
-    id: "",
-    date: "",
-    cost: "",
-    artist: "",
-    address: "",
-    host: "",
-  });
+  const [eventData, setEventData] = useState(null);
+  const [artists, setArtists] = useState([]);
+  const [selectedArtistId, setSelectedArtistId] = useState("");
 
   useEffect(() => {
-    // Load dummy event only if not set
-    if (!eventData.date) {
-      const fetchedEvent = {
-        id,
-        date: "2025-08-10",
-        cost: 1500,
-        artist: "Arijit Singh",
-        address: "Pune Stadium, Pune",
-        host: "MusicMania",
-      };
-      setEventData(fetchedEvent);
-    }
-  }, [id, eventData.date]);
+    const loadEvent = async () => {
+      try {
+        const data = await fetchEventById(id);
+        setEventData(data);
+        if (data.artist?.artistId) {
+          setSelectedArtistId(data.artist.artistId);
+        }
+      } catch (err) {
+        alert("Error fetching event details.");
+      }
+    };
+
+    const loadArtists = async () => {
+      try {
+        const artistList = await fetchAllArtists();
+        setArtists(artistList);
+      } catch (err) {
+        alert("Error loading artists.");
+      }
+    };
+
+    loadEvent();
+    loadArtists();
+  }, [id]);
 
   const handleChange = (e) => {
     setEventData({ ...eventData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Updated Event:", eventData);
-    navigate("/admin/events");
+  const handleArtistChange = (e) => {
+    setSelectedArtistId(Number(e.target.value));
   };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const updatedData = {
+      ...eventData,
+      artist: { artistId: selectedArtistId },
+    };
+
+    try {
+      const msg = await updateEditedEvent(id, updatedData);
+      alert(msg);
+      navigate("/admin/events");
+    } catch (err) {
+      alert("Failed to update event.");
+    }
+  };
+
+  if (!eventData) return <p>Loading...</p>;
 
   return (
     <div className="edit-event-container">
       <div className="edit-event-box">
-        <div style={{ textAlign: "center" }}>
-      <h2
-       className="profile-title"
-        style={{
-          display: "inline-block",
-          fontFamily: "'Segoe UI', sans-serif",
-          borderBottom: "3px solid #E2215F",
-        paddingBottom: "4px",
-        fontWeight: "600"}}>Edit Event</h2></div>
+        <h2 className="profile-title">Edit Event</h2>
         <form onSubmit={handleSubmit} className="edit-event-form">
           <div className="form-group">
-            <label>Date:</label>
-            <input type="date" name="date" value={eventData.date} onChange={handleChange} required />
+            <label>Host:</label>
+            <input type="text" value={eventData.host?.firstName || "N/A"} readOnly />
           </div>
 
           <div className="form-group">
-            <label>Cost:</label>
-            <input type="number" name="cost" value={eventData.cost} onChange={handleChange} required />
+            <label>Event Date:</label>
+            <input type="text" value={new Date(eventData.eventDate).toLocaleString()} readOnly />
           </div>
 
           <div className="form-group">
-            <label>Artist:</label>
-            <input type="text" name="artist" value={eventData.artist} onChange={handleChange} required />
+            <label>Event Name:</label>
+            <input
+              type="text"
+              name="eventName"
+              value={eventData.eventName}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Description:</label>
+            <textarea
+              name="description"
+              value={eventData.description}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label>City:</label>
+            <input
+              type="text"
+              name="city"
+              value={eventData.city}
+              onChange={handleChange}
+              required
+            />
           </div>
 
           <div className="form-group">
             <label>Address:</label>
-            <input type="text" name="address" value={eventData.address} onChange={handleChange} required />
+            <input
+              type="text"
+              name="address"
+              value={eventData.address}
+              onChange={handleChange}
+              required
+            />
           </div>
 
           <div className="form-group">
-            <label>Host:</label>
-            <input type="text" name="host" value={eventData.host} onChange={handleChange} required />
+            <label>Category:</label>
+            <input
+              type="text"
+              name="category"
+              value={eventData.category}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Artist:</label>
+            <select value={selectedArtistId} onChange={handleArtistChange} required>
+              <option value="">-- Select Artist --</option>
+              {artists.map((artist) => (
+                <option key={artist.artistId} value={artist.artistId}>
+                  {artist.name}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className="form-actions">
