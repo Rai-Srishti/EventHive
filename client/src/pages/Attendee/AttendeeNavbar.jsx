@@ -42,7 +42,7 @@ const AttendeeNavbar = () => {
             <Link to="/attendee/about" className={isActive('/attendee/about')}>ABOUT</Link>
             <Link to="/attendee/artists" className={isActive('/attendee/artists')}>ARTISTS</Link>
             <Link to="/attendee/contact" className={isActive('/attendee/contact')}>CONTACT</Link>
-            <Link to="/profile" className="nav-link"><FaUser /></Link>
+            <Link to="/attendee/profile" className="nav-link"><FaUser /></Link>
 
             <Link to="/attendee/favourites" className="favourite-link position-relative">
               <BsHeart className="heart-icon" size={24} />

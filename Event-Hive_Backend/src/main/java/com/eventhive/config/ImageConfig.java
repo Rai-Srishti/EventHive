@@ -11,5 +11,9 @@ public class ImageConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/uploads/**")
                 .addResourceLocations("file:E:/Final_EventHive/EventHive/Event-Hive_Backend/uploads");
+        
+        //srishti
+//      registry.addResourceHandler("/uploads/**")
+//      .addResourceLocations("file:D:/CDAC/EventHive/Event-Hive_Backend/uploads");
     }
 }

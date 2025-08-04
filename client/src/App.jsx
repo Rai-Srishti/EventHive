@@ -37,6 +37,7 @@ import ValidateTicketPage from './pages/Host/ValidateTickePage';
 import { ToastContainer } from 'react-toastify';
 import PrivateRoute from './components/PrivateRoute';
 import HostArtist from  './pages/Host/HostArtist';
+import AttendeeProfile from './pages/Attendee/AttendeeProfile';
 function App() {
   return (
     <>
@@ -109,6 +110,7 @@ function App() {
           <Route path="events" element={<EventsPage />} />
           <Route path="about" element={<AboutUs />} />
           <Route path="" element={<Home />} /> 
+          <Route path="profile" element={<AttendeeProfile />} /> 
           <Route path="artists" element={<ArtistPage />} /> 
           <Route path="event-details/:eventId" element={<EventDetails />} /> 
         </Route>
