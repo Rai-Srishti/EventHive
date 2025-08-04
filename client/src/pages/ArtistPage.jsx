@@ -1,18 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from 'react-router-dom';
-import speakers from "../assets/sampledata/speakerdata";
 import ArtistCard from "../components/ArtistCard";
 import "../assets/css/Artist.css";
 
 const ArtistPage = () => {
-  
+  const [artists, setArtists] = useState([]);
+  const [error, setError] = useState(null);
   const location = useLocation();
   const pathname = location.pathname;
   const isPublic = !pathname.startsWith('/host') && !pathname.startsWith('/attendee');
-  
+
+  useEffect(() => {
+    fetch("http://localhost:8080/artists")  // ✅ public route, no token
+      .then(res => {
+        if (!res.ok) {
+          throw new Error(`Failed to fetch: ${res.status}`);
+        }
+        return res.json();
+      })
+      .then(data => {
+        setArtists(data);
+        setError(null);
+      })
+      .catch(err => {
+        console.error("Fetch error:", err);
+        setError("Failed to load artists");
+      });
+  }, []);
+
   return (
     <>
-      {/* Page Banner */}
       <div className="events-page">
         <div className="events-banner py-5">
           <div className="banner-content mx-5 px-4">
@@ -28,13 +45,13 @@ const ArtistPage = () => {
         </div>
       </div>
 
-      {/* Speakers Grid */}
+      {error && <p style={{ color: "red", textAlign: "center" }}>{error}</p>}
+
       <div className="speakers-grid">
-        {speakers.map((speaker, index) => (
-          <ArtistCard key={index} speaker={speaker} />
+        {artists.map((artist, index) => (
+          <ArtistCard key={index} speaker={artist} />
         ))}
       </div>
-
     </>
   );
 };

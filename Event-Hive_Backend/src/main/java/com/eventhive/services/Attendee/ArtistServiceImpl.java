@@ -21,10 +21,21 @@ public class ArtistServiceImpl implements ArtistService{
 	
 	@Override
 	public List<ArtistDto> getAllArtists(){
-		 return artistDao.findAll()
-	                .stream()
-	                .map(artist -> mapper.map(artist, ArtistDto.class))
-	                .collect(Collectors.toList());
+	    return artistDao.findAll()
+	        .stream()
+	        .map(artist -> {
+	            ArtistDto dto = mapper.map(artist, ArtistDto.class);
+
+	            // Make sure photo URL is absolute
+	            if (artist.getPhoto() != null && !artist.getPhoto().startsWith("http")) {
+	                dto.setPhoto("http://localhost:8080/uploads/artists/" + artist.getPhoto());
+	            }
+
+	            return dto;
+	        })
+	        .collect(Collectors.toList());
 	}
+
+
 	
 }

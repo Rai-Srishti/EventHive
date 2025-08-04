@@ -70,11 +70,6 @@ public class AttendeeController {
 		return ResponseEntity.ok(bookings);
 	}
 
-	@GetMapping("/artists")
-	public ResponseEntity<List<ArtistDto>> getAllArtists() {
-		return ResponseEntity.ok(artistService.getAllArtists());
-	}
-
 	@PostMapping("/purchase-ticket")
 	public ResponseEntity<?> purchaseTicket(@RequestParam Long phaseId, @RequestParam int quantity) {
 		Long userId = jwtService.extractUserIdFromContext();
