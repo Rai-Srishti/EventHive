@@ -2,13 +2,18 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
+import {jwtDecode} from "jwt-decode";
 
 import logo from '../../images/Logo.png';
 import { Link, useLocation } from 'react-router-dom';
 import { FaUser } from 'react-icons/fa';
 
 const HostNavbar = () => {
-  const hostId = 1;
+   const token = localStorage.getItem("token");
+  const decoded = jwtDecode(token);
+  console.log("Decoded JWT:", decoded);
+  const hostId = decoded.sub;
+
   const location = useLocation();
   const isActive = (path) => location.pathname === path ? 'nav-link active' : 'nav-link';
   return (
@@ -32,7 +37,7 @@ const HostNavbar = () => {
             <Link to="/host/my-events" className={isActive('/host/myevents')}>MY EVENTS</Link>
             <Link to={`/host/artist/${hostId}`} className={isActive(`/host/artists/${hostId}`)}>ARTISTS</Link>
             <Link to="/host/about" className={isActive('/host/about')}>ABOUT</Link>
-            <Link to="/host/contact" activeclassname="active" className={isActive('/host/contact')}>CONTACT</Link>
+  
             <Link to="/host/profile" activeclassname="active" className={isActive('/host/dashboard')}></Link>
 
             

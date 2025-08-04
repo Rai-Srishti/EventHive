@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { getEventsByHostId } from '../../services/hostService';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import {jwtDecode} from "jwt-decode";
 
 const MyArtistsPage = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
-  const hostId = 1; // Replace with dynamic host ID
+  const token = localStorage.getItem("token");
+      const decoded = jwtDecode(token);
+      console.log("Decoded JWT:", decoded);
+      const hostId = decoded.sub;
 
   useEffect(() => {
     const fetchEvents = async () => {

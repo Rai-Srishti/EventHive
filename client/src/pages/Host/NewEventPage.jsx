@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "../../assets/css/TextInput.css";
+import {jwtDecode} from "jwt-decode";
 import { getAllArtists } from '../../services/artistService';
 import { insertNewEvent } from '../../services/hostService'; 
+import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
 const NewEventPage = () => {
   const [artistList, setArtistList] = useState([]);
   const [showCustomArtist, setShowCustomArtist] = useState(false);
   const [photo, setPhoto] = useState(null);
-
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     eventName: '',
     description: '',
@@ -82,16 +85,33 @@ const NewEventPage = () => {
       payload.append("photo", new Blob([], { type: "application/octet-stream" }));
     }
   
-    const hostId = 1;
+     const token = localStorage.getItem("token");
+    const decoded = jwtDecode(token);
+    console.log("Decoded JWT:", decoded);
+    const hostId = decoded.sub;
   
     try {
-      const response = await insertNewEvent(payload, hostId);
-      console.log("Event Created:", response.data);
-      alert("Event successfully submitted!");
-    } catch (error) {
-      console.error("Error submitting event:", error?.response || error);
-      alert("Event creation failed.");
-    }
+          const response = await insertNewEvent(payload, hostId);
+          console.log("Event Created:", response.data);
+         // alert("Event successfully submitted!");
+         await Swal.fire({
+          icon: 'success',
+          title: 'Success!',
+          text: 'Event successfully submitted.',
+          confirmButtonColor: '#3085d6',
+        });
+        navigate('/host/my-events');
+        } catch (error) {
+          console.error("Error submitting event:", error?.response || error);
+         // alert("Event creation failed.");
+         await Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Event creation failed.',
+          confirmButtonColor: '#d33',
+        });
+    
+        }
   };
   
 
