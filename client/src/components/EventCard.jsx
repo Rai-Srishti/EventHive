@@ -1,3 +1,4 @@
+// src/components/EventCard.jsx
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleFavourite } from '../store/FavouriteSlice';
@@ -13,19 +14,15 @@ const EventCard = ({ event }) => {
 
   const formattedDate = new Date(event.eventDate).toLocaleString();
 
-  const handleBookNow = () => {
-    const token = localStorage.getItem('token');
-    const path = token
-      ? `/attendee/event-details/${event.eventId}`
-      : `/event-details/${event.eventId}`;
-    navigate(path);
-  };
+  console.log("Image URL:", event.photo);
 
   return (
     <div className="col-lg-4 col-md-6 col-sm-12 mb-4">
       <div className="card h-100 shadow-sm position-relative">
         <img
           src={event.photo}
+         
+
           className="card-img-top"
           alt={event.eventName}
         />
@@ -63,7 +60,7 @@ const EventCard = ({ event }) => {
           </p>
           <button
             className="btn btn-danger book-btn"
-            onClick={handleBookNow}
+            onClick={() => navigate(`/event-details/${event.eventId}`)}
           >
             Book Now
           </button>

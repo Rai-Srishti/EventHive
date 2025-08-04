@@ -36,7 +36,8 @@ public class AttendeeBookingServiceImpl implements AttendeeBookingService {
                     dto.setEventId(ticket.getEvent().getEventId());
                     dto.setEventName(ticket.getEvent().getEventName());
                     dto.setCategory(ticket.getEvent().getCategory());
-                    dto.setPhoto(ticket.getEvent().getPhoto());
+                  
+                    dto.setPhoto("http://localhost:8080/uploads/event-photos/" + ticket.getEvent().getPhoto());
                     dto.setEventDate(ticket.getEvent().getEventDate());
 
                     dto.setPhaseName(ticket.getPhase().getPhaseName().name());

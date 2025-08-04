@@ -7,7 +7,7 @@ const EventDetails = ({ event }) => {
   const navigate = useNavigate();
 
   const handleBooking = () => {
-    const isLoggedIn = !!localStorage.getItem('token'); // adjust key name if needed
+    const isLoggedIn = !!localStorage.getItem('token'); 
 
     if (isLoggedIn) {
       navigate(`/attendee/booking/${event.eventId}`);

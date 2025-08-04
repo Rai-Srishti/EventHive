@@ -10,12 +10,15 @@ const favouritesSlice = createSlice({
   initialState,
   reducers: {
     toggleFavourite: (state, action) => {
-      const existing = state.items.find(item => item.id === action.payload.id);
+      const event = action.payload;
+      const existing = state.items.find(item => item.eventId === event.eventId);
+
       if (existing) {
-        state.items = state.items.filter(item => item.id !== action.payload.id);
+        state.items = state.items.filter(item => item.eventId !== event.eventId);
       } else {
-        state.items.push(action.payload);
+        state.items.push(event);
       }
+
       localStorage.setItem('favourites', JSON.stringify(state.items));
     },
   },

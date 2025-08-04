@@ -8,10 +8,10 @@ const EventBoxList = ({ events }) => {
   return (
     <div className="event-box-list">
       {events.map((event) => {
-        const isFavourite = favourites.some((fav) => fav.id === event.id);
+        const isFavourite = favourites.some((fav) => fav.eventId === event.eventId);
         return (
           <EventBox
-            key={event.id}
+            key={event.eventId}
             event={event}
             isFavourite={isFavourite}
           />

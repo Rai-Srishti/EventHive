@@ -8,7 +8,7 @@ const PackageCard = ({ title, price, seats, startTime, endTime, count, setCount,
       <div className="card-body d-flex flex-column justify-content-between">
         <div>
           <h5 className="card-title fw-bold text-primary">{title}</h5>
-          <h6 className="card-subtitle mb-2 text-muted">Rs. {price}</h6>
+          <h6 className="card-subtitle mb-2 text-muted">₹{price}</h6>
           <p className="card-text">Available Seats: {seats}</p>
 
           <div className="mb-2 text-muted">
@@ -23,9 +23,21 @@ const PackageCard = ({ title, price, seats, startTime, endTime, count, setCount,
         </div>
 
         <div className="d-flex align-items-center justify-content-between mt-4">
-          <button className="btn btn-danger" onClick={() => setCount(Math.max(0, count - 1))} disabled={disabled || count === 0}>-</button>
+          <button
+            className="btn btn-danger"
+            onClick={() => setCount(Math.max(0, count - 1))}
+            disabled={disabled || count === 0}
+          >
+            -
+          </button>
           <span className="mx-3">Selected: {count}</span>
-          <button className="btn btn-success" onClick={() => setCount(count + 1)} disabled={disabled}>+</button>
+          <button
+            className="btn btn-success"
+            onClick={() => setCount(count + 1)}
+            disabled={disabled}
+          >
+            +
+          </button>
         </div>
       </div>
     </div>
