@@ -42,7 +42,8 @@ public class AttendeeEventServiceImpl implements AttendeeEventService {
 		        dto.setCity(event.getCity());
 		        dto.setAddress(event.getAddress());
 		        dto.setCategory(event.getCategory());
-		        dto.setPhoto(event.getPhoto());
+		        dto.setPhoto("http://localhost:8080/uploads/event-photos/" + event.getPhoto());
+		     
 		        dto.setEventDate(event.getEventDate());
 
 		       
@@ -52,9 +53,10 @@ public class AttendeeEventServiceImpl implements AttendeeEventService {
 		        if (event.getHost() != null) {
 		            dto.setHostName(event.getHost().getFirstName() + " " + event.getHost().getLastName());
 		        }
-
+		      
 		        return dto;
 		    }).collect(Collectors.toList());
+		 
 	}
 
 	@Override
@@ -74,7 +76,7 @@ public class AttendeeEventServiceImpl implements AttendeeEventService {
 	    dto.setCity(event.getCity());
 	    dto.setAddress(event.getAddress());
 	    dto.setCategory(event.getCategory());
-	    dto.setPhoto(event.getPhoto());
+	    dto.setPhoto("http://localhost:8080/uploads/event-photos/" + event.getPhoto());
 	    dto.setEventDate(event.getEventDate());
 	    dto.setArtistName(event.getArtist().getName());
 	    dto.setHostName(event.getHost().getFirstName() + " " + event.getHost().getLastName());

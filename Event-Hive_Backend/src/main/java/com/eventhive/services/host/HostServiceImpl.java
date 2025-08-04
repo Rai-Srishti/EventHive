@@ -87,7 +87,7 @@ public class HostServiceImpl implements HostService {
 	            photoFile.transferTo(filePath.toFile());
 
 	            // Set relative path to photo field
-	            event.setPhoto("event-photos/" + fileName);
+	            event.setPhoto(fileName);
 	        } catch (IOException e) {
 	            throw new ApiException("Failed to store event photo: " + e.getMessage());
 	        }
