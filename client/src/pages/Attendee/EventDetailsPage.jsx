@@ -1,13 +1,37 @@
 // src/pages/Attendee/EventDetailsPage.jsx
-import React from 'react';
+
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 import EventDetails from '../../components/EventDetails';
-import events from '../../assets/sampledata/SampleEvents';
+import { getEventById } from '../../services/attendeeService';
+import { getPublicEventById } from '../../services/publicService';
 
 const EventDetailsPage = () => {
-  const { id } = useParams();
-  const event = events.find((e) => e.id === parseInt(id));
+  const { eventId } = useParams();
+  const [event, setEvent] = useState(null);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchEvent = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const data = token
+          ? await getEventById(eventId)
+          : await getPublicEventById(eventId);
+        setEvent(data);
+      } catch (err) {
+        console.error('Error fetching event:', err);
+        setError('Could not load event details');
+      }
+    };
+
+    if (eventId) {
+      fetchEvent();
+    } else {
+      setError('Invalid event ID');
+    }
+  }, [eventId]);
 
   return (
     <div>
@@ -18,7 +42,6 @@ const EventDetailsPage = () => {
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           color: 'white',
-          position: 'relative',
           height: '400px',
         }}
       >
@@ -34,9 +57,9 @@ const EventDetailsPage = () => {
           <Container>
             <p className="fw-bold display-1">Event Details</p>
             <p>
-              <span style={{ color: '#fff' }} className="h5">Home</span>{' '}
-              <span style={{ color: '#e91e63' }} className="h5">&gt;</span>{' '}
-              <span style={{ color: '#e91e63' }} className="h5">Event Details</span>
+              <span className="h5">Home</span>{' '}
+              <span className="h5 text-danger">&gt;</span>{' '}
+              <span className="h5 text-danger">Event Details</span>
             </p>
           </Container>
         </div>
@@ -44,11 +67,9 @@ const EventDetailsPage = () => {
 
       {/* Event Content */}
       <Container className="my-5">
-        {event ? (
-          <EventDetails event={event} />
-        ) : (
-          <p className="text-danger">Event not found.</p>
-        )}
+        {error && <p className="text-danger">{error}</p>}
+        {!error && !event && <p className="text-muted">Loading event details...</p>}
+        {event && <EventDetails event={event} />}
       </Container>
     </div>
   );

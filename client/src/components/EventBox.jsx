@@ -41,7 +41,7 @@ const EventBox = ({ event, isFavourite }) => {
           className="btn btn-danger book-btn"
           onClick={() => navigate(`/event-details/${event.id}`)}
         >
-          Book Now
+          Book 
         </button>
       </div>
     </div>
