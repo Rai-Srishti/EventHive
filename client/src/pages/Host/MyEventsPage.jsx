@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import {jwtDecode} from "jwt-decode";
 import { useNavigate } from 'react-router-dom';
 import { getEventsByHostId, deleteEvent } from '../../services/hostService'; 
 import Swal from 'sweetalert2';
@@ -12,7 +13,10 @@ const EventsPage = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  const hostId = 1; //  Replace with dynamic host ID later (e.g. from auth)
+   const token = localStorage.getItem("token");
+  const decoded = jwtDecode(token);
+  console.log("Decoded JWT:", decoded);
+  const hostId = decoded.sub;
 
   useEffect(() => {
     const fetchEvents = async () => {

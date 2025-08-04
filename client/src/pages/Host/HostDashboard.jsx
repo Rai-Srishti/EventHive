@@ -15,12 +15,16 @@ import {
 } from 'recharts';
 import { getEventsByHostId } from '../../services/hostService';
 import Footer from '../../components/Footer';
+import {jwtDecode} from "jwt-decode";
 
 const HostDashboard = () => {
   const [graphData, setGraphData] = useState([]);
   const [eventData, setEventData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const hostId = 1; // Replace with dynamic value if needed
+  const token = localStorage.getItem("token");
+      const decoded = jwtDecode(token);
+      console.log("Decoded JWT:", decoded);
+      const hostId = decoded.sub;
 
   useEffect(() => {
     const fetchData = async () => {
