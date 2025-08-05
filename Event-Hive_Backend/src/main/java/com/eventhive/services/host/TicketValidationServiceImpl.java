@@ -13,6 +13,7 @@ import com.eventhive.entities.QrCode;
 import com.eventhive.entities.Ticket;
 import com.eventhive.entities.enums.QrCodeStatusEnum;
 import com.eventhive.entities.enums.TicketStatus;
+import com.eventhive.services.authentication.JWTService;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -25,7 +26,7 @@ public class TicketValidationServiceImpl implements TicketValidationService{
 
 	private final QrCodeDao qrCodeDao;
 	private final TicketDao ticketDao;
-	
+	private final JWTService jwtService;
 	@Override
 	public QrValidationResponseDto validate(QrValidationRequestDto request) {
 	    Long ticketId = Long.parseLong(request.getId());
@@ -38,7 +39,12 @@ public class TicketValidationServiceImpl implements TicketValidationService{
 	    }
 
 	    Ticket ticket = ticketOpt.get();
-
+	    Long ticketHostId = ticket.getEvent().getHost().getUserId();
+	    
+	    Long hostId = jwtService.extractUserIdFromContext();
+	    if (!hostId.equals(ticketHostId)) {
+            return new QrValidationResponseDto("YOU ARE NOT THE HOST OF THIS EVENT", "You are not authorized to validate this ticket.");
+        }
 	    // Step 2: Optional - verify if the ticket has an associated QR code
 	    if (ticket.getQrCodes() == null) {
 	        return new QrValidationResponseDto("NO_QR", "This ticket does not have a QR code assigned.");

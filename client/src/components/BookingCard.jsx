@@ -3,8 +3,10 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleFavourite } from '../store/FavouriteSlice';
 import { BsHeart, BsHeartFill } from 'react-icons/bs';
-import axios from 'axios';
+import Swal from 'sweetalert2';
+
 import '../assets/css/EventCard.css';
+import { cancelTicket } from './../services/attendeeService';
 
 const BookingCard = ({ booking, onCancel }) => {
   const dispatch = useDispatch();
@@ -29,13 +31,33 @@ const BookingCard = ({ booking, onCancel }) => {
     : 'Date Unavailable';
 
   const handleCancel = async () => {
-    try {
-      await axios.delete(`/attendee/cancel-ticket/${ticketId}`);
-      alert('Booking cancelled!');
-      if (onCancel) onCancel(ticketId);
-    } catch (error) {
-      console.error('Cancel error:', error);
-      alert('Failed to cancel booking.');
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: 'Do you really want to cancel this booking?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, cancel it!',
+      cancelButtonText: 'No, keep it',
+    });
+
+    if (result.isConfirmed) {
+      try {
+        const response = await cancelTicket(ticketId);
+
+        await Swal.fire({
+          title: 'Cancelled!',
+          text: response.message || 'Your booking has been cancelled.',
+          icon: 'success',
+        });
+
+        if (onCancel) onCancel(ticketId);
+      } catch (error) {
+        await Swal.fire({
+          title: 'Error!',
+          text: error.message || 'Failed to cancel the booking.',
+          icon: 'error',
+        });
+      }
     }
   };
 

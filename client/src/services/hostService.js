@@ -47,3 +47,18 @@ export const deleteEvent = async (eventId) => {
 
 
 
+export async function validateTicket(ticketId) {
+  try {
+    const response = await axiosInstance.post('/host/validate-ticket', {
+      id: ticketId,
+      method: 'QR_SCAN',
+    });
+
+    return response.data; // e.g., { status: 'VALIDATED' }
+  } catch (error) {
+    if (error.response && error.response.data && error.response.data.message) {
+      throw error.response.data.message;
+    }
+    throw 'Failed to validate ticket';
+  }
+}

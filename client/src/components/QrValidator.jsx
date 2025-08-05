@@ -1,6 +1,8 @@
+// src/components/QRScanner.js
 import React, { useState } from "react";
 import { Scanner } from "@yudiel/react-qr-scanner";
 import { useNavigate } from "react-router-dom";
+import { validateTicket } from "../services/hostService";
 
 const QRScanner = () => {
   const [ticketId, setTicketId] = useState(null);
@@ -8,38 +10,20 @@ const QRScanner = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  const validateTicket = async (id) => {
+  const handleValidate = async (id) => {
     try {
-      const response = await fetch("http://localhost:8080/host/validate-ticket", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id: id,
-          method: "QR_SCAN",
-        }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setStatus(data.status); // e.g., "VALIDATED"
-        setError(null);
-      } else {
-        setStatus(null);
-        setError(data.message || "Failed to validate ticket");
-      }
-    } catch (err) {
+      const data = await validateTicket(id);
+      setStatus(data.status);
+      setError(null);
+    } catch (errMsg) {
       setStatus(null);
-      setError("Network error or invalid server response");
+      setError(errMsg);
     }
   };
 
   const handleScan = (result) => {
     if (result && result[0]?.rawValue) {
       const scannedText = result[0].rawValue;
-
       const idMatch = scannedText.match(/TicketID:(\d+)/);
       if (!idMatch) {
         setError("Invalid QR Code format");
@@ -48,7 +32,7 @@ const QRScanner = () => {
 
       const extractedId = parseInt(idMatch[1], 10);
       setTicketId(extractedId);
-      validateTicket(extractedId);
+      handleValidate(extractedId);
     }
   };
 
