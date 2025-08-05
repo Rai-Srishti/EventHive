@@ -80,7 +80,13 @@ const NewEventPage = () => {
   
     if (photo) {
       payload.append("photo", photo);
-    } else {
+    }
+    
+    if (showCustomArtist && formData.artistPhoto) {
+    payload.append("artistPhoto", formData.artistPhoto);
+  }
+    
+    else {
       // Always send something, even if empty
       payload.append("photo", new Blob([], { type: "application/octet-stream" }));
     }
@@ -178,6 +184,7 @@ const NewEventPage = () => {
             </div>
 
             {showCustomArtist && (
+              <>
               <div className="mb-3">
                 <label className="form-label">Enter Artist Name:</label>
                 <input
@@ -187,6 +194,19 @@ const NewEventPage = () => {
                   onChange={handleCustomArtistChange}
                 />
               </div>
+
+              <div className="mb-3">
+      <label className="form-label">Upload Artist Photo:</label>
+      <input
+        type="file"
+        accept="image/*"
+        name="artistPhoto"
+        className="form-control"
+        onChange={(e) => setFormData(prev => ({ ...prev, artistPhoto: e.target.files[0] }))}
+      />
+    </div>
+
+              </>
             )}
 
             <h5 className="mt-4">Phases</h5>

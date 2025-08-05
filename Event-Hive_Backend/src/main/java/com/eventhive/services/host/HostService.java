@@ -10,7 +10,7 @@ import com.eventhive.dto.host.HostNewEventRequestDto;
 
 public interface HostService {
 
-	ApiResponse enterEvent(HostNewEventRequestDto dto, MultipartFile photoFile, Long hostId);
+	ApiResponse enterEvent(HostNewEventRequestDto dto, MultipartFile photoFile , MultipartFile artistPhotoFile, Long hostId);
 	
 	List<EventResponseDto> fetchDetails(Long hostId);
 
