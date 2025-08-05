@@ -37,6 +37,7 @@ const HostNavbar = () => {
             <Link to="/host/my-events" className={isActive('/host/myevents')}>MY EVENTS</Link>
             <Link to={`/host/artist/${hostId}`} className={isActive(`/host/artists/${hostId}`)}>ARTISTS</Link>
             <Link to="/host/about" className={isActive('/host/about')}>ABOUT</Link>
+            <Link to="/host/validate-ticket" className={isActive('/host/')}>Scan Qr</Link>
   
             <Link to="/host/profile" activeclassname="active" className={isActive('/host/dashboard')}></Link>
 

@@ -58,7 +58,7 @@ public class HostController {
 	@GetMapping("{hostId}")
 	ResponseEntity<?> getEventById(@PathVariable Long hostId){
 		
-		
+		System.out.println("hihi");
 		return ResponseEntity.ok(hostService.fetchDetails(hostId));
 	}
 	
@@ -80,6 +80,7 @@ public class HostController {
 	
 	@GetMapping("/artists")
 	public ResponseEntity<?> fetchAllArtists() {
+		
 	    return ResponseEntity.ok(artistService.getAllArtistNames());
 	}
 	

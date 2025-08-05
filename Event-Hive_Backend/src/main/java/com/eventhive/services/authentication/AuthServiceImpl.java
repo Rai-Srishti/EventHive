@@ -104,7 +104,7 @@ public class AuthServiceImpl implements AuthService {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         User user = userPrincipal.getUser();
 
-        String token = jwtService.generateToken(userPrincipal);  // ✅ Declare it here
+        String token = jwtService.generateToken(userPrincipal);  
 
         return new LoginResponseDto(
             user.getUserId(),
