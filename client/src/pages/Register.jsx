@@ -52,8 +52,8 @@ function Register() {
       return;
     }
 
-    if (password.length < 6) {
-      toast.warn('Password must be at least 6 characters');
+    if (password.length < 8) {
+      toast.warn('Password must be at least 8 characters');
       return;
     }
 
@@ -79,7 +79,7 @@ function Register() {
       toast.success(result.message || 'Registered successfully!');
       setTimeout(() => navigate('/login'), 1500);
     } catch (errMsg) {
-      toast.error(errMsg);
+      toast.error(errMsg.message || 'Registration failed');
     }
   };
 
@@ -161,13 +161,13 @@ function Register() {
           <label className="form-label"><strong>Password</strong></label>
           <input
             type="password"
-            className={`form-control ${userdet.password && userdet.password.length < 6 ? 'is-invalid' : ''}`}
+            className={`form-control ${userdet.password && userdet.password.length < 8 ? 'is-invalid' : ''}`}
             placeholder="Enter password"
             value={userdet.password}
             onChange={(e) => setUserdet({ ...userdet, password: e.target.value })}
           />
-          {userdet.password && userdet.password.length < 6 && (
-            <div className="invalid-feedback">Password must be at least 6 characters.</div>
+          {userdet.password && userdet.password.length < 8 && (
+            <div className="invalid-feedback">Password must be at least 8 characters.</div>
           )}
         </div>
 

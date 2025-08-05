@@ -198,20 +198,6 @@ const Sidebar = () => {
     <div style={sidebarStyle}>
       {/* Logout Button on Top */}
       <div style={{ width: "100%", marginBottom: "20px" }}>
-        {/* <button
-          onClick={handleLogout}
-          style={{
-            ...profileStyle,
-            backgroundColor: "white" , //"#f5f5f5"
-            width: "100%",
-            border: "none",
-            cursor: "pointer",
-          }}
-        >
-          <FaSignOutAlt color="#E2215F" />
-          Logout
-        </button> */}
-
         <button
           onClick={handleLogout}
           style={{
