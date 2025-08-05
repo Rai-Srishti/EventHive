@@ -46,7 +46,7 @@ public class HostServiceImpl implements HostService {
 	private final ModelMapper mapper;
 
 	
-	public ApiResponse enterEvent(HostNewEventRequestDto dto, MultipartFile photoFile, Long hostId) {
+	public ApiResponse enterEvent(HostNewEventRequestDto dto, MultipartFile photoFile, MultipartFile artistPhotoFile,Long hostId) {
 
 	    // 1. Find the Host
 	    User host = hostDao.findById(hostId)
@@ -60,6 +60,26 @@ public class HostServiceImpl implements HostService {
 	    	        newArtist.setCountry("India"); // default
 	    	        newArtist.setBio("Performer in " + dto.getCategory()); // default based on category
 	    	        newArtist.setGenre(dto.getCategory()); 
+	    	        
+	    	     // Save artist photo
+	    	        if (artistPhotoFile != null && !artistPhotoFile.isEmpty()) {
+	    	            try {
+	    	                String artistFileName = UUID.randomUUID().toString() + "_" + artistPhotoFile.getOriginalFilename();
+	    	                String artistUploadDirStr = System.getProperty("user.dir") + "/uploads/artists";
+	    	                Path artistUploadDir = Paths.get(artistUploadDirStr);
+	    	                Files.createDirectories(artistUploadDir);
+	    	                Path artistFilePath = artistUploadDir.resolve(artistFileName);
+
+	    	                artistPhotoFile.transferTo(artistFilePath.toFile());
+
+	    	                newArtist.setPhoto(artistFileName); // Assuming Artist entity has photo field
+	    	            } catch (IOException e) {
+	    	                throw new ApiException("Failed to store artist photo: " + e.getMessage());
+	    	            }
+	    	        }
+	    	        
+	    	        
+	    	        
 	    	        return artistDao.save(newArtist);
 	    	    });
 
