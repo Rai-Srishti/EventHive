@@ -1,27 +1,3 @@
-// import axios from "axios";
-// import axiosInstance from "./axiosInstance";
-
-// const API_BASE_URL = '/auth'; 
-
-// export const loginUser = async (email, password) => {
-//   try {
-//     const response = await axiosInstance.post(`${API_BASE_URL}/login`, { email, password });
-//     return response.data;  // Will return token, role, etc.
-//   } catch (error) {
-//     throw error.response?.data?.message || "Login failed";
-//   }
-// };
-
-// export const registerUser = async (userData) => {
-//   try {
-//     const response = await axiosInstance.post(`${API_BASE_URL}/signup`, userData);
-//     return response.data; // Expected to return ApiResponse with message
-//   } catch (error) {
-//     throw error.response?.data?.message || 'Registration failed';
-//   }
-// };
-
-
 
 import axios from "axios";
 import axiosInstance from "./axiosInstance";
@@ -39,11 +15,16 @@ export const loginUser = async (email, password) => {
 
 
 const API_BASE_URL = 'http://localhost:8080/auth';
+
 export const registerUser = async (userData) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/signup`, userData);
-    return response.data; // Expected to return ApiResponse with message
+    return response.data; // Expected: { message: "User registered successfully" }
   } catch (error) {
-    throw error.response?.data?.message || 'Registration failed';
+    const errorMessage =
+      typeof error.response?.data === 'string'
+        ? error.response.data
+        : error.response?.data?.message || 'Registration failed';
+    throw new Error(errorMessage);
   }
 };

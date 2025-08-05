@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.eventhive.config.UserPrincipal;
 import com.eventhive.custom_exception.ApiException;
+import com.eventhive.custom_exception.EmailAlreadyExistsException;
 import com.eventhive.dao.authentication.AuthUserDao;
 import com.eventhive.dao.authentication.WalletDao;
 import com.eventhive.dao.host.EventDao;
@@ -59,7 +60,7 @@ public class AuthServiceImpl implements AuthService {
 
         // Check duplicate email
         if (userDao.existsByEmail(dto.getEmail())) {
-            throw new ApiException("Email is already registered.");
+            throw new EmailAlreadyExistsException("Email is already registered.");
         }
 
         // Create user

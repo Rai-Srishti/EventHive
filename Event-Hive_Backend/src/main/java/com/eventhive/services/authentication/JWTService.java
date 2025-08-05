@@ -42,7 +42,7 @@ public class JWTService {
 				.add(claims)
 				.subject(String.valueOf(userPrincipal.getUserId()))  // subject is basically userID
 				.issuedAt(new Date(System.currentTimeMillis()))
-				.expiration(new Date(System.currentTimeMillis()+1000 * 60 * 60 * 1))   //setting expiration time
+				.expiration(new Date(System.currentTimeMillis()+1000 * 60 * 60 * 10))   //setting expiration time
 				.and()
 				.signWith(key)  //here pass the secret
 				.compact();  //key will be made here				
