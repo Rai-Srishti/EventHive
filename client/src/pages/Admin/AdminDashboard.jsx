@@ -1,11 +1,76 @@
-import React from "react";
+
+import React, { useEffect, useState } from "react";
+import { fetchAdminDashboardStats } from "../../services/adminService";
 import "../../assets/css/Admin/AdminDashboard.css";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  Label,
+} from "recharts";
 
 const AdminDashboard = () => {
+  const [counts, setCounts] = useState({
+    totalUsers: 0,
+    totalApprovedEvents: 0,
+    totalPendingEvents: 0,
+    totalRejectedEvents: 0,
+    totalHosts: 0,
+    totalAttendee: 0,
+  });
+
+  useEffect(() => {
+    const fetchCounts = async () => {
+      try {
+        const data = await fetchAdminDashboardStats();
+        setCounts(data);
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+      }
+    };
+
+    fetchCounts();
+  }, []);
+
+  const totalEvents =
+    counts.totalApprovedEvents +
+    counts.totalPendingEvents +
+    counts.totalRejectedEvents;
+
+  const stats = [
+    { title: "Total Users", value: counts.totalUsers },
+    { title: "Total Events", value: totalEvents },
+    { title: "Pending Requests", value: counts.totalPendingEvents },
+    { title: "Approved Requests", value: counts.totalApprovedEvents },
+    { title: "Rejected Requests", value: counts.totalRejectedEvents },
+  ];
+
+  const barChartData = [
+    { name: "Pending", count: counts.totalPendingEvents },
+    { name: "Approved", count: counts.totalApprovedEvents },
+    { name: "Rejected", count: counts.totalRejectedEvents },
+  ];
+
+  const pieData = [
+    { name: "Hosts", value: counts.totalHosts },
+    { name: "Attendees", value: counts.totalAttendee },
+  ];
+
+  const COLORS = ["#6366F1", "#10B981"]; // Indigo, Emerald
+
+  const renderCustomizedLabel = ({ percent }) =>
+    `${(percent * 100).toFixed(0)}%`;
+
   return (
     <div className="dashboard-container" style={{ display: "flex" }}>
-     
-
       <div
         className="dashboard-content"
         style={{
@@ -41,12 +106,7 @@ const AdminDashboard = () => {
             gap: "25px",
           }}
         >
-          {[
-            { title: "Total Users", value: "1,250" },
-            { title: "Total Events", value: "340" },
-            { title: "Pending Requests", value: "28" },
-            { title: "Approved Requests", value: "312" },
-          ].map((stat, index) => (
+          {stats.map((stat, index) => (
             <div
               key={index}
               className="stat-card"
@@ -71,7 +131,6 @@ const AdminDashboard = () => {
                   color: "#E2215F",
                   marginBottom: "10px",
                   fontWeight: "600",
-                  fontFamily: "'Segoe UI', sans-serif",
                 }}
               >
                 {stat.title}
@@ -87,6 +146,71 @@ const AdminDashboard = () => {
               </p>
             </div>
           ))}
+        </div>
+
+        {/* Bar Chart */}
+        <div style={{ marginTop: "50px" }}>
+          <h3
+            style={{
+              textAlign: "center",
+              fontSize: "1.5rem",
+              marginBottom: "20px",
+              color: "#333",
+            }}
+          >
+            Event Status Overview
+          </h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart
+              data={barChartData}
+              margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="count" fill="#E2215F" barSize={40} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Pie Chart */}
+        <div style={{ marginTop: "50px" }}>
+          <h3
+            style={{
+              textAlign: "center",
+              fontSize: "1.5rem",
+              marginBottom: "20px",
+              color: "#333",
+            }}
+          >
+            Hosts vs Attendees
+          </h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <PieChart>
+              <Pie
+                data={pieData}
+                cx="50%"
+                cy="50%"
+                outerRadius={100}
+                labelLine={false}
+                label={renderCustomizedLabel}
+                dataKey="value"
+              >
+                {pieData.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                    stroke="#fff"
+                    strokeWidth={2}
+                  />
+                ))}
+              </Pie>
+              <Tooltip />
+              <Legend />
+            </PieChart>
+          </ResponsiveContainer>
         </div>
       </div>
     </div>

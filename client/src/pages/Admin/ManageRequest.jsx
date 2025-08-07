@@ -1,7 +1,7 @@
-
 import React, { useState, useEffect } from "react";
 import "../../assets/css/Admin/ManageRequest.css";
 import { fetchPendingEvents, approveEvent } from "../../services/adminService";
+import Swal from "sweetalert2";
 
 const ManageRequest = () => {
   const [requests, setRequests] = useState([]);
@@ -9,7 +9,6 @@ const ManageRequest = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const requestsPerPage = 10;
 
-  // Fetch pending events from backend
   useEffect(() => {
     loadPendingEvents();
   }, []);
@@ -26,17 +25,46 @@ const ManageRequest = () => {
   const handleApprove = async (eventId) => {
     try {
       const message = await approveEvent(eventId);
-      alert(message);
-      loadPendingEvents(); // refresh list
+
+      if (message.toLowerCase().includes("rejected")) {
+        Swal.fire({
+          icon: "error",
+          title: "Event Rejected",
+          text: message,
+          confirmButtonColor: "#d33",
+        });
+      } else {
+        Swal.fire({
+          icon: "success",
+          title: "Event Approved",
+          text: message,
+          confirmButtonColor: "#3085d6",
+        });
+
+        const updatedRequests = requests.filter((event) => event.eventId !== eventId);
+        setRequests(updatedRequests);
+
+        const filtered = updatedRequests.filter((event) =>
+          event.eventName.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        const totalPages = Math.ceil(filtered.length / requestsPerPage);
+
+        if (page >= totalPages && totalPages > 0) {
+          setPage(totalPages - 1);
+        }
+      }
     } catch (err) {
       const fallbackMessage = err.response?.data?.message || "Error approving event.";
-      alert(fallbackMessage);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: fallbackMessage,
+      });
     }
-
   };
 
   const handleReject = (eventId) => {
-    alert(`Event ID ${eventId} rejected (functionality not implemented)`); // Add reject API if needed
+    alert(`Event ID ${eventId} rejected (functionality not implemented)`);
   };
 
   const filteredRequests = requests.filter((event) =>
@@ -57,7 +85,6 @@ const ManageRequest = () => {
   return (
     <div className="manage-request-container">
       <div className="manage-request-content">
-        {/* Title */}
         <div style={{ textAlign: "center", marginBottom: "1rem" }}>
           <h1
             style={{
@@ -75,7 +102,6 @@ const ManageRequest = () => {
           </h1>
         </div>
 
-        {/* Search */}
         <div className="search-bar" style={{ marginBottom: "1rem", textAlign: "center" }}>
           <input
             type="text"
@@ -92,7 +118,6 @@ const ManageRequest = () => {
           />
         </div>
 
-        {/* Table */}
         <table className="manage-request-table">
           <thead>
             <tr>
@@ -125,12 +150,6 @@ const ManageRequest = () => {
                     >
                       Validate
                     </button>
-                    {/* <button
-                      className="button-reject"
-                      onClick={() => handleReject(event.eventId)}
-                    >
-                      Reject
-                    </button> */}
                   </td>
                 </tr>
               ))
@@ -144,7 +163,6 @@ const ManageRequest = () => {
           </tbody>
         </table>
 
-        {/* Pagination */}
         <div
           style={{
             marginTop: "20px",

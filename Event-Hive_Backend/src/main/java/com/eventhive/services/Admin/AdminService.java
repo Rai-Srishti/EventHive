@@ -2,6 +2,7 @@ package com.eventhive.services.Admin;
 
 import java.util.List;
 
+import com.eventhive.dto.admin.AdminDashboardDTO;
 import com.eventhive.dto.admin.AdminProfileResponseDTO;
 import com.eventhive.dto.admin.AdminUserRequestDTO;
 import com.eventhive.dto.admin.AdminUserResponseDTO;
@@ -32,6 +33,11 @@ public interface AdminService {
 	AdminProfileResponseDTO fetchProfile(Long adminId);
 
 	ApiResponse updateProfile(Long adminId, AdminUserRequestDTO dto);
+	
+	// Dashboard
+
+	AdminDashboardDTO getDashboardStats();
+	
 
 	
 }

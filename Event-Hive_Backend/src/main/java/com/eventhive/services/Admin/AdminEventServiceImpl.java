@@ -75,7 +75,7 @@ public class AdminEventServiceImpl implements AdminEventService{
 			event.setStatus(EventApprovalStatus.REJECTED);
 			event.setUpdatedAt(LocalDateTime.now());
 			adminEventDao.save(event);
-			return ResponseEntity.ok(new ApiResponse("Artist not found or not assigned to event. Event rejected."));
+			return ResponseEntity.ok(new ApiResponse("Artist not found or not assigned to event. Event rejected.", EventApprovalStatus.REJECTED.toString()));
 		}
 		
 		
@@ -83,14 +83,14 @@ public class AdminEventServiceImpl implements AdminEventService{
 			event.setStatus(EventApprovalStatus.REJECTED);
 	        event.setUpdatedAt(LocalDateTime.now());
 	        adminEventDao.save(event);
-	        return ResponseEntity.ok(new ApiResponse("Event host is blocked or not assigned. Event rejected."));
+	        return ResponseEntity.ok(new ApiResponse("Event host is blocked or not assigned. Event rejected.",EventApprovalStatus.REJECTED.toString()));
 		}
 		
 		if (event.getCreatedAt() == null || event.getEventDate() == null) {
 			 	event.setStatus(EventApprovalStatus.REJECTED);
 		        event.setUpdatedAt(LocalDateTime.now());
 		        adminEventDao.save(event);
-		        return ResponseEntity.ok(new ApiResponse("Event date or created date is missing. Event rejected."));
+		        return ResponseEntity.ok(new ApiResponse("Event date or created date is missing. Event rejected.",EventApprovalStatus.REJECTED.toString()));
 	    }
 		
 		long daysBetween = java.time.Duration.between(event.getCreatedAt(), event.getEventDate()).toDays();
@@ -98,14 +98,14 @@ public class AdminEventServiceImpl implements AdminEventService{
 	    	event.setStatus(EventApprovalStatus.REJECTED);
 	    	event.setUpdatedAt(LocalDateTime.now());
 	    	adminEventDao.save(event);
-	    	return ResponseEntity.ok(new ApiResponse("Event must be scheduled at least 15 days after its creation. Event rejected."));
+	    	return ResponseEntity.ok(new ApiResponse("Event must be scheduled at least 15 days after its creation. Event rejected.",EventApprovalStatus.REJECTED.toString()));
 	    }
 	    
 	    event.setStatus(EventApprovalStatus.APPROVED);
 	    event.setUpdatedAt(LocalDateTime.now());
 	    adminEventDao.save(event);
 	    
-	    return ResponseEntity.ok(new ApiResponse("Event approved successfully!"));
+	    return ResponseEntity.ok(new ApiResponse("Event approved successfully!",EventApprovalStatus.APPROVED.toString()));
 		
 	}
 
@@ -178,13 +178,7 @@ public class AdminEventServiceImpl implements AdminEventService{
 	    event.setCategory(dto.getCategory());
 	    event.setEventDate(dto.getEventDate());
 	    event.setUpdatedAt(LocalDateTime.now());
-//
-//	    // Set host
-//	    if (dto.getHost() != null && dto.getHost().getUserId() != null) {
-//	        User host = userRepository.findById(dto.getHost().getUserId())
-//	            .orElseThrow(() -> new ResourceNotFoundException("Host not found with ID: " + dto.getHost().getUserId()));
-//	        event.setHost(host);
-//	    }
+
 
 	    // Set artist
 	    if (dto.getArtist() != null && dto.getArtist().getArtistId() != null) {

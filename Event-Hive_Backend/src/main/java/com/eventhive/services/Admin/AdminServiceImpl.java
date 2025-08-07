@@ -11,11 +11,13 @@ import com.eventhive.custom_exception.UserNotFoundException;
 import com.eventhive.dao.admin.AdminEventDao;
 import com.eventhive.dao.admin.AdminTicketDao;
 import com.eventhive.dao.admin.UserDao;
+import com.eventhive.dto.admin.AdminDashboardDTO;
 import com.eventhive.dto.admin.AdminProfileResponseDTO;
 import com.eventhive.dto.admin.AdminUserRequestDTO;
 import com.eventhive.dto.admin.AdminUserResponseDTO;
 import com.eventhive.dto.host.ApiResponse;
 import com.eventhive.entities.User;
+import com.eventhive.entities.enums.EventApprovalStatus;
 import com.eventhive.entities.enums.Role;
 import com.eventhive.entities.enums.UserStatus;
 
@@ -95,9 +97,9 @@ public class AdminServiceImpl implements AdminService{
 		if(countCancelEvent>5) {
 			attendee.setStatus(UserStatus.BLOCKED);
 			adminUserDao.save(attendee);
-			return new ApiResponse("Attendee has been blocked due to excessive cancellations.");
+			return new ApiResponse("Attendee has been blocked due to excessive cancellations.","BLOCKED");
 		}
-		return new ApiResponse("Attendee has cancelled "+countCancelEvent+" Events — threshold not reached.");	
+		return new ApiResponse("Attendee has cancelled "+countCancelEvent+" Events — threshold not reached.","ACTIVE");	
 	}
 
 	@Override
@@ -130,6 +132,21 @@ public class AdminServiceImpl implements AdminService{
 		mapper.map(dto, admin);
 		adminUserDao.save(admin);
 		return new ApiResponse("Profile Updated Successfully!!");
+	}
+	
+	//------------------DashBoard Stats-------------------------
+
+	@Override
+	public AdminDashboardDTO getDashboardStats() {
+		 	long pendingEvents = adminEventDao.countByStatus(EventApprovalStatus.PENDING);
+	        long approvedEvents = adminEventDao.countByStatus(EventApprovalStatus.APPROVED);
+	        long rejectedEvents = adminEventDao.countByStatus(EventApprovalStatus.REJECTED);
+	        long totalEvents = adminEventDao.countByStatus(EventApprovalStatus.APPROVED)+ adminEventDao.countByStatus(EventApprovalStatus.PENDING);
+	        long totalUsers = adminUserDao.count();
+	        long totalHosts = adminUserDao.countByRole(Role.HOST);
+	        long totalAttendee = adminUserDao.countByRole(Role.ATTENDEE);
+
+	        return new AdminDashboardDTO(pendingEvents, approvedEvents, rejectedEvents,totalEvents, totalUsers, totalHosts,totalAttendee);
 	}
 	
 }

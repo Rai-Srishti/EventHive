@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchAdminProfile } from "../../services/adminService"; // You'll define this service
+import { fetchAdminProfile } from "../../services/adminService"; 
 import "../../assets/css/Admin/Profile.css";
 
 const Profile = () => {
@@ -11,7 +11,7 @@ const Profile = () => {
   useEffect(() => {
     const loadProfile = async () => {
       try {
-        const data = await fetchAdminProfile(); // API call to /admin/profile
+        const data = await fetchAdminProfile(); 
         setAdminData(data);
       } catch (err) {
         alert("Failed to load profile");

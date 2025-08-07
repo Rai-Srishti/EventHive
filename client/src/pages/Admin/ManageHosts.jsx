@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import "../../assets/css/Admin/ManageRequest.css";
 import { fetchAllHosts,blockHost,unblockHost } from "../../services/adminService";
 
@@ -29,8 +28,8 @@ const ManageHosts = () => {
       ? await unblockHost(hostId)
       : await blockHost(hostId);
 
-    alert(message); // or use toast
-    // Refresh host list after status change
+    alert(message); 
+    
     const updatedHosts = await fetchAllHosts();
     setAllHosts(updatedHosts);
   } catch (error) {
@@ -168,5 +167,6 @@ const ManageHosts = () => {
 };
 
 export default ManageHosts;
+
 
 

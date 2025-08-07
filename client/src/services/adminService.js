@@ -129,3 +129,15 @@ export const updateAdminProfile = async (updatedData) => {
   const response = await axiosInstance.put(`${API}/profile/update`, updatedData);
   return response.data.message;
 };
+
+//Admin DashBoard
+export const fetchAdminDashboardStats = async () => {
+  try {
+    const response = await axiosInstance.get(`${API}`); // where API = "/admin"
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching dashboard stats:", error);
+    throw error;
+  }
+};
+
