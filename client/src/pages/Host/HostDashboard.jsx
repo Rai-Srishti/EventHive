@@ -15,16 +15,16 @@ import {
 } from 'recharts';
 import { getEventsByHostId } from '../../services/hostService';
 import Footer from '../../components/Footer';
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 const HostDashboard = () => {
   const [graphData, setGraphData] = useState([]);
   const [eventData, setEventData] = useState([]);
   const [loading, setLoading] = useState(true);
+
   const token = localStorage.getItem("token");
-      const decoded = jwtDecode(token);
-      console.log("Decoded JWT:", decoded);
-      const hostId = decoded.sub;
+  const decoded = jwtDecode(token);
+  const hostId = decoded.sub;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,27 +32,30 @@ const HostDashboard = () => {
         const response = await getEventsByHostId(hostId);
         const events = Array.isArray(response) ? response : [];
 
-        console.log("Events from /host/{hostId}:", events);
-        console.log("Sample event object:", events[0]);
+       // console.log("Events from /host/{hostId}:", events);
+        //console.log("Sample event object:", events[0]);
 
         setEventData(events);
 
         const graph = events
           .filter(event => event.eventDate)
-          .map((event) => {
+          .map(event => {
             const date = new Date(event.eventDate);
-            const month = isNaN(date) ? 'Unknown' : date.toLocaleString('default', { month: 'short' });
+            const month = isNaN(date)
+              ? 'Unknown'
+              : date.toLocaleString('default', { month: 'short' });
 
             return {
               month,
-              attendance: Math.floor(Math.random() * 50) + 30 // Dummy attendance
+              count: 1
             };
           });
 
+        // Group by month and count number of events
         const grouped = graph.reduce((acc, cur) => {
           const existing = acc.find(item => item.month === cur.month);
           if (existing) {
-            existing.attendance += cur.attendance;
+            existing.count += 1;
           } else {
             acc.push({ ...cur });
           }
@@ -61,7 +64,7 @@ const HostDashboard = () => {
 
         setGraphData(grouped);
       } catch (error) {
-        console.error(" Error fetching events:", error);
+        console.error("Error fetching events:", error);
         setEventData([]);
         setGraphData([]);
       } finally {
@@ -82,14 +85,14 @@ const HostDashboard = () => {
       {/* Graph */}
       <Container className="mb-5">
         <div className="bg-white shadow rounded p-4">
-          <h5 className="text-center mb-3">Event Attendance Trend</h5>
+          <h5 className="text-center mb-3">Number of Events per Month</h5>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={graphData}>
               <CartesianGrid stroke="#e0e0e0" />
               <XAxis dataKey="month" />
-              <YAxis />
+              <YAxis allowDecimals={false} />
               <Tooltip />
-              <Line type="monotone" dataKey="attendance" stroke="#4e73df" strokeWidth={2} />
+              <Line type="monotone" dataKey="count" stroke="#4e73df" strokeWidth={2} />
             </LineChart>
           </ResponsiveContainer>
         </div>
