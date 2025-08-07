@@ -31,7 +31,7 @@ const HostEditEventPage = () => {
           artistName: data.artistName || ''
         });
       } catch (err) {
-        console.error('Error loading event:', err);
+       // console.error('Error loading event:', err);
         Swal.fire('Error', 'Failed to load event data.', 'error');
       }
     };
@@ -80,7 +80,7 @@ const HostEditEventPage = () => {
 
       navigate("/host/my-events");
     } catch (error) {
-      console.error("Error updating event:", error);
+      //console.error("Error updating event:", error);
       Swal.fire('Error', 'Event update failed.', 'error');
     }
   };

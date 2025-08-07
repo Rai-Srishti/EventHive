@@ -153,12 +153,12 @@ const NewEventPage = () => {
   
      const token = localStorage.getItem("token");
     const decoded = jwtDecode(token);
-    console.log("Decoded JWT:", decoded);
+    //console.log("Decoded JWT:", decoded);
     const hostId = decoded.sub;
   
     try {
           const response = await insertNewEvent(payload, hostId);
-          console.log("Event Created:", response.data);
+          //console.log("Event Created:", response.data);
          // alert("Event successfully submitted!");
          await Swal.fire({
           icon: 'success',

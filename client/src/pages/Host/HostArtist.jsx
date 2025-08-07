@@ -8,7 +8,7 @@ const MyArtistsPage = () => {
   const [loading, setLoading] = useState(true);
   const token = localStorage.getItem("token");
       const decoded = jwtDecode(token);
-      console.log("Decoded JWT:", decoded);
+    //  console.log("Decoded JWT:", decoded);
       const hostId = decoded.sub;
 
   useEffect(() => {
