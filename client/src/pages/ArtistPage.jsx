@@ -11,7 +11,7 @@ const ArtistPage = () => {
   const isPublic = !pathname.startsWith('/host') && !pathname.startsWith('/attendee');
 
   useEffect(() => {
-    fetch("http://localhost:8080/artists")  // ✅ public route, no token
+    fetch("http://localhost:8080/artists")
       .then(res => {
         if (!res.ok) {
           throw new Error(`Failed to fetch: ${res.status}`);
