@@ -1,7 +1,9 @@
+
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "../../assets/css/Admin/EditProfile.css";
 import { updateAdminProfile } from "../../services/adminService";
+import Swal from "sweetalert2"; 
 
 const EditProfile = () => {
   const navigate = useNavigate();
@@ -28,16 +30,28 @@ const EditProfile = () => {
   };
 
   const handleSave = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
+    try {
+      const message = await updateAdminProfile(formData);
 
-  try {
-    const message = await updateAdminProfile(formData);
-    alert(message);
-    navigate("/admin/profile");
-  } catch (err) {
-    alert("Failed to update profile.");
-    console.error(err);
-  }
+      Swal.fire({
+        icon: "success",
+        title: "Profile Updated",
+        text: message,
+        confirmButtonColor: "#E2215F",
+      }).then(() => {
+        navigate("/admin/profile");
+      });
+
+    } catch (err) {
+      Swal.fire({
+        icon: "error",
+        title: "Failed to update profile",
+        text: err.response?.data?.message || "Something went wrong!",
+        confirmButtonColor: "#E2215F",
+      });
+      console.error(err);
+    }
   };
 
   return (
@@ -116,14 +130,15 @@ const EditProfile = () => {
             />
           </div>
 
-          <div className="form-btn-group">
-            <button className="save-btn" type="submit">
+          <div className="form-btn-group" style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
+            <button className="save-btn" type="submit" style={{ padding: "8px 20px" }}>
               Save
             </button>
             <button
               className="cancel-btn"
               type="button"
               onClick={() => navigate("/admin/profile")}
+              style={{ padding: "8px 20px" }}
             >
               Cancel
             </button>

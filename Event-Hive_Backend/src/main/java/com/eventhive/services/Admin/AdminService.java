@@ -18,6 +18,8 @@ public interface AdminService {
 
 	ApiResponse unblockHost(Long hostId);
 	
+	ApiResponse validateHost(Long hostId);
+	
 	
 	//Attendee
 
@@ -26,6 +28,8 @@ public interface AdminService {
 	ApiResponse updateAttendee(Long attId);
 
 	ApiResponse unblockAttendee(Long attId);
+	
+	ApiResponse validateAttendee(Long attId);
 	
 	
 	// Profile
@@ -37,7 +41,7 @@ public interface AdminService {
 	// Dashboard
 
 	AdminDashboardDTO getDashboardStats();
-	
+
 
 	
 }
