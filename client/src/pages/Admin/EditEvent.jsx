@@ -1,5 +1,7 @@
+
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import {fetchEventById,fetchAllArtists,updateEditedEvent,} from "../../services/adminService";
 import "../../assets/css/Admin/EditEvent.css";
 
@@ -20,7 +22,11 @@ const EditEvent = () => {
           setSelectedArtistId(data.artist.artistId);
         }
       } catch (err) {
-        alert("Error fetching event details.");
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Error fetching event details.",
+        });
       }
     };
 
@@ -29,7 +35,11 @@ const EditEvent = () => {
         const artistList = await fetchAllArtists();
         setArtists(artistList);
       } catch (err) {
-        alert("Error loading artists.");
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Error loading artists.",
+        });
       }
     };
 
@@ -55,10 +65,19 @@ const EditEvent = () => {
 
     try {
       const msg = await updateEditedEvent(id, updatedData);
-      alert(msg);
+      await Swal.fire({
+        icon: "success",
+        title: "Event Updated",
+        text: msg,
+        confirmButtonText: "OK",
+      });
       navigate("/admin/events");
     } catch (err) {
-      alert("Failed to update event.");
+      Swal.fire({
+        icon: "error",
+        title: "Update Failed",
+        text: "Failed to update event.",
+      });
     }
   };
 
@@ -76,7 +95,11 @@ const EditEvent = () => {
 
           <div className="form-group">
             <label>Event Date:</label>
-            <input type="text" value={new Date(eventData.eventDate).toLocaleString()} readOnly />
+            <input
+              type="text"
+              value={new Date(eventData.eventDate).toLocaleString()}
+              readOnly
+            />
           </div>
 
           <div className="form-group">
@@ -135,7 +158,11 @@ const EditEvent = () => {
 
           <div className="form-group">
             <label>Artist:</label>
-            <select value={selectedArtistId} onChange={handleArtistChange} required>
+            <select
+              value={selectedArtistId}
+              onChange={handleArtistChange}
+              required
+            >
               <option value="">-- Select Artist --</option>
               {artists.map((artist) => (
                 <option key={artist.artistId} value={artist.artistId}>
@@ -146,7 +173,9 @@ const EditEvent = () => {
           </div>
 
           <div className="form-actions">
-            <button type="submit" className="save-button">Save</button>
+            <button type="submit" className="save-button">
+              Save
+            </button>
           </div>
         </form>
       </div>
