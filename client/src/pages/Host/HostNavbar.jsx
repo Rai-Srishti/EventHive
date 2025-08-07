@@ -13,7 +13,11 @@ const HostNavbar = () => {
   const decoded = jwtDecode(token);
  // console.log("Decoded JWT:", decoded);
   const hostId = decoded.sub;
-
+  
+  const handleLogout = () => {
+    localStorage.clear(); // clear all items in localStorage
+  };
+  
   const location = useLocation();
   const isActive = (path) => location.pathname === path ? 'nav-link active' : 'nav-link';
   return (
@@ -45,7 +49,7 @@ const HostNavbar = () => {
           </Nav>
 
           <Nav className="me-2 align-items-center">
-            <Link to="/" className="get-ticket-btn" style={{textDecoration:"none"}}>
+            <Link to="/" className="get-ticket-btn" style={{textDecoration:"none"}} onClick={handleLogout}>
               Logout
             </Link>
           </Nav>
