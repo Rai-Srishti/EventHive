@@ -15,5 +15,9 @@ public interface AdminEventDao extends JpaRepository<Event, Long>{
 	
 	 @Query("SELECT COUNT(e) FROM Event e WHERE e.host.id = :hostId AND e.status = 'CANCELLED'")
 	 int countCancelledEventsByHost(@Param("hostId") Long hostId);
+
+	long countByStatus(EventApprovalStatus approved);
+	 
+	 
 }
   

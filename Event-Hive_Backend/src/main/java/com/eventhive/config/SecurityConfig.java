@@ -30,34 +30,7 @@ public class SecurityConfig {
 	
 	@Autowired
 	private JwtFilter jwtFilter;   // we do not have this filter by default so we need to create class for it 
-	
-//	@Bean
-//	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-//		return http
-//				.cors(cors -> cors.configurationSource(corsConfigurationSource()))
-//				.csrf(customize -> customize.disable())  // disabling csrf
-//				//any request comming should be authenticated, but doing only this create an issue as with login id and password also it will 
-//				//not allow user to enter
-//				.authorizeHttpRequests(request->request
-//						.requestMatchers("/auth/login","/auth/signup", "/swagger-ui/", "/v3/api-docs/")
-//						.permitAll()
-//						.anyRequest().authenticated()) 
-//				//to enable login through form
-//				//.formLogin(Customizer.withDefaults())
-//					//through postman
-//				//.httpBasic(Customizer.withDefaults())
-//				//alternate way of handling csrf: making session id state-less i.e jsession id changes each time.
-//				
-//						.sessionManagement(session->
-//					session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//				// we want jwt filter to be activated before UPAF -authorization
-//				.addFilterBefore(jwtFilter,UsernamePasswordAuthenticationFilter.class)   
-//				.build();
-//				
-//		
-//	}
-	
-	
+		
 	
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -96,12 +69,6 @@ public class SecurityConfig {
         return source;
     }
 	
-//	 @Bean
-//	    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-//		AuthenticationManagerBuilder builder =http.getSharedObject(AuthenticationManagerBuilder.class);
-//		builder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-//		return builder.build();		
-//	    }
 	
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {

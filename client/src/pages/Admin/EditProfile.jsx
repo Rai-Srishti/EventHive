@@ -19,7 +19,7 @@ const EditProfile = () => {
 
   useEffect(() => {
     if (adminData) {
-      setFormData(adminData); // prefill form with data from profile
+      setFormData(adminData);
     }
   }, [adminData]);
 
@@ -32,7 +32,7 @@ const EditProfile = () => {
 
   try {
     const message = await updateAdminProfile(formData);
-    alert(message); // from backend: "updated Successfully!!"
+    alert(message);
     navigate("/admin/profile");
   } catch (err) {
     alert("Failed to update profile.");
@@ -85,7 +85,7 @@ const EditProfile = () => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              readOnly // prevent editing email if it's used as username
+              readOnly
             />
           </div>
 

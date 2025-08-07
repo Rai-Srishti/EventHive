@@ -15,11 +15,18 @@ public class ApiResponse {
 
 	private String message;
 	private LocalDate timeStamp;
+	 private String status;
 	public ApiResponse(String message) {
 		
 		this.message = message;
 		timeStamp=LocalDate.now();
 	}
+	
+	public ApiResponse(String message, String status) {
+        this.message = message;
+        this.status = status;
+        this.timeStamp = LocalDate.now();
+    }
 	
 	
 	

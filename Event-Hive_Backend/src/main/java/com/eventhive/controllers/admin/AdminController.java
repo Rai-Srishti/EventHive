@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.eventhive.dto.admin.AdminDashboardDTO;
 import com.eventhive.dto.admin.AdminEditEventDTO;
 import com.eventhive.dto.admin.AdminUserRequestDTO;
 import com.eventhive.services.Admin.AdminEventService;
@@ -106,4 +107,10 @@ public class AdminController {
         
         return adminEventService.updateEditedEvent(eventId, dto);
     }
+	
+	@GetMapping("")
+	public ResponseEntity<AdminDashboardDTO> getDashboardStats(){
+		return ResponseEntity.ok(adminService.getDashboardStats());
+	}
+	
 }

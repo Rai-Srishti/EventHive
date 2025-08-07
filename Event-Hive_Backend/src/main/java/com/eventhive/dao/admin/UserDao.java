@@ -13,4 +13,5 @@ public interface UserDao extends JpaRepository<User, Long> {
 
 	List<User> findByRole(Role host);
 	User findByEmail(String email);
+	long countByRole(Role host);
 }

@@ -1,7 +1,5 @@
 package com.eventhive.services.authentication;
 
-import org.springframework.http.ResponseEntity;
-
 import com.eventhive.dto.authentication.LoginRequestDto;
 import com.eventhive.dto.authentication.LoginResponseDto;
 import com.eventhive.dto.authentication.SignupRequestDto;
