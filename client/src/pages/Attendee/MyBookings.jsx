@@ -1,4 +1,3 @@
-// src/pages/MyBookings.jsx
 import React, { useEffect, useState } from 'react';
 import BookingList from '../../components/BookingList';
 import { getMyBookings } from '../../services/attendeeService'; 
@@ -21,8 +20,7 @@ function MyBookings() {
 
     fetchBookings();
   }, []);
-
-  // Handle booking cancel event
+  
   const handleCancel = (cancelledTicketId) => {
     setBookings((prev) => prev.filter((b) => b.ticketId !== cancelledTicketId));
   };

@@ -61,9 +61,69 @@ const NewEventPage = () => {
     setFormData(prev => ({ ...prev, phases: updatedPhases }));
   };
 
+
+  const validateForm = () => {
+  const requiredFields = ["eventName", "description", "category", "city", "address", "eventDate", "artistName"];
+  for (let field of requiredFields) {
+    if (!formData[field] || formData[field].trim() === "") {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Missing Information',
+        text: `${field.charAt(0).toUpperCase() + field.slice(1)} is required.`,
+      });
+      return false;
+    }
+  }
+
+  // Check if event date is in the future
+  if (new Date(formData.eventDate) <= new Date()) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Invalid Event Date',
+      text: 'Event date must be in the future.',
+    });
+    return false;
+  }
+
+  // Validate each phase
+  for (let i = 0; i < formData.phases.length; i++) {
+    const phase = formData.phases[i];
+
+    if (phase.price < 0 || phase.availableTickets < 0) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Invalid Ticket or Price',
+        text: `Tickets and Price must be positive in ${phase.phaseName} phase.`,
+      });
+      return false;
+    }
+
+    if (!phase.startTime || !phase.endTime) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Missing Phase Times',
+        text: `Please provide both start and end times for ${phase.phaseName} phase.`,
+      });
+      return false;
+    }
+
+    if (new Date(phase.startTime) >= new Date(phase.endTime)) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Invalid Phase Time',
+        text: `Start time must be before end time in ${phase.phaseName} phase.`,
+      });
+      return false;
+    }
+  }
+
+  return true;
+};
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+   if (!validateForm()) return;
     const eventPayload = {
       eventName: formData.eventName,
       description: formData.description,
@@ -80,19 +140,25 @@ const NewEventPage = () => {
   
     if (photo) {
       payload.append("photo", photo);
-    } else {
+    }
+    
+    if (showCustomArtist && formData.artistPhoto) {
+    payload.append("artistPhoto", formData.artistPhoto);
+  }
+    
+    else {
       // Always send something, even if empty
       payload.append("photo", new Blob([], { type: "application/octet-stream" }));
     }
   
      const token = localStorage.getItem("token");
     const decoded = jwtDecode(token);
-    console.log("Decoded JWT:", decoded);
+    //console.log("Decoded JWT:", decoded);
     const hostId = decoded.sub;
   
     try {
           const response = await insertNewEvent(payload, hostId);
-          console.log("Event Created:", response.data);
+          //console.log("Event Created:", response.data);
          // alert("Event successfully submitted!");
          await Swal.fire({
           icon: 'success',
@@ -178,6 +244,7 @@ const NewEventPage = () => {
             </div>
 
             {showCustomArtist && (
+              <>
               <div className="mb-3">
                 <label className="form-label">Enter Artist Name:</label>
                 <input
@@ -187,6 +254,19 @@ const NewEventPage = () => {
                   onChange={handleCustomArtistChange}
                 />
               </div>
+
+              <div className="mb-3">
+      <label className="form-label">Upload Artist Photo:</label>
+      <input
+        type="file"
+        accept="image/*"
+        name="artistPhoto"
+        className="form-control"
+        onChange={(e) => setFormData(prev => ({ ...prev, artistPhoto: e.target.files[0] }))}
+      />
+    </div>
+
+              </>
             )}
 
             <h5 className="mt-4">Phases</h5>

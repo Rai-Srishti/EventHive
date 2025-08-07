@@ -16,7 +16,6 @@ public class MyUserDetailsService implements UserDetailsService {
 	@Autowired
 	private UserDao repo;
 	
-	//abstract class method 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		
@@ -30,7 +29,6 @@ public class MyUserDetailsService implements UserDetailsService {
 	}
 	
 	
-	// loadUserById has to be implemented
 	public UserDetails loadUserById(Long id) throws UsernameNotFoundException {
 	    User user = repo.findById(id)
 	                    .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + id));

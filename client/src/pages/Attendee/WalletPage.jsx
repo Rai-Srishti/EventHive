@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axiosInstance from '../../services/axiosInstance'; // ✅ Use your interceptor-based axios
+import axiosInstance from '../../services/axiosInstance';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const WalletPage = () => {
@@ -7,13 +7,13 @@ const WalletPage = () => {
   const [amount, setAmount] = useState('');
 
   useEffect(() => {
-    // ✅ Load Razorpay script
+    //Load Razorpay script
     const script = document.createElement('script');
     script.src = 'https://checkout.razorpay.com/v1/checkout.js';
     script.async = true;
     document.body.appendChild(script);
 
-    // ✅ Fetch wallet balance
+    //Fetch wallet balance
     const fetchBalance = async () => {
       try {
         const res = await axiosInstance.get('/attendee/wallet');

@@ -62,7 +62,7 @@ const AttendeeProfile = () => {
       return { valid: false, message: 'Please enter a valid email address.' };
     }
 
-    // Phone number: must be 10 digits (customize as per your country)
+    // Phone number: must be 10 digits
     const phoneRegex = /^\d{10}$/;
     if (!phoneRegex.test(trimmedData.phoneNumber)) {
       return { valid: false, message: 'Phone number must be 10 digits.' };

@@ -35,8 +35,6 @@ import lombok.AllArgsConstructor;
 public class HostController {
 
 	
-	//Dependency Injection 
-	//Field Based (2 Benefits)
 	private final HostService hostService;
 	private final HostEventService eventService;
 	private final HostArtist artistService;
@@ -46,13 +44,14 @@ public class HostController {
 
 @PostMapping(value = "/event", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	
-	public ResponseEntity<?> createEvent(
-	        @RequestPart("event") HostNewEventRequestDto dto,
-	        @RequestPart(value = "photo", required = false) MultipartFile photoFile,
-	        @RequestParam Long hostId) {
-	    
-	    return ResponseEntity.ok( hostService.enterEvent(dto, photoFile, hostId));
-	}
+public ResponseEntity<?> createEvent(
+        @RequestPart("event") HostNewEventRequestDto dto,
+        @RequestPart(value = "photo", required = false) MultipartFile photoFile,
+        @RequestPart(value = "artistPhoto", required = false) MultipartFile artistPhotoFile,
+        @RequestParam Long hostId) {
+    
+    return ResponseEntity.ok( hostService.enterEvent(dto, photoFile,artistPhotoFile, hostId));
+}
 	
 	//API For All Events of Host
 	@GetMapping("{hostId}")
