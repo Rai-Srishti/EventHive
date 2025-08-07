@@ -37,6 +37,7 @@ import { ToastContainer } from 'react-toastify';
 import PrivateRoute from './components/PrivateRoute';
 import HostArtist from  './pages/Host/HostArtist';
 import AttendeeProfile from './pages/Attendee/AttendeeProfile';
+import NotFound from './pages/NotFound';
 function App() {
   return (
     <>
@@ -139,6 +140,7 @@ function App() {
           <Route path="validate-ticket" element={<ValidateTicketPage />} />
 
         </Route>
+        <Route path="*" element={<NotFound/>}/>
       </Routes>
       <ToastContainer/>    </>
   );
