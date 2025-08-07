@@ -35,8 +35,6 @@ import lombok.AllArgsConstructor;
 public class HostController {
 
 	
-	//Dependency Injection 
-	//Field Based (2 Benefits)
 	private final HostService hostService;
 	private final HostEventService eventService;
 	private final HostArtist artistService;

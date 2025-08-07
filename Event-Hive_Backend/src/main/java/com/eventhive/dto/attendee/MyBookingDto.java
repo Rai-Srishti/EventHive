@@ -18,11 +18,11 @@ public class MyBookingDto {
     private String photo;
     private LocalDateTime eventDate;
 
-    private String phaseName;         // e.g. PLATINUM, GOLD, SILVER
+    private String phaseName;         
     private Integer quantity;
     private BigDecimal totalPrice;
 
     private LocalDateTime bookingDate;
-    private String ticketStatus;      // e.g. BOOKED, CANCELLED
+    private String ticketStatus;      
 }
 

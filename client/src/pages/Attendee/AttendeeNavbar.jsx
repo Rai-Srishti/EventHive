@@ -15,9 +15,7 @@ const AttendeeNavbar = () => {
     location.pathname === path ? 'nav-link active' : 'nav-link';
 
   const handleLogout = () => {
-    localStorage.clear(); // clears all items in localStorage
-    // Optionally navigate to login or home (if using react-router v6)
-    // navigate('/');
+    localStorage.clear(); // clear all items in localStorage
   };
 
   return (

@@ -1,5 +1,3 @@
-// src/pages/Attendee/EventDetailsPage.jsx
-
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
