@@ -14,8 +14,6 @@ import jakarta.persistence.LockModeType;
 
 public interface AttendeeEventPhaseDao extends JpaRepository<EventPhase, Long>{
 
-	//List<EventPhase> findByEventEventID(Long Id);
-
 	List<EventPhase> findByEvent_EventId(Long eventId);
 	
 	
