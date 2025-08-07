@@ -27,6 +27,7 @@ public class AdminController {
 	private final AdminService adminService;
 	private final JWTService jwtService;
 	
+	//--------------------Events----------------------------
 	@GetMapping("/events")
 	public ResponseEntity<?> getPendingEventsEvent(){
 		return ResponseEntity.ok(adminEventService.fetchpendingEvents());
@@ -37,10 +38,16 @@ public class AdminController {
 		return adminEventService.updateEvent(eventId);
 	}
 	
-	
+	//--------------------Hosts----------------------------
 	@GetMapping("/hosts")
 	public ResponseEntity<?> getAllHosts(){
 		return ResponseEntity.ok(adminService.fetchAllHosts());
+	}
+	
+	@PutMapping("/hosts/validate/{hostId}")
+	public ResponseEntity<?> validateHost(@PathVariable Long hostId){
+		return ResponseEntity.ok(adminService.validateHost(hostId));
+		
 	}
 	
 	@PutMapping("/hosts/block/{hostId}")
@@ -55,9 +62,17 @@ public class AdminController {
 		
 	}
 	
+	//--------------------users----------------------------
+	
 	@GetMapping("/attendee")
 	public ResponseEntity<?> getAllAttendee(){
 		return ResponseEntity.ok(adminService.fetchAllAttendee());
+	}
+	
+	@GetMapping("/attendee/validate/{attId}")
+	public ResponseEntity<?> validateAttendee(@PathVariable Long attId){
+		return ResponseEntity.ok(adminService.validateAttendee(attId));
+		
 	}
 	
 	@PutMapping("/attendee/block/{attId}")
@@ -71,11 +86,9 @@ public class AdminController {
 		return ResponseEntity.ok(adminService.unblockAttendee(attId));
 		
 	}
+
 	
-	@GetMapping("/events/approved")
-	public ResponseEntity<?> getApprovedEvents() {
-	    return ResponseEntity.ok(adminEventService.fetchApprovedEvents());
-	}
+	//--------------------Admin Profile----------------------------
 	
 	@GetMapping("/profile")
 	public ResponseEntity<?> showProfile(){
@@ -96,6 +109,13 @@ public class AdminController {
 	    return ResponseEntity.ok(adminEventService.findAll());
 	}
 	
+	//------------------------------Event Management----------------
+	
+	@GetMapping("/events/approved")
+	public ResponseEntity<?> getApprovedEvents() {
+	    return ResponseEntity.ok(adminEventService.fetchApprovedEvents());
+	}
+	
 	@GetMapping("events/edit/{eventId}")
     public ResponseEntity<AdminEditEventDTO> getEventForEdit(@PathVariable Long eventId) {
         return ResponseEntity.ok(adminEventService.getEventForEdit(eventId));
@@ -107,6 +127,9 @@ public class AdminController {
         
         return adminEventService.updateEditedEvent(eventId, dto);
     }
+	
+	
+	//--------------------Dashboard----------------------------
 	
 	@GetMapping("")
 	public ResponseEntity<AdminDashboardDTO> getDashboardStats(){

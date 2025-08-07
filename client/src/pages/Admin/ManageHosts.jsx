@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
+import Swal from "sweetalert2";
 import "../../assets/css/Admin/ManageRequest.css";
-import { fetchAllHosts,blockHost,unblockHost } from "../../services/adminService";
+import {
+  fetchAllHosts,
+  blockHost,
+  unblockHost,
+  validateHost,
+} from "../../services/adminService";
 
 const ManageHosts = () => {
   const [allHosts, setAllHosts] = useState([]);
@@ -12,30 +18,59 @@ const ManageHosts = () => {
     const fetchHosts = async () => {
       try {
         const response = await fetchAllHosts();
-        console.log("Fetched hosts:", response);
         setAllHosts(response);
       } catch (error) {
         console.error("Failed to fetch hosts:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Failed to fetch hosts.",
+        });
       }
     };
 
     fetchHosts();
   }, []);
 
- const handleBlockToggle = async (hostId, isCurrentlyBlocked) => {
-  try {
-    const message = isCurrentlyBlocked
-      ? await unblockHost(hostId)
-      : await blockHost(hostId);
+  const handleBlockToggle = async (hostId, isCurrentlyBlocked) => {
+    try {
+      const message = isCurrentlyBlocked
+        ? await unblockHost(hostId)
+        : await blockHost(hostId);
 
-    alert(message); 
-    
-    const updatedHosts = await fetchAllHosts();
-    setAllHosts(updatedHosts);
-  } catch (error) {
-    alert("Action failed. Please try again.");
-  }
-};
+      await Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: message,
+      });
+
+      const updatedHosts = await fetchAllHosts();
+      setAllHosts(updatedHosts);
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Failed!",
+        text: "Action failed. Please try again.",
+      });
+    }
+  };
+
+  const handleValidate = async (hostId) => {
+    try {
+      const message = await validateHost(hostId);
+      Swal.fire({
+        icon: "info",
+        title: "Validation Result",
+        text: message,
+      });
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Validation Failed",
+        text: "Please try again later.",
+      });
+    }
+  };
 
   const filteredHosts = allHosts.filter(
     (host) =>
@@ -118,10 +153,19 @@ const ManageHosts = () => {
                   <td>{host.country}</td>
                   <td>
                     <button
-                      className={host.status == "BLOCKED" ? "button-approve" : "button-reject"}
-                      onClick={() => handleBlockToggle(host.userId, host.status=="BLOCKED")}
+                      className="button-info"
+                      onClick={() => handleValidate(host.userId)}
+                      style={{ marginRight: "8px" }}
                     >
-                      {host.status=="BLOCKED" ? "Unblock" : "Block"}
+                      Validate
+                    </button>
+                    <button
+                      className={host.status === "BLOCKED" ? "button-approve" : "button-reject"}
+                      onClick={() =>
+                        handleBlockToggle(host.userId, host.status === "BLOCKED")
+                      }
+                    >
+                      {host.status === "BLOCKED" ? "Unblock" : "Block"}
                     </button>
                   </td>
                 </tr>
@@ -167,6 +211,3 @@ const ManageHosts = () => {
 };
 
 export default ManageHosts;
-
-
-

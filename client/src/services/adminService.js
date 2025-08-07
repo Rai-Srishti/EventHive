@@ -32,6 +32,17 @@ export const fetchAllHosts = async () => {
   }
 };
 
+// 4. Validate a host
+export const validateHost = async (hostId) => {
+  try {
+    const response = await axiosInstance.put(`${API}/hosts/validate/${hostId}`);
+    return response.data.message;
+  } catch (error) {
+    console.error(`Error validating host with ID ${hostId}`, error);
+    throw error;
+  }
+};
+
 // 2. Block a host (based on cancellation count > 5)
 export const blockHost = async (hostId) => {
   try {
@@ -58,6 +69,12 @@ export const unblockHost = async (hostId) => {
 export const fetchAllAttendees = async () => {
   const response = await axiosInstance.get(`${API}/attendee`);
   return response.data;
+};
+
+// Validate attendee
+export const validateAttendee = async (attendeeId) => {
+  const response = await axiosInstance.get(`${API}/attendee/validate/${attendeeId}`);
+  return response.data.message;
 };
 
 // Block attendee

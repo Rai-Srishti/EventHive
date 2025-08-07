@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "../../assets/css/Admin/ManageRequest.css";
-import { fetchAllAttendees, blockAttendee, unblockAttendee } from "../../services/adminService";
+import Swal from "sweetalert2";
+import {
+  fetchAllAttendees,
+  blockAttendee,
+  unblockAttendee,
+  validateAttendee,
+} from "../../services/adminService";
 
 const ManageUsers = () => {
   const [users, setUsers] = useState([]);
@@ -14,7 +20,7 @@ const ManageUsers = () => {
         const attendees = await fetchAllAttendees();
         setUsers(attendees);
       } catch (error) {
-        console.error("Error fetching attendees:", error);
+        Swal.fire("Error", "Failed to fetch attendees.", "error");
       }
     };
     fetchData();
@@ -25,13 +31,22 @@ const ManageUsers = () => {
       const message = isBlocked
         ? await unblockAttendee(userId)
         : await blockAttendee(userId);
-      alert(message);
 
-      // Refresh user list
+      await Swal.fire("Success", message, "success");
+
       const attendees = await fetchAllAttendees();
       setUsers(attendees);
     } catch (err) {
-      alert("Failed to update status.");
+      Swal.fire("Error", "Failed to update status.", "error");
+    }
+  };
+
+  const handleValidate = async (userId) => {
+    try {
+      const message = await validateAttendee(userId);
+      Swal.fire("Validation Result", message, "info");
+    } catch (err) {
+      Swal.fire("Error", "Validation failed. Try again later.", "error");
     }
   };
 
@@ -97,7 +112,6 @@ const ManageUsers = () => {
               <th>City</th>
               <th>State</th>
               <th>Country</th>
-              <th>Status</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -112,11 +126,19 @@ const ManageUsers = () => {
                   <td>{user.city}</td>
                   <td>{user.state}</td>
                   <td>{user.country}</td>
-                  <td>{user.status}</td>
                   <td>
                     <button
+                      className="button-info"
+                      style={{ marginRight: "8px" }}
+                      onClick={() => handleValidate(user.userId)}
+                    >
+                      Validate
+                    </button>
+                    <button
                       className={user.status === "BLOCKED" ? "button-approve" : "button-reject"}
-                      onClick={() => handleBlockToggle(user.userId, user.status === "BLOCKED")}
+                      onClick={() =>
+                        handleBlockToggle(user.userId, user.status === "BLOCKED")
+                      }
                     >
                       {user.status === "BLOCKED" ? "Unblock" : "Block"}
                     </button>

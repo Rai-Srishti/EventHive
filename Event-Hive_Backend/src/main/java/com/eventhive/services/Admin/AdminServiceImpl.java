@@ -49,22 +49,27 @@ public class AdminServiceImpl implements AdminService{
 	}
 
 	@Override
-	public ApiResponse updateHost(Long hostId) {
+	public ApiResponse validateHost(Long hostId) {
 		User host = adminUserDao.findById(hostId)
 				.orElseThrow(()->new UserNotFoundException("Host Not Found!!"));
 		
 		int countCancelEvent = adminEventDao.countCancelledEventsByHost(hostId);
 		
 		if(countCancelEvent>5) {
-			host.setStatus(UserStatus.BLOCKED);
-			adminUserDao.save(host);
-			return new ApiResponse("Host has been blocked due to excessive cancellations.");
+			return new ApiResponse("Host has cancelled "+countCancelEvent+" Events — Threshold Reached.");
 		}
-		
-		
-		return new ApiResponse("Host has cancelled "+countCancelEvent+" Events — threshold not reached.");
+		return new ApiResponse("Host has cancelled "+countCancelEvent+" Events — Threshold not reached.");
 	}
 
+	@Override
+	public ApiResponse updateHost(Long hostId) {
+		User host = adminUserDao.findById(hostId)
+				.orElseThrow(()->new UserNotFoundException("Host Not Found!!"));
+		host.setStatus(UserStatus.BLOCKED);
+		adminUserDao.save(host);
+		return new ApiResponse("Host has been Blocked!!");
+	}
+	
 	@Override
 	public ApiResponse unblockHost(Long hostId) {
 		User host = adminUserDao.findById(hostId)
@@ -88,18 +93,25 @@ public class AdminServiceImpl implements AdminService{
 	}
 
 	@Override
-	public ApiResponse updateAttendee(Long attId) {
+	public ApiResponse validateAttendee(Long attId) {
 		User attendee = adminUserDao.findById(attId)
 				.orElseThrow(()->new UserNotFoundException("Attendee Not Found!!"));
 		
 		int countCancelEvent = adminTicketDao.countCancelledTicketByAttendee(attId);
 		
 		if(countCancelEvent>5) {
-			attendee.setStatus(UserStatus.BLOCKED);
-			adminUserDao.save(attendee);
-			return new ApiResponse("Attendee has been blocked due to excessive cancellations.","BLOCKED");
+			return new ApiResponse("Attendee has cancelled "+countCancelEvent+" Events — Threshold Reached.");
 		}
-		return new ApiResponse("Attendee has cancelled "+countCancelEvent+" Events — threshold not reached.","ACTIVE");	
+		return new ApiResponse("Attendee has cancelled "+countCancelEvent+" Events — Threshold not Reached.");	
+	}
+	
+	@Override
+	public ApiResponse updateAttendee(Long attId) {
+		User attendee = adminUserDao.findById(attId)
+				.orElseThrow(()->new UserNotFoundException("Attendee Not Found!!"));
+		attendee.setStatus(UserStatus.BLOCKED);
+		adminUserDao.save(attendee);
+		return new ApiResponse("User has been Unblocked!!");
 	}
 
 	@Override
@@ -108,7 +120,7 @@ public class AdminServiceImpl implements AdminService{
 				.orElseThrow(()->new UserNotFoundException("Attendee Not Found!!"));
 		attendee.setStatus(UserStatus.ACTIVE);
 		adminUserDao.save(attendee);
-		return new ApiResponse("Attendee has been Unblocked!!");
+		return new ApiResponse("User has been Unblocked!!");
 	}
 	
 	//------------------Manage Profile -------------------------
@@ -148,5 +160,7 @@ public class AdminServiceImpl implements AdminService{
 
 	        return new AdminDashboardDTO(pendingEvents, approvedEvents, rejectedEvents,totalEvents, totalUsers, totalHosts,totalAttendee);
 	}
+
+	
 	
 }
