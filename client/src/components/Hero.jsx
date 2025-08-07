@@ -24,14 +24,11 @@ const Hero = () => {
             </h1>
 
             {/* Buttons */}
-            <div className="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start">
-              <Button size="lg" className="hero-btn--primary">
-                Join Now
-              </Button>
-              <Button size="lg" variant="outline-danger" className="hero-btn--outline">
-                Discover More
-              </Button>
-            </div>
+          <div className="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start">
+            <span className="fs-5 fw-semibold text-muted">
+              Discover unforgettable moments. Book tickets, meet artists, and explore events near you.
+            </span>
+          </div>
           </Col>
 
           {/* ─────────────── Right image ─────────────── */}
