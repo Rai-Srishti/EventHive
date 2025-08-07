@@ -61,9 +61,69 @@ const NewEventPage = () => {
     setFormData(prev => ({ ...prev, phases: updatedPhases }));
   };
 
+
+  const validateForm = () => {
+  const requiredFields = ["eventName", "description", "category", "city", "address", "eventDate", "artistName"];
+  for (let field of requiredFields) {
+    if (!formData[field] || formData[field].trim() === "") {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Missing Information',
+        text: `${field.charAt(0).toUpperCase() + field.slice(1)} is required.`,
+      });
+      return false;
+    }
+  }
+
+  // Check if event date is in the future
+  if (new Date(formData.eventDate) <= new Date()) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Invalid Event Date',
+      text: 'Event date must be in the future.',
+    });
+    return false;
+  }
+
+  // Validate each phase
+  for (let i = 0; i < formData.phases.length; i++) {
+    const phase = formData.phases[i];
+
+    if (phase.price < 0 || phase.availableTickets < 0) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Invalid Ticket or Price',
+        text: `Tickets and Price must be positive in ${phase.phaseName} phase.`,
+      });
+      return false;
+    }
+
+    if (!phase.startTime || !phase.endTime) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Missing Phase Times',
+        text: `Please provide both start and end times for ${phase.phaseName} phase.`,
+      });
+      return false;
+    }
+
+    if (new Date(phase.startTime) >= new Date(phase.endTime)) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Invalid Phase Time',
+        text: `Start time must be before end time in ${phase.phaseName} phase.`,
+      });
+      return false;
+    }
+  }
+
+  return true;
+};
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+   if (!validateForm()) return;
     const eventPayload = {
       eventName: formData.eventName,
       description: formData.description,
