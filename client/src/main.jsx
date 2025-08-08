@@ -5,6 +5,9 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './store/Store';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import {setupSyncfusionLicense} from "./syncfusion-license"
+
+setupSyncfusionLicense();
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -15,3 +18,4 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     </Provider>
   </React.StrictMode>
 );
+

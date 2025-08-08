@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from "react";
-import "../../assets/css/Admin/ManageRequest.css";
 import Swal from "sweetalert2";
+import {
+  GridComponent,
+  ColumnsDirective,
+  ColumnDirective,
+  Sort,
+  Toolbar,
+  ExcelExport,
+  Page,
+  Inject,
+} from "@syncfusion/ej2-react-grids";
+
 import {
   fetchAllAttendees,
   blockAttendee,
@@ -8,23 +18,27 @@ import {
   validateAttendee,
 } from "../../services/adminService";
 
+import "@syncfusion/ej2-base/styles/material.css";
+import "@syncfusion/ej2-buttons/styles/material.css";
+import "@syncfusion/ej2-react-grids/styles/material.css";
+
 const ManageUsers = () => {
   const [users, setUsers] = useState([]);
-  const [page, setPage] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
-  const usersPerPage = 10;
+  let gridRef = null;
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const attendees = await fetchAllAttendees();
-        setUsers(attendees);
-      } catch (error) {
-        Swal.fire("Error", "Failed to fetch attendees.", "error");
-      }
-    };
-    fetchData();
+    loadUsers();
   }, []);
+
+  const loadUsers = async () => {
+    try {
+      const attendees = await fetchAllAttendees();
+      setUsers(attendees);
+    } catch (error) {
+      Swal.fire("Error", "Failed to fetch attendees.", "error");
+    }
+  };
 
   const handleBlockToggle = async (userId, isBlocked) => {
     try {
@@ -33,9 +47,7 @@ const ManageUsers = () => {
         : await blockAttendee(userId);
 
       await Swal.fire("Success", message, "success");
-
-      const attendees = await fetchAllAttendees();
-      setUsers(attendees);
+      loadUsers();
     } catch (err) {
       Swal.fire("Error", "Failed to update status.", "error");
     }
@@ -50,137 +62,148 @@ const ManageUsers = () => {
     }
   };
 
+  // Toolbar options for Excel export
+  const toolbarOptions = ["ExcelExport"];
+
+  const toolbarClick = (args) => {
+    if (gridRef && args.item.id.includes("excelexport")) {
+      gridRef.excelExport();
+    }
+  };
+
+  // Filter users by search term (name or email or phone etc.)
   const filteredUsers = users.filter((user) =>
-    `${user.firstName} ${user.lastName}`.toLowerCase().includes(searchTerm.toLowerCase())
+    (
+      `${user.firstName} ${user.lastName} ${user.email} ${user.phoneNumber} ${user.city} ${user.state} ${user.country}`
+    )
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase())
   );
 
-  const startIndex = page * usersPerPage;
-  const currentUsers = filteredUsers.slice(startIndex, startIndex + usersPerPage);
-
-  useEffect(() => {
-    if (page > 0 && startIndex >= filteredUsers.length) {
-      setPage(0);
-    }
-  }, [searchTerm, filteredUsers.length, page, startIndex]);
+  // Action buttons template for grid
+  const actionTemplate = (props) => (
+    <div>
+      <button
+        style={{ marginRight: "8px" }}
+        className="button-info"
+        onClick={() => handleValidate(props.userId)}
+      >
+        Validate
+      </button>
+      <button
+        className={props.status === "BLOCKED" ? "button-approve" : "button-reject"}
+        onClick={() => handleBlockToggle(props.userId, props.status === "BLOCKED")}
+      >
+        {props.status === "BLOCKED" ? "Unblock" : "Block"}
+      </button>
+    </div>
+  );
 
   return (
-    <div className="manage-request-container">
-      <div className="manage-request-content">
-        {/* Title */}
-        <div style={{ textAlign: "center", marginBottom: "1rem" }}>
-          <h1
-            style={{
-              fontFamily: "'Segoe UI', sans-serif",
-              fontSize: "2rem",
-              fontWeight: "700",
-              color: "#000",
-              display: "inline-block",
-              borderBottom: "3px solid #E2215F",
-              paddingBottom: "4px",
-              marginBottom: "1.5rem",
-            }}
-          >
-            Manage Users
-          </h1>
-        </div>
-
-        {/* Search Bar */}
-        <div className="search-bar" style={{ marginBottom: "1rem", textAlign: "center" }}>
-          <input
-            type="text"
-            placeholder="Search by name..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            style={{
-              padding: "8px",
-              width: "50%",
-              borderRadius: "5px",
-              border: "1px solid #ccc",
-              boxShadow: "0px 1px 4px rgba(0, 0, 0, 0.1)",
-            }}
-          />
-        </div>
-
-        {/* Table */}
-        <table className="manage-request-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Phone</th>
-              <th>City</th>
-              <th>State</th>
-              <th>Country</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentUsers.length > 0 ? (
-              currentUsers.map((user) => (
-                <tr key={user.userId}>
-                  <td>{user.userId}</td>
-                  <td>{user.firstName} {user.lastName}</td>
-                  <td>{user.email}</td>
-                  <td>{user.phoneNumber}</td>
-                  <td>{user.city}</td>
-                  <td>{user.state}</td>
-                  <td>{user.country}</td>
-                  <td>
-                    <button
-                      className="button-info"
-                      style={{ marginRight: "8px" }}
-                      onClick={() => handleValidate(user.userId)}
-                    >
-                      Validate
-                    </button>
-                    <button
-                      className={user.status === "BLOCKED" ? "button-approve" : "button-reject"}
-                      onClick={() =>
-                        handleBlockToggle(user.userId, user.status === "BLOCKED")
-                      }
-                    >
-                      {user.status === "BLOCKED" ? "Unblock" : "Block"}
-                    </button>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="9" style={{ textAlign: "center" }}>
-                  No users found.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-
-        {/* Pagination */}
-        <div
+    <div style={{ padding: "20px" }}>
+      <div style={{ textAlign: "center", marginBottom: "1.5rem" }}>
+        <h1
           style={{
-            marginTop: "20px",
-            display: "flex",
-            justifyContent: "center",
-            gap: "10px",
+            fontFamily: "'Segoe UI', sans-serif",
+            fontSize: "2rem",
+            fontWeight: "700",
+            color: "#000",
+            display: "inline-block",
+            borderBottom: "3px solid #E2215F",
+            paddingBottom: "4px",
           }}
         >
-          <button
-            onClick={() => setPage((prev) => prev - 1)}
-            disabled={page === 0}
-            className="pagination-btn"
-          >
-            Previous
-          </button>
-          <span>Page {page + 1}</span>
-          <button
-            onClick={() => setPage((prev) => prev + 1)}
-            disabled={(page + 1) * usersPerPage >= filteredUsers.length}
-            className="pagination-btn"
-          >
-            Next
-          </button>
-        </div>
+          Manage Users
+        </h1>
       </div>
+
+      {/* Search input */}
+      <div style={{ marginBottom: "10px", textAlign: "right" }}>
+        <input
+          type="text"
+          placeholder="Search users..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          style={{
+            padding: "8px",
+            width: "250px",
+            borderRadius: "5px",
+            border: "1px solid #ccc",
+          }}
+        />
+      </div>
+
+      <GridComponent
+        dataSource={filteredUsers}
+        allowSorting={true}
+        allowPaging={true}
+        pageSettings={{ pageSize: 10 }}
+        toolbar={toolbarOptions}
+        toolbarClick={toolbarClick}
+        ref={(g) => (gridRef = g)}
+        allowExcelExport={true}
+        height={400}
+      >
+        <ColumnsDirective>
+          <ColumnDirective
+            field="userId"
+            headerText="ID"
+            width="90"
+            textAlign="Center"
+          />
+          <ColumnDirective
+            headerText="Name"
+            width="160"
+            textAlign="Center"
+            template={(props) => `${props.firstName} ${props.lastName}`}
+          />
+          <ColumnDirective
+            field="email"
+            headerText="Email"
+            width="180"
+            textAlign="Center"
+          />
+          <ColumnDirective
+            field="phoneNumber"
+            headerText="Phone"
+            width="130"
+            textAlign="Center"
+          />
+          <ColumnDirective
+            field="city"
+            headerText="City"
+            width="100"
+            textAlign="Center"
+          />
+          <ColumnDirective
+            field="state"
+            headerText="State"
+            width="100"
+            textAlign="Center"
+          />
+          <ColumnDirective
+            field="country"
+            headerText="Country"
+            width="100"
+            textAlign="Center"
+          />
+          <ColumnDirective
+            headerText="Actions"
+            width="200"
+            textAlign="Center"
+            template={actionTemplate}
+          />
+        </ColumnsDirective>
+        <Inject services={[Sort, Toolbar, ExcelExport, Page]} />
+      </GridComponent>
+
+      {/* Pagination left align override */}
+      <style>{`
+        .e-pager.e-lib {
+          justify-content: flex-start !important;
+          padding-left: 0 !important;
+        }
+      `}</style>
     </div>
   );
 };
