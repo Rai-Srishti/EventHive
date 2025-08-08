@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
-import "../../assets/css/Admin/ManageRequest.css";
+import {
+  GridComponent,
+  ColumnsDirective,
+  ColumnDirective,
+  Sort,
+  Toolbar,
+  ExcelExport,
+  Page,            
+  Inject,
+} from "@syncfusion/ej2-react-grids";
+
 import {
   fetchAllHosts,
   blockHost,
@@ -8,11 +18,14 @@ import {
   validateHost,
 } from "../../services/adminService";
 
+import "@syncfusion/ej2-base/styles/material.css";
+import "@syncfusion/ej2-buttons/styles/material.css";
+import "@syncfusion/ej2-react-grids/styles/material.css";
+
 const ManageHosts = () => {
   const [allHosts, setAllHosts] = useState([]);
-  const [page, setPage] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
-  const hostsPerPage = 10;
+  let gridRef = null;
 
   useEffect(() => {
     const fetchHosts = async () => {
@@ -28,7 +41,6 @@ const ManageHosts = () => {
         });
       }
     };
-
     fetchHosts();
   }, []);
 
@@ -72,140 +84,147 @@ const ManageHosts = () => {
     }
   };
 
-  const filteredHosts = allHosts.filter(
-    (host) =>
-      host.firstName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      host.lastName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      host.email?.toLowerCase().includes(searchTerm.toLowerCase())
+  // Toolbar for Excel Export
+  const toolbarOptions = ["ExcelExport"];
+  const toolbarClick = (args) => {
+    if (gridRef && args.item.id.includes("excelexport")) {
+      gridRef.excelExport();
+    }
+  };
+
+  // Filter data based on search term
+  const filteredHosts = allHosts.filter((host) =>
+    Object.values(host).some(
+      (value) =>
+        value &&
+        value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+    )
   );
 
-  const startIndex = page * hostsPerPage;
-  const currentHosts = filteredHosts.slice(startIndex, startIndex + hostsPerPage);
-
-  useEffect(() => {
-    if (page > 0 && startIndex >= filteredHosts.length) {
-      setPage(0);
-    }
-  }, [searchTerm, filteredHosts.length, page, startIndex]);
-
   return (
-    <div className="manage-request-container">
-      <div className="manage-request-content">
-        {/* Title */}
-        <div style={{ textAlign: "center", marginBottom: "1rem" }}>
-          <h1
-            style={{
-              fontFamily: "'Segoe UI', sans-serif",
-              fontSize: "2rem",
-              fontWeight: "700",
-              color: "#000",
-              display: "inline-block",
-              borderBottom: "3px solid #E2215F",
-              paddingBottom: "4px",
-              marginBottom: "1.5rem",
-            }}
-          >
-            Manage Hosts
-          </h1>
-        </div>
-
-        {/* Search Bar */}
-        <div className="search-bar" style={{ marginBottom: "1rem", textAlign: "center" }}>
-          <input
-            type="text"
-            placeholder="Search by name or email..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            style={{
-              padding: "8px",
-              width: "50%",
-              borderRadius: "5px",
-              border: "1px solid #ccc",
-              boxShadow: "0px 1px 4px rgba(0, 0, 0, 0.1)",
-            }}
-          />
-        </div>
-
-        {/* Table */}
-        <table className="manage-request-table">
-          <thead>
-            <tr>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>Email</th>
-              <th>Phone</th>
-              <th>City</th>
-              <th>State</th>
-              <th>Country</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentHosts.length > 0 ? (
-              currentHosts.map((host, index) => (
-                <tr key={index}>
-                  <td>{host.firstName}</td>
-                  <td>{host.lastName}</td>
-                  <td>{host.email}</td>
-                  <td>{host.phoneNumber}</td>
-                  <td>{host.city}</td>
-                  <td>{host.state}</td>
-                  <td>{host.country}</td>
-                  <td>
-                    <button
-                      className="button-info"
-                      onClick={() => handleValidate(host.userId)}
-                      style={{ marginRight: "8px" }}
-                    >
-                      Validate
-                    </button>
-                    <button
-                      className={host.status === "BLOCKED" ? "button-approve" : "button-reject"}
-                      onClick={() =>
-                        handleBlockToggle(host.userId, host.status === "BLOCKED")
-                      }
-                    >
-                      {host.status === "BLOCKED" ? "Unblock" : "Block"}
-                    </button>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="8" style={{ textAlign: "center" }}>
-                  No hosts found.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-
-        {/* Pagination */}
-        <div
+    <div style={{ }}>
+      <div style={{ textAlign: "center" }}>
+        <h1
           style={{
-            marginTop: "20px",
-            display: "flex",
-            justifyContent: "center",
-            gap: "10px",
+            fontFamily: "'Segoe UI', sans-serif",
+            fontSize: "2rem",
+            fontWeight: "700",
+            color: "#000",
+            display: "inline-block",
+            borderBottom: "3px solid #E2215F",
+            paddingBottom: "4px",
+            marginBottom: "1.5rem",
           }}
         >
-          <button
-            onClick={() => setPage((prev) => prev - 1)}
-            disabled={page === 0}
-            className="pagination-btn"
-          >
-            Previous
-          </button>
-          <span>Page {page + 1}</span>
-          <button
-            onClick={() => setPage((prev) => prev + 1)}
-            disabled={(page + 1) * hostsPerPage >= filteredHosts.length}
-            className="pagination-btn"
-          >
-            Next
-          </button>
-        </div>
+          Manage Hosts
+        </h1>
       </div>
+
+      {/* Search bar */}
+      <div style={{ marginBottom: "10px", textAlign: "right" }}>
+        <input
+          type="text"
+          placeholder="Search hosts..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          style={{
+            padding: "8px",
+            width: "250px",
+            borderRadius: "5px",
+            border: "1px solid #ccc",
+          }}
+        />
+      </div>
+
+      <GridComponent
+        dataSource={filteredHosts}
+        allowSorting={true}
+        allowPaging={true}               // Pagination enabled here
+        pageSettings={{ pageSize: 10 }}  // Optional: 10 rows per page
+        toolbar={toolbarOptions}
+        toolbarClick={toolbarClick}
+        ref={(g) => (gridRef = g)}
+        allowExcelExport={true}
+        height={400}
+      >
+        <ColumnsDirective>
+          <ColumnDirective
+            field="firstName"
+            headerText="First Name"
+            width="120"
+            textAlign="Center"
+            allowSorting={true}
+          />
+          <ColumnDirective
+            field="lastName"
+            headerText="Last Name"
+            width="120"
+            textAlign="Center"
+          />
+          <ColumnDirective
+            field="email"
+            headerText="Email"
+            width="200"
+            textAlign="Center"
+          />
+          <ColumnDirective
+            field="phoneNumber"
+            headerText="Phone"
+            width="130"
+            textAlign="Center"
+          />
+          <ColumnDirective
+            field="city"
+            headerText="City"
+            width="100"
+            textAlign="Center"
+          />
+          <ColumnDirective
+            field="state"
+            headerText="State"
+            width="100"
+            textAlign="Center"
+          />
+          <ColumnDirective
+            field="country"
+            headerText="Country"
+            width="100"
+            textAlign="Center"
+          />
+          <ColumnDirective
+            headerText="Actions"
+            textAlign="Center"
+            width="200"
+            template={(props) => (
+              <div>
+                <button
+                  style={{ marginRight: "8px" }}
+                  onClick={() => handleValidate(props.userId)}
+                  className="button-info"
+                >
+                  Validate
+                </button>
+                <button
+                  onClick={() =>
+                    handleBlockToggle(
+                      props.userId,
+                      props.status === "BLOCKED"
+                    )
+                  }
+                  className={
+                    props.status === "BLOCKED"
+                      ? "button-approve"
+                      : "button-reject"
+                  }
+                >
+                  {props.status === "BLOCKED" ? "Unblock" : "Block"}
+                </button>
+              </div>
+            )}
+          />
+        </ColumnsDirective>
+        <Inject services={[Sort, Toolbar, ExcelExport, Page]} /> {/* Page injected */}
+      </GridComponent>
     </div>
   );
 };

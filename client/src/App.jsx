@@ -39,6 +39,7 @@ import HostArtist from  './pages/Host/HostArtist';
 import AttendeeProfile from './pages/Attendee/AttendeeProfile';
 import NotFound from './pages/NotFound';
 import Unauthorized from './pages/Unauthorized';
+
 function App() {
   return (
     <>
@@ -118,8 +119,6 @@ function App() {
 
         {/* Admin Routes */}
         <Route path="/admin" element={<PrivateRoute allowedRoles={['SUPERADMIN']}><AdminLayout /> </PrivateRoute>}>
-          {/* <Route path="categories" element={<ManageCategories />} />
-          <Route path="categories/edit/:id" element={<EditCategory />} /> */}
           <Route path="events" element={<ManageEvents />} />
           <Route path="events/edit/:id" element={<EditEvent />} />
           <Route path="requests" element={<ManageRequest />} />

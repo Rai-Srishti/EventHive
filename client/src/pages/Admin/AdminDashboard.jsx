@@ -1,21 +1,41 @@
-
 import React, { useEffect, useState } from "react";
 import { fetchAdminDashboardStats } from "../../services/adminService";
 import "../../assets/css/Admin/AdminDashboard.css";
+
 import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
+  ChartComponent,
+  SeriesCollectionDirective,
+  SeriesDirective,
+  Inject,
+  ColumnSeries,
+  Category,
   Tooltip,
   Legend,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-  Label,
-} from "recharts";
+  DataLabel,
+} from "@syncfusion/ej2-react-charts";
+
+// Chart imports for accumulation charts (Pie/Doughnut)
+import {
+  AccumulationChartComponent,
+  AccumulationSeriesCollectionDirective,
+  AccumulationSeriesDirective,
+  AccumulationDataLabel,
+  AccumulationLegend,
+  PieSeries,
+  AccumulationTooltip,
+} from "@syncfusion/ej2-react-charts";
+
+// Syncfusion CSS
+import "@syncfusion/ej2-base/styles/material.css";
+import "@syncfusion/ej2-buttons/styles/material.css";
+import "@syncfusion/ej2-calendars/styles/material.css";
+import "@syncfusion/ej2-dropdowns/styles/material.css";
+import "@syncfusion/ej2-inputs/styles/material.css";
+import "@syncfusion/ej2-navigations/styles/material.css";
+import "@syncfusion/ej2-popups/styles/material.css";
+import "@syncfusion/ej2-splitbuttons/styles/material.css";
+//import "@syncfusion/ej2-react-charts/styles/material.css";
+
 
 const AdminDashboard = () => {
   const [counts, setCounts] = useState({
@@ -54,20 +74,15 @@ const AdminDashboard = () => {
   ];
 
   const barChartData = [
-    { name: "Pending", count: counts.totalPendingEvents },
-    { name: "Approved", count: counts.totalApprovedEvents },
-    { name: "Rejected", count: counts.totalRejectedEvents },
+    { status: "Pending", count: counts.totalPendingEvents },
+    { status: "Approved", count: counts.totalApprovedEvents },
+    { status: "Rejected", count: counts.totalRejectedEvents },
   ];
 
   const pieData = [
-    { name: "Hosts", value: counts.totalHosts },
-    { name: "Attendees", value: counts.totalAttendee },
+    { x: "Hosts", y: counts.totalHosts, text: `${counts.totalHosts}` },
+    { x: "Attendees", y: counts.totalAttendee, text: `${counts.totalAttendee}` },
   ];
-
-  const COLORS = ["#6366F1", "#10B981"]; // Indigo, Emerald
-
-  const renderCustomizedLabel = ({ percent }) =>
-    `${(percent * 100).toFixed(0)}%`;
 
   return (
     <div className="dashboard-container" style={{ display: "flex" }}>
@@ -97,9 +112,8 @@ const AdminDashboard = () => {
           </h2>
         </div>
 
-        {/* Stats Cards */}
+        {/* Stats */}
         <div
-          className="stats-grid"
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
@@ -109,7 +123,6 @@ const AdminDashboard = () => {
           {stats.map((stat, index) => (
             <div
               key={index}
-              className="stat-card"
               style={{
                 background: "#fff",
                 padding: "20px",
@@ -148,69 +161,66 @@ const AdminDashboard = () => {
           ))}
         </div>
 
-        {/* Bar Chart */}
+        {/* Column Chart */}
         <div style={{ marginTop: "50px" }}>
-          <h3
-            style={{
-              textAlign: "center",
-              fontSize: "1.5rem",
-              marginBottom: "20px",
-              color: "#333",
-            }}
-          >
+          <h3 style={{ textAlign: "center", fontSize: "1.5rem", marginBottom: "20px" }}>
             Event Status Overview
           </h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart
-              data={barChartData}
-              margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="count" fill="#E2215F" barSize={40} />
-            </BarChart>
-          </ResponsiveContainer>
+          <ChartComponent
+            primaryXAxis={{ valueType: "Category", title: "Status" }}
+            primaryYAxis={{ title: "Count" }}
+            tooltip={{ enable: true }}
+            legendSettings={{ visible: false }}
+            width="100%"
+            height="300px"
+          >
+            <Inject services={[ColumnSeries, Tooltip, Legend, Category, DataLabel]} />
+            <SeriesCollectionDirective>
+              <SeriesDirective
+                dataSource={barChartData}
+                xName="status"
+                yName="count"
+                type="Column"
+                fill="#E2215F"
+                marker={{ dataLabel: { visible: true } }}
+              />
+            </SeriesCollectionDirective>
+          </ChartComponent>
         </div>
 
         {/* Pie Chart */}
         <div style={{ marginTop: "50px" }}>
-          <h3
-            style={{
-              textAlign: "center",
-              fontSize: "1.5rem",
-              marginBottom: "20px",
-              color: "#333",
-            }}
-          >
+          <h3 style={{ textAlign: "center", fontSize: "1.5rem", marginBottom: "20px" }}>
             Hosts vs Attendees
           </h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie
-                data={pieData}
-                cx="50%"
-                cy="50%"
-                outerRadius={100}
-                labelLine={false}
-                label={renderCustomizedLabel}
-                dataKey="value"
-              >
-                {pieData.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                    stroke="#fff"
-                    strokeWidth={2}
-                  />
-                ))}
-              </Pie>
-              <Tooltip />
-              <Legend />
-            </PieChart>
-          </ResponsiveContainer>
+          <AccumulationChartComponent
+            legendSettings={{ visible: true }}
+            tooltip={{ enable: true }}
+            width="100%"
+            height="300px"
+          >
+            <Inject
+              services={[
+                PieSeries,
+                AccumulationDataLabel,
+                AccumulationLegend,
+                AccumulationTooltip,
+              ]}
+            />
+            <AccumulationSeriesCollectionDirective>
+              <AccumulationSeriesDirective
+                dataSource={pieData}
+                xName="x"
+                yName="y"
+                type="Pie"
+                dataLabel={{
+                  visible: true,
+                  position: "Inside",
+                  name: "text",
+                }}
+              />
+            </AccumulationSeriesCollectionDirective>
+          </AccumulationChartComponent>
         </div>
       </div>
     </div>
@@ -218,3 +228,5 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
+
+
