@@ -16,14 +16,16 @@ function Register() {
     city: '',
     state: '',
     country: '',
-    role: 'ATTENDEE' // Default selection
+    role: 'ATTENDEE'
   });
 
   const navigate = useNavigate();
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const phoneRegex = /^[0-9]{10}$/;
 
-  const onRegister = async () => {
+  const onRegister = async (e) => {
+    e.preventDefault(); // prevent page reload
+
     const {
       first_name,
       last_name,
@@ -71,7 +73,7 @@ function Register() {
       city,
       state,
       country,
-      role // already "HOST" or "ATTENDEE"
+      role
     };
 
     try {
@@ -92,7 +94,12 @@ function Register() {
         <div style={{ width: '80px', height: '4px', backgroundColor: '#dc3545', margin: '0.5rem auto 0' }} />
       </div>
 
-      <form className="mx-auto p-4 border rounded shadow-sm w-100" style={{ maxWidth: '600px', backgroundColor: '#f8f9fa' }}>
+      {/* Changed onSubmit here */}
+      <form 
+        className="mx-auto p-4 border rounded shadow-sm w-100" 
+        style={{ maxWidth: '600px', backgroundColor: '#f8f9fa' }}
+        onSubmit={onRegister}
+      >
         {/* Basic fields */}
         <div className="mb-3">
           <label className="form-label"><strong>First Name</strong></label>
@@ -185,7 +192,6 @@ function Register() {
           )}
         </div>
 
-        {/* ✅ Updated Role Dropdown */}
         <div className="mb-3">
           <label className="form-label"><strong>Role</strong></label>
           <select
@@ -198,7 +204,8 @@ function Register() {
           </select>
         </div>
 
-        <button type="button" className="btn btn-danger w-100 fw-bold" onClick={onRegister}>
+        {/* Changed type to submit so Enter works */}
+        <button type="submit" className="btn btn-danger w-100 fw-bold">
           Sign Up
         </button>
 
