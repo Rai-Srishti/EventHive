@@ -1,8 +1,11 @@
-
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import {fetchEventById,fetchAllArtists,updateEditedEvent,} from "../../services/adminService";
+import {
+  fetchEventById,
+  fetchAllArtists,
+  updateEditedEvent,
+} from "../../services/adminService";
 import "../../assets/css/Admin/EditEvent.css";
 
 const EditEvent = () => {
@@ -51,10 +54,6 @@ const EditEvent = () => {
     setEventData({ ...eventData, [e.target.name]: e.target.value });
   };
 
-  const handleArtistChange = (e) => {
-    setSelectedArtistId(Number(e.target.value));
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -83,6 +82,12 @@ const EditEvent = () => {
 
   if (!eventData) return <p>Loading...</p>;
 
+  const readOnlyStyle = {
+    backgroundColor: "#f4f3f3ff", // darker gray
+    color: "#333",
+    fontWeight: "500",
+  };
+
   return (
     <div className="edit-event-container">
       <div className="edit-event-box">
@@ -90,7 +95,12 @@ const EditEvent = () => {
         <form onSubmit={handleSubmit} className="edit-event-form">
           <div className="form-group">
             <label>Host:</label>
-            <input type="text" value={eventData.host?.firstName || "N/A"} readOnly />
+            <input
+              type="text"
+              value={`${eventData.host?.firstName || ""} ${eventData.host?.lastName || ""}`}
+              readOnly
+              style={readOnlyStyle}
+            />
           </div>
 
           <div className="form-group">
@@ -99,6 +109,7 @@ const EditEvent = () => {
               type="text"
               value={new Date(eventData.eventDate).toLocaleString()}
               readOnly
+              style={readOnlyStyle}
             />
           </div>
 
@@ -129,8 +140,8 @@ const EditEvent = () => {
               type="text"
               name="city"
               value={eventData.city}
-              onChange={handleChange}
-              required
+              readOnly
+              style={readOnlyStyle}
             />
           </div>
 
@@ -140,8 +151,8 @@ const EditEvent = () => {
               type="text"
               name="address"
               value={eventData.address}
-              onChange={handleChange}
-              required
+              readOnly
+              style={readOnlyStyle}
             />
           </div>
 
@@ -158,18 +169,16 @@ const EditEvent = () => {
 
           <div className="form-group">
             <label>Artist:</label>
-            <select
-              value={selectedArtistId}
-              onChange={handleArtistChange}
-              required
-            >
-              <option value="">-- Select Artist --</option>
-              {artists.map((artist) => (
-                <option key={artist.artistId} value={artist.artistId}>
-                  {artist.name}
-                </option>
-              ))}
-            </select>
+            <input
+              type="text"
+              value={
+                artists.find((a) => a.artistId === selectedArtistId)?.name ||
+                eventData.artist?.name ||
+                ""
+              }
+              readOnly
+              style={readOnlyStyle}
+            />
           </div>
 
           <div className="form-actions">
