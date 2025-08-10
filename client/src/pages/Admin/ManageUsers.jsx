@@ -71,7 +71,7 @@ const ManageUsers = () => {
     }
   };
 
-  // Filter users by search term (name or email or phone etc.)
+  // Filter users by search term 
   const filteredUsers = users.filter((user) =>
     (
       `${user.firstName} ${user.lastName} ${user.email} ${user.phoneNumber} ${user.city} ${user.state} ${user.country}`
@@ -152,6 +152,7 @@ const ManageUsers = () => {
             textAlign="Center"
           />
           <ColumnDirective
+            field="firstName"
             headerText="Name"
             width="160"
             textAlign="Center"
