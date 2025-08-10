@@ -11,7 +11,6 @@ import {
   Page,
   Inject,
 } from "@syncfusion/ej2-react-grids";
-
 import { fetchApprovedEvents } from "../../services/adminService";
 
 import "@syncfusion/ej2-base/styles/material.css";
@@ -36,23 +35,21 @@ const ManageEvents = () => {
     loadEvents();
   }, []);
 
-  // Filter events by artist name (or extend as needed)
   const filteredEvents = events.filter((event) =>
     event.artist?.name?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Action buttons template
+  // Edit button template
   const actionTemplate = (props) => (
     <button
       className="button-approve"
       style={{ marginRight: "8px" }}
-      onClick={() => navigate(`/admin/events/edit/${props.eventId}`, { state: { event: props } })}
+      onClick={() => navigate(`/admin/events/edit/${props.eventId}`)}
     >
       Edit
     </button>
   );
 
-  // Toolbar for Excel Export
   const toolbarOptions = ["ExcelExport"];
   const toolbarClick = (args) => {
     if (gridRef && args.item.id.includes("excelexport")) {
@@ -106,57 +103,14 @@ const ManageEvents = () => {
         height={400}
       >
         <ColumnsDirective>
-          <ColumnDirective
-            field="eventId"
-            headerText="Event ID"
-            width="100"
-            textAlign="Center"
-          />
-          <ColumnDirective
-            field="eventDate"
-            headerText="Date"
-            width="110"
-            textAlign="Center"
-            format="yMd"
-            type="date"
-          />
-          <ColumnDirective
-            field="eventName"
-            headerText="Event"
-            width="150"
-            textAlign="Center"
-          />
-          <ColumnDirective
-            field="artist.name"
-            headerText="Artist"
-            width="130"
-            textAlign="Center"
-            template={(props) => props.artist?.name || "N/A"}
-          />
-          <ColumnDirective
-            field="category"
-            headerText="Category"
-            width="130"
-            textAlign="Center"
-          />
-          <ColumnDirective
-            headerText="Address"
-            width="180"
-            textAlign="Center"
-            template={(props) => `${props.address}, ${props.city}`}
-          />
-          <ColumnDirective
-            headerText="Host Name"
-            width="160"
-            textAlign="Center"
-            template={(props) => `${props.host?.firstName || ""} ${props.host?.lastName || ""}`}
-          />
-          <ColumnDirective
-            headerText="Actions"
-            width="150"
-            textAlign="Center"
-            template={actionTemplate}
-          />
+          <ColumnDirective field="eventId" headerText="Event ID" width="100" textAlign="Center" />
+          <ColumnDirective field="eventDate" headerText="Date" width="110" textAlign="Center" format="yMd" type="date" />
+          <ColumnDirective field="eventName" headerText="Event" width="150" textAlign="Center" />
+          <ColumnDirective field="artist.name" headerText="Artist" width="130" textAlign="Center" template={(props) => props.artist?.name || "N/A"} />
+          <ColumnDirective field="category" headerText="Category" width="130" textAlign="Center" />
+          <ColumnDirective headerText="Address" width="180" textAlign="Center" template={(props) => `${props.address}, ${props.city}`} />
+          <ColumnDirective headerText="Host Name" width="160" textAlign="Center" template={(props) => `${props.host?.firstName || ""} ${props.host?.lastName || ""}`} />
+          <ColumnDirective headerText="Actions" width="150" textAlign="Center" template={actionTemplate} />
         </ColumnsDirective>
         <Inject services={[Sort, Toolbar, ExcelExport, Page]} />
       </GridComponent>
@@ -166,6 +120,17 @@ const ManageEvents = () => {
         .e-pager.e-lib {
           justify-content: flex-start !important;
           padding-left: 0 !important;
+        }
+        .button-approve {
+          background-color: #E2215F;
+          color: white;
+          border: none;
+          padding: 6px 12px;
+          border-radius: 4px;
+          cursor: pointer;
+        }
+        .button-approve:hover {
+          background-color: #c51b51;
         }
       `}</style>
     </div>
