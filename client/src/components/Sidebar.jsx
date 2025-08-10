@@ -10,7 +10,7 @@ const Sidebar = () => {
     { label: "Dashboard", path: "/admin" },
     { label: "Manage Requests", path: "/admin/requests" },
     { label: "Manage Hosts", path: "/admin/hosts" },
-    { label: "Manage Users", path: "/admin/users" },
+    { label: "Manage Attendee", path: "/admin/users" },
     { label: "Manage Events", path: "/admin/events" },
   ];
 

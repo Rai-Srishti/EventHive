@@ -108,8 +108,8 @@ const ManageEvents = () => {
           <ColumnDirective field="eventName" headerText="Event" width="150" textAlign="Center" />
           <ColumnDirective field="artist.name" headerText="Artist" width="130" textAlign="Center" template={(props) => props.artist?.name || "N/A"} />
           <ColumnDirective field="category" headerText="Category" width="130" textAlign="Center" />
-          <ColumnDirective headerText="Address" width="180" textAlign="Center" template={(props) => `${props.address}, ${props.city}`} />
-          <ColumnDirective headerText="Host Name" width="160" textAlign="Center" template={(props) => `${props.host?.firstName || ""} ${props.host?.lastName || ""}`} />
+          <ColumnDirective field="address" headerText="Address" width="180" textAlign="Center" template={(props) => `${props.address}, ${props.city}`} />
+          <ColumnDirective field="firstName" headerText="Host Name" width="160" textAlign="Center" template={(props) => `${props.host?.firstName || ""} ${props.host?.lastName || ""}`} />
           <ColumnDirective headerText="Actions" width="150" textAlign="Center" template={actionTemplate} />
         </ColumnsDirective>
         <Inject services={[Sort, Toolbar, ExcelExport, Page]} />

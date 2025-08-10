@@ -66,7 +66,7 @@ const AdminDashboard = () => {
     counts.totalRejectedEvents;
 
   const stats = [
-    { title: "Total Users", value: counts.totalUsers },
+    { title: "Total Attendee", value: counts.totalUsers },
     { title: "Total Events", value: totalEvents },
     { title: "Pending Requests", value: counts.totalPendingEvents },
     { title: "Approved Requests", value: counts.totalApprovedEvents },
