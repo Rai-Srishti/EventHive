@@ -32,11 +32,6 @@ const ManageRequest = () => {
       setRequests(data);
     } catch (error) {
       console.error("Failed to load events:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Failed to load pending events.",
-      });
     }
   };
 
@@ -58,6 +53,8 @@ const ManageRequest = () => {
           confirmButtonColor: "#3085d6",
         });
         loadPendingEvents(); // reload list after approval
+        setRequests((prev) => prev.filter((r) => r.eventId !== eventId));
+        setSearchTerm("");
       }
     } catch (error) {
       Swal.fire({
