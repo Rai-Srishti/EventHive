@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import { useNavigate } from 'react-router-dom';
 import { getEventsByHostId, deleteEvent } from '../../services/hostService'; 
 import Swal from 'sweetalert2';
@@ -13,22 +13,24 @@ const EventsPage = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-   const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token");
   const decoded = jwtDecode(token);
- // console.log("Decoded JWT:", decoded);
   const hostId = decoded.sub;
 
+  // Fetch events function (reusable)
+  const fetchEvents = async () => {
+    try {
+      setLoading(true);
+      const data = await getEventsByHostId(hostId);
+      setEvents(data);
+    } catch (err) {
+      console.error('Error fetching events:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const data = await getEventsByHostId(hostId);
-        setEvents(data);
-      } catch (err) {
-        console.error('Error fetching events:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchEvents();
   }, [hostId]);
 
@@ -37,29 +39,27 @@ const EventsPage = () => {
   };
 
   const handleDelete = async (eventId) => {
-  const result = await Swal.fire({
-    title: 'Delete Event?',
-    text: 'Are you sure you want to delete this event? This action cannot be undone.',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#E2215F',
-    cancelButtonColor: '#6c757d',
-    confirmButtonText: 'Yes, delete it!',
-  });
+    const result = await Swal.fire({
+      title: 'Delete Event?',
+      text: 'Are you sure you want to delete this event? This action cannot be undone.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#E2215F',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Yes, delete it!',
+    });
 
-  if (result.isConfirmed) {
-    try {
-      await deleteEvent(eventId);
-      Swal.fire('Deleted!', 'The event has been deleted.', 'success');
-      // Optionally, refresh the event list here
-    } catch (error) {
-      Swal.fire('Error', 'Failed to delete event.', 'error');
+    if (result.isConfirmed) {
+      try {
+        await deleteEvent(eventId);
+        Swal.fire('Deleted!', 'The event has been deleted.', 'success');
+        // Refresh events list
+        fetchEvents();
+      } catch (error) {
+        Swal.fire('Error', 'Failed to delete event.', 'error');
+      }
     }
-  }
-};
-
-
-
+  };
 
   const filteredEvents = events.filter((event) =>
     event.eventName?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -125,7 +125,7 @@ const EventsPage = () => {
               <tbody>
                 {currentEvents.length > 0 ? (
                   currentEvents.map((event, index) => (
-                    <tr key={index}>
+                    <tr key={event.eventId}>
                       <td>{page * eventsPerPage + index + 1}</td>
                       <td>{event.eventName}</td>
                       <td>{event.artistName}</td>
