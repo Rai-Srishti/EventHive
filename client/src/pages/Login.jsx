@@ -14,38 +14,39 @@ function Login() {
 
   const navigate = useNavigate();
 
-  const onLogin = async () => {
-  if (log.email.trim() === '') {
-    toast.warn('Please enter email');
-  } else if (log.password.trim() === '') {
-    toast.warn('Please enter password');
-  } else {
-    try {
-      const data = await loginUser(log.email, log.password);
-      const { token, role } = data;
+  const onLogin = async (e) => {
+    
+    if (e) e.preventDefault();
 
-      // Save JWT token and role in localStorage
-      localStorage.setItem("token", token);
-      localStorage.setItem("role", role);
+    if (log.email.trim() === '') {
+      toast.warn('Please enter email');
+    } else if (log.password.trim() === '') {
+      toast.warn('Please enter password');
+    } else {
+      try {
+        const data = await loginUser(log.email, log.password);
+        const { token, role } = data;
 
-      toast.success('Login Successful!');
+        
+        localStorage.setItem("token", token);
+        localStorage.setItem("role", role);
 
-      // Redirect based on role
-      if (role === 'SUPERADMIN') navigate('/admin');
-      else if (role === 'HOST') navigate('/host');
-      else if (role === 'ATTENDEE') navigate('/attendee');
-      else navigate('/home');
+        toast.success('Login Successful!');
 
-    } catch (error) {
-      toast.error(error);
+        
+        if (role === 'SUPERADMIN') navigate('/admin');
+        else if (role === 'HOST') navigate('/host');
+        else if (role === 'ATTENDEE') navigate('/attendee');
+        else navigate('/home');
+
+      } catch (error) {
+        toast.error(error);
+      }
     }
-  }
-};
+  };
 
   return (
     <div>
-      
-
       <div className="container my-5">
         <div className="text-center mb-4">
           <h2 className="fw-bold" style={{ fontSize: '2rem', color: '#343a40' }}>
@@ -57,6 +58,7 @@ function Login() {
         <form
           className="mx-auto p-4 border rounded shadow-sm w-100"
           style={{ maxWidth: '600px', backgroundColor: '#f8f9fa' }}
+          onSubmit={onLogin}
         >
           <div className="mb-3">
             <label className="form-label"><strong>Email</strong></label>
@@ -82,9 +84,8 @@ function Login() {
 
           <div className="d-flex flex-column flex-md-row justify-content-between gap-2">
             <button
-              type="button"
+              type="submit"
               className="btn btn-danger w-100"
-              onClick={onLogin}
               style={{ fontWeight: 'bold' }}
             >
               Login
@@ -101,8 +102,6 @@ function Login() {
           </div>
         </form>
       </div>
-
-      
     </div>
   );
 }

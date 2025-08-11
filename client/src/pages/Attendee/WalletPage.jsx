@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axiosInstance from '../../services/axiosInstance';
+import Swal from 'sweetalert2';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const WalletPage = () => {
@@ -7,13 +8,13 @@ const WalletPage = () => {
   const [amount, setAmount] = useState('');
 
   useEffect(() => {
-    //Load Razorpay script
+    // Load Razorpay script
     const script = document.createElement('script');
     script.src = 'https://checkout.razorpay.com/v1/checkout.js';
     script.async = true;
     document.body.appendChild(script);
 
-    //Fetch wallet balance
+    // Fetch wallet balance
     const fetchBalance = async () => {
       try {
         const res = await axiosInstance.get('/attendee/wallet');
@@ -30,14 +31,18 @@ const WalletPage = () => {
   const handleAddBalance = async () => {
     const value = parseFloat(amount);
     if (isNaN(value) || value <= 0) {
-      alert('Enter a valid amount.');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Invalid Amount',
+        text: 'Please enter a valid amount greater than 0.'
+      });
       return;
     }
 
     try {
       const response = await axiosInstance.post('/payment/create-order', null, {
         params: {
-          amount: value , 
+          amount: value,
           receiptId: `wallet_txn_${Date.now()}`
         }
       });
@@ -58,12 +63,21 @@ const WalletPage = () => {
               params: { amount: value }
             });
 
-            alert('Payment successful and wallet updated!');
+            Swal.fire({
+              icon: 'success',
+              title: 'Payment Successful',
+              text: 'Your wallet has been updated!'
+            });
+
             setBalance((prev) => parseFloat(prev || 0) + value);
             setAmount('');
           } catch (err) {
             console.error(err);
-            alert('Payment succeeded but wallet update failed.');
+            Swal.fire({
+              icon: 'error',
+              title: 'Update Failed',
+              text: 'Payment succeeded but wallet update failed.'
+            });
           }
         },
 
@@ -81,7 +95,11 @@ const WalletPage = () => {
       rzp.open();
     } catch (err) {
       console.error('Order creation failed:', err);
-      alert('Something went wrong during payment.');
+      Swal.fire({
+        icon: 'error',
+        title: 'Payment Failed',
+        text: 'Something went wrong during payment.'
+      });
     }
   };
 
